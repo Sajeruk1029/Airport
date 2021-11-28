@@ -31,10 +31,12 @@ HEADERS += Accounts.h \
            CargoTrunc.h \
            CategoriesCargo.h \
            Client.h \
+           ClientAndAccounts.h \
            ClientAndBaggage.h \
            ClientAndBaggageFull.h \
            ClientAndBaggageTrunc.h \
            ClientFull.h \
+           CustomInputWidget.h \
            Flights.h \
            FlightsFull.h \
            FlightsTrunc.h \
@@ -44,6 +46,7 @@ HEADERS += Accounts.h \
            Post.h \
            Services.h \
            Staff.h \
+           StaffAndAccounts.h \
            StaffFull.h \
            StaffTrunc.h \
            Tickets.h \
@@ -78,6 +81,7 @@ SOURCES += Accounts.cpp \
            ClientAndBaggageFull.cpp \
            ClientAndBaggageTrunc.cpp \
            ClientFull.cpp \
+           CustomInputWidget.cpp \
            Flights.cpp \
            FlightsFull.cpp \
            FlightsTrunc.cpp \

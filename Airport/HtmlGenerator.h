@@ -56,7 +56,7 @@
 class HTMLGenerator
 {
 public:
-    HTMLGenerator(QString);
+    explicit HTMLGenerator(QString);
     ~HTMLGenerator(void);
 
     void createHTMLFile(int);
