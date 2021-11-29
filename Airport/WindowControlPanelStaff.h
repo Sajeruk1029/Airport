@@ -13,6 +13,7 @@
 #include <QTabWidget>
 
 #include "WindowAirCompany.h"
+#include "WindowAirplane.h"
 
 class WindowControlPanelStaff : public QGroupBox
 {
@@ -27,6 +28,7 @@ private:
     QTabWidget *tabs;
 
     WindowAirCompany *windowAirCompany;
+    WindowAirplane *windowAirplane;
 
     /*
     QPushButton *butAirCompanies;

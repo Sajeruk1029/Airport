@@ -653,8 +653,6 @@ Airplane CustomInputWidget::getAirplane(QString title, bool &ok, QWidget *parent
     name->setMaxLength(30);
     description->setMaxLength(100);
 
-    description->setMinimumHeight(200);
-
     name->setValidator(validator);
     description->setValidator(validator);
 
@@ -672,7 +670,7 @@ Airplane CustomInputWidget::getAirplane(QString title, bool &ok, QWidget *parent
     layout->addWidget(description);
     layout->addWidget(maxSizeCargo);
     layout->addWidget(maxWeightCargo);
-    layout->addWidget(maxWeightCargo);
+    layout->addWidget(maxSeatPlaces);
 
     layoutContayner->addWidget(dialogButtonBox);
 

@@ -47,7 +47,7 @@ void NetworkAPIRequester::getAllAccounts(const std::function<void(QList<Accounts
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Accounts(jsonObject["Id"].toInt(), jsonObject["Login"].toString(), jsonObject["Password"].toString(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Accounts(jsonObject["Id"].toInt(), jsonObject["Login"].toString(), jsonObject["Password"].toString(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -102,7 +102,7 @@ void NetworkAPIRequester::getDeleteAccounts(const std::function<void(QList<Accou
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Accounts(jsonObject["Id"].toInt(), jsonObject["Login"].toString(), jsonObject["Password"].toString(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Accounts(jsonObject["Id"].toInt(), jsonObject["Login"].toString(), jsonObject["Password"].toString(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -157,7 +157,7 @@ void NetworkAPIRequester::getActiveAccounts(const std::function<void(QList<Accou
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Accounts(jsonObject["Id"].toInt(), jsonObject["Login"].toString(), jsonObject["Password"].toString(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Accounts(jsonObject["Id"].toInt(), jsonObject["Login"].toString(), jsonObject["Password"].toString(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -220,7 +220,7 @@ void NetworkAPIRequester::searchAccounts(const std::function<void (Accounts)> ca
                     accounts.setId(jsonObject["Id"].toInt());
                     accounts.setLogin(jsonObject["Login"].toString());
                     accounts.setPassword(jsonObject["Password"].toString());
-                    accounts.setIsDeleted(jsonObject["IsDeleted"].toBool());
+                    accounts.setIsDeleted(jsonObject["IsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(accounts);
@@ -523,7 +523,7 @@ void NetworkAPIRequester::getAllAirCompany(const std::function<void(QList<AirCom
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(AirCompany(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["IsDeleted"].toBool()));
+                    list.append(AirCompany(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -578,7 +578,7 @@ void NetworkAPIRequester::getDeleteAirCompany(const std::function<void(QList<Air
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(AirCompany(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["IsDeleted"].toBool()));
+                    list.append(AirCompany(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -633,7 +633,7 @@ void NetworkAPIRequester::getActiveAirCompany(const std::function<void(QList<Air
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(AirCompany(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["IsDeleted"].toBool()));
+                    list.append(AirCompany(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -695,7 +695,7 @@ void NetworkAPIRequester::searchAirCompany(const std::function<void (AirCompany)
 
                     airCompany.setId(jsonObject["Id"].toInt());
                     airCompany.setName(jsonObject["Name"].toString());
-                    airCompany.setIsDeleted(jsonObject["IsDeleted"].toBool());
+                    airCompany.setIsDeleted(jsonObject["IsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(airCompany);
@@ -996,7 +996,7 @@ void NetworkAPIRequester::getAllAirCompanyAndAirplane(const std::function<void(Q
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(AirCompanyAndAirplane(jsonObject["Id"].toInt(), jsonObject["IdAirplane"].toInt(), jsonObject["IdAirCompany"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(AirCompanyAndAirplane(jsonObject["Id"].toInt(), jsonObject["IdAirplane"].toInt(), jsonObject["IdAirCompany"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -1051,7 +1051,7 @@ void NetworkAPIRequester::getDeleteAirCompanyAndAirplane(const std::function<voi
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(AirCompanyAndAirplane(jsonObject["Id"].toInt(), jsonObject["IdAirplane"].toInt(), jsonObject["IdAirCompany"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(AirCompanyAndAirplane(jsonObject["Id"].toInt(), jsonObject["IdAirplane"].toInt(), jsonObject["IdAirCompany"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -1106,7 +1106,7 @@ void NetworkAPIRequester::getActiveAirCompanyAndAirplane(const std::function<voi
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(AirCompanyAndAirplane(jsonObject["Id"].toInt(), jsonObject["IdAirplane"].toInt(), jsonObject["IdAirCompany"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(AirCompanyAndAirplane(jsonObject["Id"].toInt(), jsonObject["IdAirplane"].toInt(), jsonObject["IdAirCompany"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -1409,7 +1409,7 @@ void NetworkAPIRequester::getAllAirCompanyAndServices(const std::function<void(Q
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(AirCompanyAndServices(jsonObject["Id"].toInt(), jsonObject["IdAirCompany"].toInt(), jsonObject["IdService"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(AirCompanyAndServices(jsonObject["Id"].toInt(), jsonObject["IdAirCompany"].toInt(), jsonObject["IdService"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -1464,7 +1464,7 @@ void NetworkAPIRequester::getDeleteAirCompanyAndServices(const std::function<voi
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(AirCompanyAndServices(jsonObject["Id"].toInt(), jsonObject["IdAirCompany"].toInt(), jsonObject["IdService"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(AirCompanyAndServices(jsonObject["Id"].toInt(), jsonObject["IdAirCompany"].toInt(), jsonObject["IdService"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -1519,7 +1519,7 @@ void NetworkAPIRequester::getActiveAirCompanyAndServices(const std::function<voi
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(AirCompanyAndServices(jsonObject["Id"].toInt(), jsonObject["IdAirCompany"].toInt(), jsonObject["IdService"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(AirCompanyAndServices(jsonObject["Id"].toInt(), jsonObject["IdAirCompany"].toInt(), jsonObject["IdService"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -1822,7 +1822,7 @@ void NetworkAPIRequester::getAllAirplane(const std::function<void(QList<Airplane
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Airplane(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Description"].toString(), jsonObject["MaxSizeCargo"].toInt(), jsonObject["MaxWeightCargo"].toInt(), jsonObject["MaxSeatPlaces"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Airplane(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Description"].toString(), jsonObject["MaxSizeCargo"].toInt(), jsonObject["MaxWeightCargo"].toInt(), jsonObject["MaxSeatPlaces"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -1877,7 +1877,7 @@ void NetworkAPIRequester::getDeleteAirplane(const std::function<void(QList<Airpl
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Airplane(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Description"].toString(), jsonObject["MaxSizeCargo"].toInt(), jsonObject["MaxWeightCargo"].toInt(), jsonObject["MaxSeatPlaces"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Airplane(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Description"].toString(), jsonObject["MaxSizeCargo"].toInt(), jsonObject["MaxWeightCargo"].toInt(), jsonObject["MaxSeatPlaces"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -1932,7 +1932,7 @@ void NetworkAPIRequester::getActiveAirplane(const std::function<void(QList<Airpl
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Airplane(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Description"].toString(), jsonObject["MaxSizeCargo"].toInt(), jsonObject["MaxWeightCargo"].toInt(), jsonObject["MaxSeatPlaces"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Airplane(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Description"].toString(), jsonObject["MaxSizeCargo"].toInt(), jsonObject["MaxWeightCargo"].toInt(), jsonObject["MaxSeatPlaces"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -1998,7 +1998,7 @@ void NetworkAPIRequester::searchAirplane(const std::function<void (Airplane)> ca
                     airplane.setMaxSizeCargo(jsonObject["MaxSizeCargo"].toInt());
                     airplane.setMaxWeightCargo(jsonObject["MaxWeightCargo"].toInt());
                     airplane.setMaxSeatPlaces(jsonObject["MaxSeatPlaces"].toInt());
-                    airplane.setIsDeleted(jsonObject["IsDeleted"].toBool());
+                    airplane.setIsDeleted(jsonObject["IsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(airplane);
@@ -2161,7 +2161,7 @@ void NetworkAPIRequester::logicalRecoverAirplane(const std::function<void (bool)
 }
 void NetworkAPIRequester::logicalDeleterAirplane(const std::function<void (bool)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed, Airplane airplane)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/Airplane/AirCompanyAndServicesLogicalDeleter.php"));
+    QNetworkRequest request(QUrl(this->url + "Tables/Airplane/AirplaneLogicalDeleter.php"));
     QUrlQuery query;
 
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
@@ -2307,7 +2307,7 @@ void NetworkAPIRequester::getAllBaggage(const std::function<void(QList<Baggage>)
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Baggage(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Description"].toString(), jsonObject["Weight"].toInt(), jsonObject["Size"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Baggage(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Description"].toString(), jsonObject["Weight"].toInt(), jsonObject["Size"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -2362,7 +2362,7 @@ void NetworkAPIRequester::getDeleteBaggage(const std::function<void(QList<Baggag
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Baggage(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Description"].toString(), jsonObject["Weight"].toInt(), jsonObject["Size"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Baggage(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Description"].toString(), jsonObject["Weight"].toInt(), jsonObject["Size"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -2417,7 +2417,7 @@ void NetworkAPIRequester::getActiveBaggage(const std::function<void(QList<Baggag
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Baggage(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Description"].toString(), jsonObject["Weight"].toInt(), jsonObject["Size"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Baggage(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Description"].toString(), jsonObject["Weight"].toInt(), jsonObject["Size"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -2482,7 +2482,7 @@ void NetworkAPIRequester::searchBaggage(const std::function<void (Baggage)> call
                     baggage.setDescription(jsonObject["Description"].toString());
                     baggage.setWeight(jsonObject["Weight"].toInt());
                     baggage.setSize(jsonObject["Size"].toInt());
-                    baggage.setIsDeleted(jsonObject["IsDeleted"].toBool());
+                    baggage.setIsDeleted(jsonObject["IsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(baggage);
@@ -2789,7 +2789,7 @@ void NetworkAPIRequester::getAllCargo(const std::function<void(QList<Cargo>)> ca
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Cargo(jsonObject["Id"].toInt(), jsonObject["IdCategory"].toInt(), jsonObject["Weight"].toInt(), jsonObject["Description"].toString(), jsonObject["IdTicket"].toInt(), jsonObject["Size"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Cargo(jsonObject["Id"].toInt(), jsonObject["IdCategory"].toInt(), jsonObject["Weight"].toInt(), jsonObject["Description"].toString(), jsonObject["IdTicket"].toInt(), jsonObject["Size"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -2844,7 +2844,7 @@ void NetworkAPIRequester::getDeleteCargo(const std::function<void(QList<Cargo>)>
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Cargo(jsonObject["Id"].toInt(), jsonObject["IdCategory"].toInt(), jsonObject["Weight"].toInt(), jsonObject["Description"].toString(), jsonObject["IdTicket"].toInt(), jsonObject["Size"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Cargo(jsonObject["Id"].toInt(), jsonObject["IdCategory"].toInt(), jsonObject["Weight"].toInt(), jsonObject["Description"].toString(), jsonObject["IdTicket"].toInt(), jsonObject["Size"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -2899,7 +2899,7 @@ void NetworkAPIRequester::getActiveCargo(const std::function<void(QList<Cargo>)>
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Cargo(jsonObject["Id"].toInt(), jsonObject["IdCategory"].toInt(), jsonObject["Weight"].toInt(), jsonObject["Description"].toString(), jsonObject["IdTicket"].toInt(), jsonObject["Size"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Cargo(jsonObject["Id"].toInt(), jsonObject["IdCategory"].toInt(), jsonObject["Weight"].toInt(), jsonObject["Description"].toString(), jsonObject["IdTicket"].toInt(), jsonObject["Size"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -2965,7 +2965,7 @@ void NetworkAPIRequester::searchCargo(const std::function<void (Cargo)> callBack
                     cargo.setDescription(jsonObject["Description"].toString());
                     cargo.setIdTicket(jsonObject["IdTicket"].toInt());
                     cargo.setSize(jsonObject["Size"].toInt());
-                    cargo.setIsDeleted(jsonObject["IsDeleted"].toBool());
+                    cargo.setIsDeleted(jsonObject["IsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(cargo);
@@ -3275,7 +3275,7 @@ void NetworkAPIRequester::getAllCategoriesCargo(const std::function<void(QList<C
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(CategoriesCargo(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Description"].toString(), jsonObject["IsDeleted"].toBool()));
+                    list.append(CategoriesCargo(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Description"].toString(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -3330,7 +3330,7 @@ void NetworkAPIRequester::getDeleteCategoriesCargo(const std::function<void(QLis
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(CategoriesCargo(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Description"].toString(), jsonObject["IsDeleted"].toBool()));
+                    list.append(CategoriesCargo(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Description"].toString(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -3385,7 +3385,7 @@ void NetworkAPIRequester::getActiveCategoriesCargo(const std::function<void(QLis
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(CategoriesCargo(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Description"].toString(), jsonObject["IsDeleted"].toBool()));
+                    list.append(CategoriesCargo(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Description"].toString(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -3448,7 +3448,7 @@ void NetworkAPIRequester::searchCategoriesCargo(const std::function<void (Catego
                     categoriesCargo.setId(jsonObject["Id"].toInt());
                     categoriesCargo.setName(jsonObject["Name"].toString());
                     categoriesCargo.setDescription(jsonObject["Description"].toString());
-                    categoriesCargo.setIsDeleted(jsonObject["IsDeleted"].toBool());
+                    categoriesCargo.setIsDeleted(jsonObject["IsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(categoriesCargo);
@@ -3751,7 +3751,7 @@ void NetworkAPIRequester::getAllClient(const std::function<void(QList<Client>)> 
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Client(jsonObject["Id"].toInt(), jsonObject["FirstName"].toString(), jsonObject["LastName"].toString(), jsonObject["Patronymic"].toString(), jsonObject["PassportSeries"].toInt(), jsonObject["PassportNumber"].toInt(), jsonObject["Account"].toInt(), jsonObject["Money"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Client(jsonObject["Id"].toInt(), jsonObject["FirstName"].toString(), jsonObject["LastName"].toString(), jsonObject["Patronymic"].toString(), jsonObject["PassportSeries"].toInt(), jsonObject["PassportNumber"].toInt(), jsonObject["Account"].toInt(), jsonObject["Money"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -3806,7 +3806,7 @@ void NetworkAPIRequester::getDeleteClient(const std::function<void(QList<Client>
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Client(jsonObject["Id"].toInt(), jsonObject["FirstName"].toString(), jsonObject["LastName"].toString(), jsonObject["Patronymic"].toString(), jsonObject["PassportSeries"].toInt(), jsonObject["PassportNumber"].toInt(), jsonObject["Account"].toInt(), jsonObject["Money"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Client(jsonObject["Id"].toInt(), jsonObject["FirstName"].toString(), jsonObject["LastName"].toString(), jsonObject["Patronymic"].toString(), jsonObject["PassportSeries"].toInt(), jsonObject["PassportNumber"].toInt(), jsonObject["Account"].toInt(), jsonObject["Money"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -3861,7 +3861,7 @@ void NetworkAPIRequester::getActiveClient(const std::function<void(QList<Client>
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Client(jsonObject["Id"].toInt(), jsonObject["FirstName"].toString(), jsonObject["LastName"].toString(), jsonObject["Patronymic"].toString(), jsonObject["PassportSeries"].toInt(), jsonObject["PassportNumber"].toInt(), jsonObject["Account"].toInt(), jsonObject["Money"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Client(jsonObject["Id"].toInt(), jsonObject["FirstName"].toString(), jsonObject["LastName"].toString(), jsonObject["Patronymic"].toString(), jsonObject["PassportSeries"].toInt(), jsonObject["PassportNumber"].toInt(), jsonObject["Account"].toInt(), jsonObject["Money"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -3931,7 +3931,7 @@ void NetworkAPIRequester::searchClient(const std::function<void (Client)> callBa
                     client.setPassportNumber(jsonObject["PassportNumber"].toInt());
                     client.setAccount(jsonObject["Account"].toInt());
                     client.setMoney(jsonObject["Money"].toInt());
-                    client.setIsDeleted(jsonObject["IsDeleted"].toBool());
+                    client.setIsDeleted(jsonObject["IsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(client);
@@ -4244,7 +4244,7 @@ void NetworkAPIRequester::getAllClientAndBaggage(const std::function<void(QList<
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(ClientAndBaggage(jsonObject["Id"].toInt(), jsonObject["IdClient"].toInt(), jsonObject["IdBaggage"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(ClientAndBaggage(jsonObject["Id"].toInt(), jsonObject["IdClient"].toInt(), jsonObject["IdBaggage"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -4299,7 +4299,7 @@ void NetworkAPIRequester::getDeleteClientAndBaggage(const std::function<void(QLi
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(ClientAndBaggage(jsonObject["Id"].toInt(), jsonObject["IdClient"].toInt(), jsonObject["IdBaggage"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(ClientAndBaggage(jsonObject["Id"].toInt(), jsonObject["IdClient"].toInt(), jsonObject["IdBaggage"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -4354,7 +4354,7 @@ void NetworkAPIRequester::getActiveClientAndBaggage(const std::function<void(QLi
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(ClientAndBaggage(jsonObject["Id"].toInt(), jsonObject["IdClient"].toInt(), jsonObject["IdBaggage"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(ClientAndBaggage(jsonObject["Id"].toInt(), jsonObject["IdClient"].toInt(), jsonObject["IdBaggage"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -4657,7 +4657,7 @@ void NetworkAPIRequester::getAllFlights(const std::function<void(QList<Flights>)
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Flights(jsonObject["Id"].toInt(), jsonObject["DepartureDate"].toString(), jsonObject["ArrivalDate"].toString(), jsonObject["DeparturePoint"].toInt(), jsonObject["ArrivalPoint"].toInt(), jsonObject["Airplane"].toInt(), jsonObject["Ladder"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Flights(jsonObject["Id"].toInt(), jsonObject["DepartureDate"].toString(), jsonObject["ArrivalDate"].toString(), jsonObject["DeparturePoint"].toInt(), jsonObject["ArrivalPoint"].toInt(), jsonObject["Airplane"].toInt(), jsonObject["Ladder"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -4712,7 +4712,7 @@ void NetworkAPIRequester::getDeleteFlights(const std::function<void(QList<Flight
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Flights(jsonObject["Id"].toInt(), jsonObject["DepartureDate"].toString(), jsonObject["ArrivalDate"].toString(), jsonObject["DeparturePoint"].toInt(), jsonObject["ArrivalPoint"].toInt(), jsonObject["Airplane"].toInt(), jsonObject["Ladder"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Flights(jsonObject["Id"].toInt(), jsonObject["DepartureDate"].toString(), jsonObject["ArrivalDate"].toString(), jsonObject["DeparturePoint"].toInt(), jsonObject["ArrivalPoint"].toInt(), jsonObject["Airplane"].toInt(), jsonObject["Ladder"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -4767,7 +4767,7 @@ void NetworkAPIRequester::getActiveFlights(const std::function<void(QList<Flight
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Flights(jsonObject["Id"].toInt(), jsonObject["DepartureDate"].toString(), jsonObject["ArrivalDate"].toString(), jsonObject["DeparturePoint"].toInt(), jsonObject["ArrivalPoint"].toInt(), jsonObject["Airplane"].toInt(), jsonObject["Ladder"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Flights(jsonObject["Id"].toInt(), jsonObject["DepartureDate"].toString(), jsonObject["ArrivalDate"].toString(), jsonObject["DeparturePoint"].toInt(), jsonObject["ArrivalPoint"].toInt(), jsonObject["Airplane"].toInt(), jsonObject["Ladder"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -4835,7 +4835,7 @@ void NetworkAPIRequester::searchFlights(const std::function<void (Flights)> call
                     flights.setDeparturePoint(jsonObject["DeparturePoint"].toInt());
                     flights.setDeparturePoint(jsonObject["Airplane"].toInt());
                     flights.setDeparturePoint(jsonObject["Ladder"].toInt());
-                    flights.setIsDeleted(jsonObject["IsDeleted"].toBool());
+                    flights.setIsDeleted(jsonObject["IsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(flights);
@@ -5146,7 +5146,7 @@ void NetworkAPIRequester::getAllPlacesOfAirports(const std::function<void(QList<
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(PlacesOfAirports(jsonObject["Id"].toInt(), jsonObject["Country"].toString(), jsonObject["City"].toString(), jsonObject["Street"].toString(), jsonObject["HouseNumber"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(PlacesOfAirports(jsonObject["Id"].toInt(), jsonObject["Country"].toString(), jsonObject["City"].toString(), jsonObject["Street"].toString(), jsonObject["HouseNumber"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -5201,7 +5201,7 @@ void NetworkAPIRequester::getDeletePlacesOfAirports(const std::function<void(QLi
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(PlacesOfAirports(jsonObject["Id"].toInt(), jsonObject["Country"].toString(), jsonObject["City"].toString(), jsonObject["Street"].toString(), jsonObject["HouseNumber"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(PlacesOfAirports(jsonObject["Id"].toInt(), jsonObject["Country"].toString(), jsonObject["City"].toString(), jsonObject["Street"].toString(), jsonObject["HouseNumber"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -5256,7 +5256,7 @@ void NetworkAPIRequester::getActivePlacesOfAirports(const std::function<void(QLi
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(PlacesOfAirports(jsonObject["Id"].toInt(), jsonObject["Country"].toString(), jsonObject["City"].toString(), jsonObject["Street"].toString(), jsonObject["HouseNumber"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(PlacesOfAirports(jsonObject["Id"].toInt(), jsonObject["Country"].toString(), jsonObject["City"].toString(), jsonObject["Street"].toString(), jsonObject["HouseNumber"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -5323,7 +5323,7 @@ void NetworkAPIRequester::searchPlacesOfAirports(const std::function<void (Place
                     placesOfAirports.setCity(jsonObject["City"].toString());
                     placesOfAirports.setStreet(jsonObject["Street"].toString());
                     placesOfAirports.setHouseNumber(jsonObject["HouseNumber"].toInt());
-                    placesOfAirports.setIsDeleted(jsonObject["IsDeleted"].toBool());
+                    placesOfAirports.setIsDeleted(jsonObject["IsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(placesOfAirports);
@@ -5630,7 +5630,7 @@ void NetworkAPIRequester::getAllPost(const std::function<void(QList<Post>)> call
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Post(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Salary"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Post(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Salary"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -5685,7 +5685,7 @@ void NetworkAPIRequester::getDeletePost(const std::function<void(QList<Post>)> c
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Post(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Salary"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Post(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Salary"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -5740,7 +5740,7 @@ void NetworkAPIRequester::getActivePost(const std::function<void(QList<Post>)> c
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Post(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Salary"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Post(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Salary"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -5803,7 +5803,7 @@ void NetworkAPIRequester::searchPost(const std::function<void (Post)> callBackSu
                     post.setId(jsonObject["Id"].toInt());
                     post.setName(jsonObject["Name"].toString());
                     post.setId(jsonObject["Salary"].toInt());
-                    post.setIsDeleted(jsonObject["IsDeleted"].toBool());
+                    post.setIsDeleted(jsonObject["IsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(post);
@@ -6106,7 +6106,7 @@ void NetworkAPIRequester::getAllServices(const std::function<void(QList<Services
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Services(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Description"].toString(), jsonObject["Price"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Services(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Description"].toString(), jsonObject["Price"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -6161,7 +6161,7 @@ void NetworkAPIRequester::getDeleteServices(const std::function<void(QList<Servi
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Services(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Description"].toString(), jsonObject["Price"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Services(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Description"].toString(), jsonObject["Price"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -6216,7 +6216,7 @@ void NetworkAPIRequester::getActiveServices(const std::function<void(QList<Servi
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Services(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Description"].toString(), jsonObject["Price"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Services(jsonObject["Id"].toInt(), jsonObject["Name"].toString(), jsonObject["Description"].toString(), jsonObject["Price"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -6280,7 +6280,7 @@ void NetworkAPIRequester::searchServices(const std::function<void (Services)> ca
                     services.setName(jsonObject["Name"].toString());
                     services.setDescription(jsonObject["Description"].toString());
                     services.setPrice(jsonObject["Price"].toInt());
-                    services.setIsDeleted(jsonObject["IsDeleted"].toBool());
+                    services.setIsDeleted(jsonObject["IsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(services);
@@ -6585,7 +6585,7 @@ void NetworkAPIRequester::getAllStaff(const std::function<void(QList<Staff>)> ca
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Staff(jsonObject["Id"].toInt(), jsonObject["FirstName"].toString(), jsonObject["LastName"].toString(), jsonObject["Patronymic"].toString(), jsonObject["Post"].toInt(), jsonObject["PassportSeries"].toInt(), jsonObject["PassportNumber"].toInt(), jsonObject["Account"].toInt(), jsonObject["Education"].toString(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Staff(jsonObject["Id"].toInt(), jsonObject["FirstName"].toString(), jsonObject["LastName"].toString(), jsonObject["Patronymic"].toString(), jsonObject["Post"].toInt(), jsonObject["PassportSeries"].toInt(), jsonObject["PassportNumber"].toInt(), jsonObject["Account"].toInt(), jsonObject["Education"].toString(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -6640,7 +6640,7 @@ void NetworkAPIRequester::getDeleteStaff(const std::function<void(QList<Staff>)>
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Staff(jsonObject["Id"].toInt(), jsonObject["FirstName"].toString(), jsonObject["LastName"].toString(), jsonObject["Patronymic"].toString(), jsonObject["Post"].toInt(), jsonObject["PassportSeries"].toInt(), jsonObject["PassportNumber"].toInt(), jsonObject["Account"].toInt(), jsonObject["Education"].toString(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Staff(jsonObject["Id"].toInt(), jsonObject["FirstName"].toString(), jsonObject["LastName"].toString(), jsonObject["Patronymic"].toString(), jsonObject["Post"].toInt(), jsonObject["PassportSeries"].toInt(), jsonObject["PassportNumber"].toInt(), jsonObject["Account"].toInt(), jsonObject["Education"].toString(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -6695,7 +6695,7 @@ void NetworkAPIRequester::getActiveStaff(const std::function<void(QList<Staff>)>
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Staff(jsonObject["Id"].toInt(), jsonObject["FirstName"].toString(), jsonObject["LastName"].toString(), jsonObject["Patronymic"].toString(), jsonObject["Post"].toInt(), jsonObject["PassportSeries"].toInt(), jsonObject["PassportNumber"].toInt(), jsonObject["Account"].toInt(), jsonObject["Education"].toString(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Staff(jsonObject["Id"].toInt(), jsonObject["FirstName"].toString(), jsonObject["LastName"].toString(), jsonObject["Patronymic"].toString(), jsonObject["Post"].toInt(), jsonObject["PassportSeries"].toInt(), jsonObject["PassportNumber"].toInt(), jsonObject["Account"].toInt(), jsonObject["Education"].toString(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -6766,7 +6766,7 @@ void NetworkAPIRequester::searchStaff(const std::function<void (Staff)> callBack
                     staff.setPassportNumber(jsonObject["PassportNumber"].toInt());
                     staff.setAccount(jsonObject["Account"].toInt());
                     staff.setEducation(jsonObject["Education"].toString());
-                    staff.setIsDeleted(jsonObject["IsDeleted"].toBool());
+                    staff.setIsDeleted(jsonObject["IsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(staff);
@@ -7082,7 +7082,7 @@ void NetworkAPIRequester::getAllTickets(const std::function<void(QList<Tickets>)
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Tickets(jsonObject["Id"].toInt(), jsonObject["Price"].toInt(), jsonObject["SeatNumber"].toInt(), jsonObject["IdClient"].toInt(), jsonObject["Flights"].toInt(), jsonObject["BaggageAvailable"].toBool(), jsonObject["Baggage"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Tickets(jsonObject["Id"].toInt(), jsonObject["Price"].toInt(), jsonObject["SeatNumber"].toInt(), jsonObject["IdClient"].toInt(), jsonObject["Flights"].toInt(), jsonObject["BaggageAvailable"].toInt() == 1, jsonObject["Baggage"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -7137,7 +7137,7 @@ void NetworkAPIRequester::getDeleteTickets(const std::function<void(QList<Ticket
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Tickets(jsonObject["Id"].toInt(), jsonObject["Price"].toInt(), jsonObject["SeatNumber"].toInt(), jsonObject["IdClient"].toInt(), jsonObject["Flights"].toInt(), jsonObject["BaggageAvailable"].toBool(), jsonObject["Baggage"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Tickets(jsonObject["Id"].toInt(), jsonObject["Price"].toInt(), jsonObject["SeatNumber"].toInt(), jsonObject["IdClient"].toInt(), jsonObject["Flights"].toInt(), jsonObject["BaggageAvailable"].toInt() == 1, jsonObject["Baggage"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -7192,7 +7192,7 @@ void NetworkAPIRequester::getActiveTickets(const std::function<void(QList<Ticket
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(Tickets(jsonObject["Id"].toInt(), jsonObject["Price"].toInt(), jsonObject["SeatNumber"].toInt(), jsonObject["IdClient"].toInt(), jsonObject["Flights"].toInt(), jsonObject["BaggageAvailable"].toBool(), jsonObject["Baggage"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(Tickets(jsonObject["Id"].toInt(), jsonObject["Price"].toInt(), jsonObject["SeatNumber"].toInt(), jsonObject["IdClient"].toInt(), jsonObject["Flights"].toInt(), jsonObject["BaggageAvailable"].toInt() == 1, jsonObject["Baggage"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -7257,9 +7257,9 @@ void NetworkAPIRequester::searchTickets(const std::function<void (Tickets)> call
                     tickets.setIdClient(jsonObject["IdClient"].toInt());
                     tickets.setSeatNumber(jsonObject["SeatNumber"].toInt());
                     tickets.setFlights(jsonObject["Flights"].toInt());
-                    tickets.setBaggageAvailable(jsonObject["BaggageAvailable"].toBool());
+                    tickets.setBaggageAvailable(jsonObject["BaggageAvailable"].toInt() == 1);
                     tickets.setBaggage(jsonObject["Baggage"].toInt());
-                    tickets.setIsDeleted(jsonObject["IsDeleted"].toBool());
+                    tickets.setIsDeleted(jsonObject["IsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(tickets);
@@ -7571,7 +7571,7 @@ void NetworkAPIRequester::getAllTicketsAndServices(const std::function<void(QLis
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(TicketsAndServices(jsonObject["Id"].toInt(), jsonObject["IdService"].toInt(), jsonObject["IdTicket"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(TicketsAndServices(jsonObject["Id"].toInt(), jsonObject["IdService"].toInt(), jsonObject["IdTicket"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -7626,7 +7626,7 @@ void NetworkAPIRequester::getDeleteTicketsAndServices(const std::function<void(Q
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(TicketsAndServices(jsonObject["Id"].toInt(), jsonObject["IdService"].toInt(), jsonObject["IdTicket"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(TicketsAndServices(jsonObject["Id"].toInt(), jsonObject["IdService"].toInt(), jsonObject["IdTicket"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -7681,7 +7681,7 @@ void NetworkAPIRequester::getActiveTicketsAndServices(const std::function<void(Q
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(TicketsAndServices(jsonObject["Id"].toInt(), jsonObject["IdService"].toInt(), jsonObject["IdTicket"].toInt(), jsonObject["IsDeleted"].toBool()));
+                    list.append(TicketsAndServices(jsonObject["Id"].toInt(), jsonObject["IdService"].toInt(), jsonObject["IdTicket"].toInt(), jsonObject["IsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -7984,7 +7984,7 @@ void NetworkAPIRequester::getAllAirCompanyAndAirplaneFull(const std::function<vo
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(AirCompanyAndAirplaneFull(jsonObject["AirplaneId"].toInt(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxWeightCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["AirCompanyName"].toString(), jsonObject["AirplaneIsDeleted"].toBool()));
+                    list.append(AirCompanyAndAirplaneFull(jsonObject["AirplaneId"].toInt(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxWeightCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["AirCompanyName"].toString(), jsonObject["AirplaneIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -8039,7 +8039,7 @@ void NetworkAPIRequester::getDeleteAirCompanyAndAirplaneFull(const std::function
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(AirCompanyAndAirplaneFull(jsonObject["AirplaneId"].toInt(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxWeightCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["AirCompanyName"].toString(), jsonObject["AirplaneIsDeleted"].toBool()));
+                    list.append(AirCompanyAndAirplaneFull(jsonObject["AirplaneId"].toInt(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxWeightCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["AirCompanyName"].toString(), jsonObject["AirplaneIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -8094,7 +8094,7 @@ void NetworkAPIRequester::getActiveAirCompanyAndAirplaneFull(const std::function
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(AirCompanyAndAirplaneFull(jsonObject["AirplaneId"].toInt(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxWeightCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["AirCompanyName"].toString(), jsonObject["AirplaneIsDeleted"].toBool()));
+                    list.append(AirCompanyAndAirplaneFull(jsonObject["AirplaneId"].toInt(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxWeightCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["AirCompanyName"].toString(), jsonObject["AirplaneIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -8161,7 +8161,7 @@ void NetworkAPIRequester::searchAirCompanyAndAirplaneFull(const std::function<vo
                     airCompanyAndAirplaneFull.setAirplaneMaxWeightCargo(jsonObject["AirplaneMaxWeightCargo"].toInt());
                     airCompanyAndAirplaneFull.setAirplaneMaxSeatPlaces(jsonObject["AirplaneMaxSeatPlaces"].toInt());
                     airCompanyAndAirplaneFull.setAirCompanyName(jsonObject["AirCompanyName"].toString());
-                    airCompanyAndAirplaneFull.setAirplaneIsDeleted(jsonObject["AirplaneIsDeleted"].toBool());
+                    airCompanyAndAirplaneFull.setAirplaneIsDeleted(jsonObject["AirplaneIsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(airCompanyAndAirplaneFull);
@@ -8219,7 +8219,7 @@ void NetworkAPIRequester::getAllAirCompanyAndAirplaneTrunc(const std::function<v
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(AirCompanyAndAirplaneTrunc(jsonObject["AirplaneId"].toInt(), jsonObject["AirplaneName"].toString(), jsonObject["AirCompanyName"].toString(), jsonObject["AirplaneIsDeleted"].toBool()));
+                    list.append(AirCompanyAndAirplaneTrunc(jsonObject["AirplaneId"].toInt(), jsonObject["AirplaneName"].toString(), jsonObject["AirCompanyName"].toString(), jsonObject["AirplaneIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -8274,7 +8274,7 @@ void NetworkAPIRequester::getDeleteAirCompanyAndAirplaneTrunc(const std::functio
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(AirCompanyAndAirplaneTrunc(jsonObject["AirplaneId"].toInt(), jsonObject["AirplaneName"].toString(), jsonObject["AirCompanyName"].toString(), jsonObject["AirplaneIsDeleted"].toBool()));
+                    list.append(AirCompanyAndAirplaneTrunc(jsonObject["AirplaneId"].toInt(), jsonObject["AirplaneName"].toString(), jsonObject["AirCompanyName"].toString(), jsonObject["AirplaneIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -8329,7 +8329,7 @@ void NetworkAPIRequester::getActiveAirCompanyAndAirplaneTrunc(const std::functio
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(AirCompanyAndAirplaneTrunc(jsonObject["AirplaneId"].toInt(), jsonObject["AirplaneName"].toString(), jsonObject["AirCompanyName"].toString(), jsonObject["AirplaneIsDeleted"].toBool()));
+                    list.append(AirCompanyAndAirplaneTrunc(jsonObject["AirplaneId"].toInt(), jsonObject["AirplaneName"].toString(), jsonObject["AirCompanyName"].toString(), jsonObject["AirplaneIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -8392,7 +8392,7 @@ void NetworkAPIRequester::searchAirCompanyAndAirplaneTrunc(const std::function<v
                     airCompanyAndAirplaneTrunc.setAirplaneId(jsonObject["AirplaneId"].toInt());
                     airCompanyAndAirplaneTrunc.setAirplaneName(jsonObject["AirplaneName"].toString());
                     airCompanyAndAirplaneTrunc.setAirCompanyName(jsonObject["AirCompanyName"].toString());
-                    airCompanyAndAirplaneTrunc.setAirplaneIsDeleted(jsonObject["AirplaneIsDeleted"].toBool());
+                    airCompanyAndAirplaneTrunc.setAirplaneIsDeleted(jsonObject["AirplaneIsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(airCompanyAndAirplaneTrunc);
@@ -8450,7 +8450,7 @@ void NetworkAPIRequester::getAllAirCompanyAndServicesFull(const std::function<vo
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(AirCompanyAndServicesFull(jsonObject["ServiceId"].toInt(), jsonObject["ServiceName"].toString(), jsonObject["ServiceDescription"].toString(), jsonObject["ServicePrice"].toInt(), jsonObject["AirCompanyName"].toString(), jsonObject["ServicesIsDeleted"].toBool()));
+                    list.append(AirCompanyAndServicesFull(jsonObject["ServiceId"].toInt(), jsonObject["ServiceName"].toString(), jsonObject["ServiceDescription"].toString(), jsonObject["ServicePrice"].toInt(), jsonObject["AirCompanyName"].toString(), jsonObject["ServicesIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -8505,7 +8505,7 @@ void NetworkAPIRequester::getDeleteAirCompanyAndServicesFull(const std::function
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(AirCompanyAndServicesFull(jsonObject["ServiceId"].toInt(), jsonObject["ServiceName"].toString(), jsonObject["ServiceDescription"].toString(), jsonObject["ServicePrice"].toInt(), jsonObject["AirCompanyName"].toString(), jsonObject["ServicesIsDeleted"].toBool()));
+                    list.append(AirCompanyAndServicesFull(jsonObject["ServiceId"].toInt(), jsonObject["ServiceName"].toString(), jsonObject["ServiceDescription"].toString(), jsonObject["ServicePrice"].toInt(), jsonObject["AirCompanyName"].toString(), jsonObject["ServicesIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -8560,7 +8560,7 @@ void NetworkAPIRequester::getActiveAirCompanyAndServicesFull(const std::function
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(AirCompanyAndServicesFull(jsonObject["ServiceId"].toInt(), jsonObject["ServiceName"].toString(), jsonObject["ServiceDescription"].toString(), jsonObject["ServicePrice"].toInt(), jsonObject["AirCompanyName"].toString(), jsonObject["ServicesIsDeleted"].toBool()));
+                    list.append(AirCompanyAndServicesFull(jsonObject["ServiceId"].toInt(), jsonObject["ServiceName"].toString(), jsonObject["ServiceDescription"].toString(), jsonObject["ServicePrice"].toInt(), jsonObject["AirCompanyName"].toString(), jsonObject["ServicesIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -8625,7 +8625,7 @@ void NetworkAPIRequester::searchAirCompanyAndServicesFull(const std::function<vo
                     airCompanyAndServicesFull.setServiceDescription(jsonObject["ServiceDescription"].toString());
                     airCompanyAndServicesFull.setServicePrice(jsonObject["ServicePrice"].toInt());
                     airCompanyAndServicesFull.setAirCompanyName(jsonObject["AirCompanyName"].toString());
-                    airCompanyAndServicesFull.setServicesIsDeleted(jsonObject["ServicesIsDeleted"].toBool());
+                    airCompanyAndServicesFull.setServicesIsDeleted(jsonObject["ServicesIsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(airCompanyAndServicesFull);
@@ -8683,7 +8683,7 @@ void NetworkAPIRequester::getAllAirCompanyAndServicesTrunc(const std::function<v
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(AirCompanyAndServicesTrunc(jsonObject["ServiceId"].toInt(), jsonObject["ServiceName"].toString(), jsonObject["ServicePrice"].toInt(), jsonObject["AirCompanyName"].toString(), jsonObject["ServicesIsDeleted"].toBool()));
+                    list.append(AirCompanyAndServicesTrunc(jsonObject["ServiceId"].toInt(), jsonObject["ServiceName"].toString(), jsonObject["ServicePrice"].toInt(), jsonObject["AirCompanyName"].toString(), jsonObject["ServicesIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -8738,7 +8738,7 @@ void NetworkAPIRequester::getDeleteAirCompanyAndServicesTrunc(const std::functio
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(AirCompanyAndServicesTrunc(jsonObject["ServiceId"].toInt(), jsonObject["ServiceName"].toString(), jsonObject["ServicePrice"].toInt(), jsonObject["AirCompanyName"].toString(), jsonObject["ServicesIsDeleted"].toBool()));
+                    list.append(AirCompanyAndServicesTrunc(jsonObject["ServiceId"].toInt(), jsonObject["ServiceName"].toString(), jsonObject["ServicePrice"].toInt(), jsonObject["AirCompanyName"].toString(), jsonObject["ServicesIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -8793,7 +8793,7 @@ void NetworkAPIRequester::getActiveAirCompanyAndServicesTrunc(const std::functio
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(AirCompanyAndServicesTrunc(jsonObject["ServiceId"].toInt(), jsonObject["ServiceName"].toString(), jsonObject["ServicePrice"].toInt(), jsonObject["AirCompanyName"].toString(), jsonObject["ServicesIsDeleted"].toBool()));
+                    list.append(AirCompanyAndServicesTrunc(jsonObject["ServiceId"].toInt(), jsonObject["ServiceName"].toString(), jsonObject["ServicePrice"].toInt(), jsonObject["AirCompanyName"].toString(), jsonObject["ServicesIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -8857,7 +8857,7 @@ void NetworkAPIRequester::searchAirCompanyAndServicesTrunc(const std::function<v
                     airCompanyAndServicesTrunc.setServiceName(jsonObject["ServiceName"].toString());
                     airCompanyAndServicesTrunc.setServicePrice(jsonObject["ServicePrice"].toInt());
                     airCompanyAndServicesTrunc.setAirCompanyName(jsonObject["AirCompanyName"].toString());
-                    airCompanyAndServicesTrunc.setServicesIsDeleted(jsonObject["ServicesIsDeleted"].toBool());
+                    airCompanyAndServicesTrunc.setServicesIsDeleted(jsonObject["ServicesIsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(airCompanyAndServicesTrunc);
@@ -8915,7 +8915,7 @@ void NetworkAPIRequester::getAllCargoFull(const std::function<void(QList<CargoFu
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(CargoFull(jsonObject["CargoId"].toInt(), jsonObject["CargoDescription"].toString(), jsonObject["CargoWeight"].toInt(), jsonObject["CargoSize"].toInt(), jsonObject["CategoriesCargoName"].toString(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymicName"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsDeparturePoint"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["FlightsLadder"].toInt(), jsonObject["CargoIsDeleted"].toBool()));
+                    list.append(CargoFull(jsonObject["CargoId"].toInt(), jsonObject["CargoDescription"].toString(), jsonObject["CargoWeight"].toInt(), jsonObject["CargoSize"].toInt(), jsonObject["CategoriesCargoName"].toString(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymicName"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsDeparturePoint"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["FlightsLadder"].toInt(), jsonObject["CargoIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -8970,7 +8970,7 @@ void NetworkAPIRequester::getDeleteCargoFull(const std::function<void(QList<Carg
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(CargoFull(jsonObject["CargoId"].toInt(), jsonObject["CargoDescription"].toString(), jsonObject["CargoWeight"].toInt(), jsonObject["CargoSize"].toInt(), jsonObject["CategoriesCargoName"].toString(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymicName"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsDeparturePoint"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["FlightsLadder"].toInt(), jsonObject["CargoIsDeleted"].toBool()));
+                    list.append(CargoFull(jsonObject["CargoId"].toInt(), jsonObject["CargoDescription"].toString(), jsonObject["CargoWeight"].toInt(), jsonObject["CargoSize"].toInt(), jsonObject["CategoriesCargoName"].toString(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymicName"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsDeparturePoint"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["FlightsLadder"].toInt(), jsonObject["CargoIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -9025,7 +9025,7 @@ void NetworkAPIRequester::getActiveCargoFull(const std::function<void(QList<Carg
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(CargoFull(jsonObject["CargoId"].toInt(), jsonObject["CargoDescription"].toString(), jsonObject["CargoWeight"].toInt(), jsonObject["CargoSize"].toInt(), jsonObject["CategoriesCargoName"].toString(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymicName"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsDeparturePoint"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["FlightsLadder"].toInt(), jsonObject["CargoIsDeleted"].toBool()));
+                    list.append(CargoFull(jsonObject["CargoId"].toInt(), jsonObject["CargoDescription"].toString(), jsonObject["CargoWeight"].toInt(), jsonObject["CargoSize"].toInt(), jsonObject["CategoriesCargoName"].toString(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymicName"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsDeparturePoint"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["FlightsLadder"].toInt(), jsonObject["CargoIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -9100,7 +9100,7 @@ void NetworkAPIRequester::searchCargoFull(const std::function<void (CargoFull)> 
                     cargoFull.setDeparturePoint(jsonObject["DeparturePoint"].toString());
                     cargoFull.setArrivalPoint(jsonObject["ArrivalPoint"].toString());
                     cargoFull.setFlightsLadder(jsonObject["FlightsLadder"].toInt());
-                    cargoFull.setCargoIsDeleted(jsonObject["CargoIsDeleted"].toBool());
+                    cargoFull.setCargoIsDeleted(jsonObject["CargoIsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(cargoFull);
@@ -9158,7 +9158,7 @@ void NetworkAPIRequester::getAllCargoTrunc(const std::function<void(QList<CargoT
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(CargoTrunc(jsonObject["CargoId"].toInt(), jsonObject["CargoDescription"].toString(), jsonObject["CargoWeight"].toInt(), jsonObject["CargoSize"].toInt(), jsonObject["CategoriesCargoName"].toString(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["CargoIsDeleted"].toBool()));
+                    list.append(CargoTrunc(jsonObject["CargoId"].toInt(), jsonObject["CargoDescription"].toString(), jsonObject["CargoWeight"].toInt(), jsonObject["CargoSize"].toInt(), jsonObject["CategoriesCargoName"].toString(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["CargoIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -9213,7 +9213,7 @@ void NetworkAPIRequester::getDeleteCargoTrunc(const std::function<void(QList<Car
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(CargoTrunc(jsonObject["CargoId"].toInt(), jsonObject["CargoDescription"].toString(), jsonObject["CargoWeight"].toInt(), jsonObject["CargoSize"].toInt(), jsonObject["CategoriesCargoName"].toString(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["CargoIsDeleted"].toBool()));
+                    list.append(CargoTrunc(jsonObject["CargoId"].toInt(), jsonObject["CargoDescription"].toString(), jsonObject["CargoWeight"].toInt(), jsonObject["CargoSize"].toInt(), jsonObject["CategoriesCargoName"].toString(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["CargoIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -9268,7 +9268,7 @@ void NetworkAPIRequester::getActiveCargoTrunc(const std::function<void(QList<Car
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(CargoTrunc(jsonObject["CargoId"].toInt(), jsonObject["CargoDescription"].toString(), jsonObject["CargoWeight"].toInt(), jsonObject["CargoSize"].toInt(), jsonObject["CategoriesCargoName"].toString(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["CargoIsDeleted"].toBool()));
+                    list.append(CargoTrunc(jsonObject["CargoId"].toInt(), jsonObject["CargoDescription"].toString(), jsonObject["CargoWeight"].toInt(), jsonObject["CargoSize"].toInt(), jsonObject["CategoriesCargoName"].toString(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["CargoIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -9336,7 +9336,7 @@ void NetworkAPIRequester::searchCargoTrunc(const std::function<void (CargoTrunc)
                     cargoTrunc.setClientFirstName(jsonObject["ClientFirstName"].toString());
                     cargoTrunc.setClientLastName(jsonObject["ClientLastName"].toString());
                     cargoTrunc.setClientPatronymic(jsonObject["ClientPatronymic"].toString());
-                    cargoTrunc.setCargoIsDeleted(jsonObject["CargoIsDeleted"].toBool());
+                    cargoTrunc.setCargoIsDeleted(jsonObject["CargoIsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(cargoTrunc);
@@ -9394,7 +9394,7 @@ void NetworkAPIRequester::getAllClientAndBaggageFull(const std::function<void(QL
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(ClientAndBaggageFull(jsonObject["BaggageId"].toInt(), jsonObject["BaggageName"].toString(), jsonObject["BaggageDescription"].toString(), jsonObject["BaggageWeight"].toInt(), jsonObject["BaggageSize"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["BaggageIsDeleted"].toBool()));
+                    list.append(ClientAndBaggageFull(jsonObject["BaggageId"].toInt(), jsonObject["BaggageName"].toString(), jsonObject["BaggageDescription"].toString(), jsonObject["BaggageWeight"].toInt(), jsonObject["BaggageSize"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["BaggageIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -9449,7 +9449,7 @@ void NetworkAPIRequester::getDeleteClientAndBaggageFull(const std::function<void
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(ClientAndBaggageFull(jsonObject["BaggageId"].toInt(), jsonObject["BaggageName"].toString(), jsonObject["BaggageDescription"].toString(), jsonObject["BaggageWeight"].toInt(), jsonObject["BaggageSize"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["BaggageIsDeleted"].toBool()));
+                    list.append(ClientAndBaggageFull(jsonObject["BaggageId"].toInt(), jsonObject["BaggageName"].toString(), jsonObject["BaggageDescription"].toString(), jsonObject["BaggageWeight"].toInt(), jsonObject["BaggageSize"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["BaggageIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -9504,7 +9504,7 @@ void NetworkAPIRequester::getActiveClientAndBaggageFull(const std::function<void
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(ClientAndBaggageFull(jsonObject["BaggageId"].toInt(), jsonObject["BaggageName"].toString(), jsonObject["BaggageDescription"].toString(), jsonObject["BaggageWeight"].toInt(), jsonObject["BaggageSize"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["BaggageIsDeleted"].toBool()));
+                    list.append(ClientAndBaggageFull(jsonObject["BaggageId"].toInt(), jsonObject["BaggageName"].toString(), jsonObject["BaggageDescription"].toString(), jsonObject["BaggageWeight"].toInt(), jsonObject["BaggageSize"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["BaggageIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -9574,7 +9574,7 @@ void NetworkAPIRequester::searchClientAndBaggageFull(const std::function<void (C
                     clientAndBaggageFull.setClientPatronymic(jsonObject["ClientPatronymic"].toString());
                     clientAndBaggageFull.setClientPassportSeries(jsonObject["ClientPassportSeries"].toInt());
                     clientAndBaggageFull.setClientPassportNumber(jsonObject["ClientPassportNumber"].toInt());
-                    clientAndBaggageFull.setBaggageIsDeleted(jsonObject["BaggageIsDeleted"].toBool());
+                    clientAndBaggageFull.setBaggageIsDeleted(jsonObject["BaggageIsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(clientAndBaggageFull);
@@ -9632,7 +9632,7 @@ void NetworkAPIRequester::getAllClientAndBaggageTrunc(const std::function<void(Q
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(ClientAndBaggageTrunc(jsonObject["BaggageId"].toInt(), jsonObject["BaggageName"].toString(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["BaggageIsDeleted"].toBool()));
+                    list.append(ClientAndBaggageTrunc(jsonObject["BaggageId"].toInt(), jsonObject["BaggageName"].toString(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["BaggageIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -9687,7 +9687,7 @@ void NetworkAPIRequester::getDeleteClientAndBaggageTrunc(const std::function<voi
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(ClientAndBaggageTrunc(jsonObject["BaggageId"].toInt(), jsonObject["BaggageName"].toString(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["BaggageIsDeleted"].toBool()));
+                    list.append(ClientAndBaggageTrunc(jsonObject["BaggageId"].toInt(), jsonObject["BaggageName"].toString(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["BaggageIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -9742,7 +9742,7 @@ void NetworkAPIRequester::getActiveClientAndBaggageTrunc(const std::function<voi
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(ClientAndBaggageTrunc(jsonObject["BaggageId"].toInt(), jsonObject["BaggageName"].toString(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["BaggageIsDeleted"].toBool()));
+                    list.append(ClientAndBaggageTrunc(jsonObject["BaggageId"].toInt(), jsonObject["BaggageName"].toString(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["BaggageIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -9807,7 +9807,7 @@ void NetworkAPIRequester::searchClientAndBaggageTrunc(const std::function<void (
                     clientAndBaggageTrunc.setClientFirstName(jsonObject["ClientFirstName"].toString());
                     clientAndBaggageTrunc.setClientLastName(jsonObject["ClientLastName"].toString());
                     clientAndBaggageTrunc.setClientPatronymic(jsonObject["ClientPatronymic"].toString());
-                    clientAndBaggageTrunc.setBaggageIsDeleted(jsonObject["BaggageIsDeleted"].toBool());
+                    clientAndBaggageTrunc.setBaggageIsDeleted(jsonObject["BaggageIsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(clientAndBaggageTrunc);
@@ -9865,7 +9865,7 @@ void NetworkAPIRequester::getAllFlightsFull(const std::function<void(QList<Fligh
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(FlightsFull(jsonObject["FlightsId"].toInt(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["DeparturePoint"].toString(), jsonObject["ArrivalPoint"].toString(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxWeightCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["FlightsLadder"].toInt(), jsonObject["FlightsIsDeleted"].toBool()));
+                    list.append(FlightsFull(jsonObject["FlightsId"].toInt(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["DeparturePoint"].toString(), jsonObject["ArrivalPoint"].toString(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxWeightCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["FlightsLadder"].toInt(), jsonObject["FlightsIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -9920,7 +9920,7 @@ void NetworkAPIRequester::getDeleteFlightsFull(const std::function<void(QList<Fl
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(FlightsFull(jsonObject["FlightsId"].toInt(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["DeparturePoint"].toString(), jsonObject["ArrivalPoint"].toString(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxWeightCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["FlightsLadder"].toInt(), jsonObject["FlightsIsDeleted"].toBool()));
+                    list.append(FlightsFull(jsonObject["FlightsId"].toInt(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["DeparturePoint"].toString(), jsonObject["ArrivalPoint"].toString(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxWeightCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["FlightsLadder"].toInt(), jsonObject["FlightsIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -9975,7 +9975,7 @@ void NetworkAPIRequester::getActiveFlightsFull(const std::function<void(QList<Fl
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(FlightsFull(jsonObject["FlightsId"].toInt(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["DeparturePoint"].toString(), jsonObject["ArrivalPoint"].toString(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxWeightCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["FlightsLadder"].toInt(), jsonObject["FlightsIsDeleted"].toBool()));
+                    list.append(FlightsFull(jsonObject["FlightsId"].toInt(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["DeparturePoint"].toString(), jsonObject["ArrivalPoint"].toString(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxWeightCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["FlightsLadder"].toInt(), jsonObject["FlightsIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -10046,7 +10046,7 @@ void NetworkAPIRequester::searchFlightsFull(const std::function<void (FlightsFul
                     flightsFull.setAirplaneMaxWeightCargo(jsonObject["AirplaneMaxWeightCargo"].toInt());
                     flightsFull.setAirplaneMaxSeatPlaces(jsonObject["AirplaneMaxSeatPlaces"].toInt());
                     flightsFull.setFlightsLadder(jsonObject["FlightsLadder"].toInt());
-                    flightsFull.setFlightsIsDeleted(jsonObject["FlightsIsDeleted"].toBool());
+                    flightsFull.setFlightsIsDeleted(jsonObject["FlightsIsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(flightsFull);
@@ -10104,7 +10104,7 @@ void NetworkAPIRequester::getAllFlightsTrunc(const std::function<void(QList<Flig
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(FlightsTrunc(jsonObject["FlightsId"].toInt(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["ArrivalPoint"].toString(), jsonObject["FlightsLadder"].toInt(), jsonObject["FlightsIsDeleted"].toBool()));
+                    list.append(FlightsTrunc(jsonObject["FlightsId"].toInt(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["ArrivalPoint"].toString(), jsonObject["FlightsLadder"].toInt(), jsonObject["FlightsIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -10159,7 +10159,7 @@ void NetworkAPIRequester::getDeleteFlightsTrunc(const std::function<void(QList<F
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(FlightsTrunc(jsonObject["FlightsId"].toInt(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["ArrivalPoint"].toString(), jsonObject["FlightsLadder"].toInt(), jsonObject["FlightsIsDeleted"].toBool()));
+                    list.append(FlightsTrunc(jsonObject["FlightsId"].toInt(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["ArrivalPoint"].toString(), jsonObject["FlightsLadder"].toInt(), jsonObject["FlightsIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -10214,7 +10214,7 @@ void NetworkAPIRequester::getActiveFlightsTrunc(const std::function<void(QList<F
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(FlightsTrunc(jsonObject["FlightsId"].toInt(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["ArrivalPoint"].toString(), jsonObject["FlightsLadder"].toInt(), jsonObject["FlightsIsDeleted"].toBool()));
+                    list.append(FlightsTrunc(jsonObject["FlightsId"].toInt(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["ArrivalPoint"].toString(), jsonObject["FlightsLadder"].toInt(), jsonObject["FlightsIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -10278,7 +10278,7 @@ void NetworkAPIRequester::searchFlightsTrunc(const std::function<void (FlightsTr
                     flightsTrunc.setFlightsDepartureDate(jsonObject["FlightsDepartureDate"].toString());
                     flightsTrunc.setArrivalPoint(jsonObject["ArrivalPoint"].toString());
                     flightsTrunc.setFlightsLadder(jsonObject["FlightsLadder"].toInt());
-                    flightsTrunc.setFlightsIsDeleted(jsonObject["FlightsIsDeleted"].toBool());
+                    flightsTrunc.setFlightsIsDeleted(jsonObject["FlightsIsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(flightsTrunc);
@@ -10336,7 +10336,7 @@ void NetworkAPIRequester::getAllStaffFull(const std::function<void(QList<StaffFu
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(StaffFull(jsonObject["StaffId"].toInt(), jsonObject["StaffFirstName"].toString(), jsonObject["StaffLastName"].toString(), jsonObject["StaffPatronymic"].toString(), jsonObject["PostName"].toString(), jsonObject["PostSalary"].toInt(), jsonObject["StaffPassportSeries"].toInt(), jsonObject["StaffPassportNumber"].toInt(), jsonObject["StaffEducation"].toString(), jsonObject["AccountLogin"].toString(), jsonObject["AccountPassword"].toString(), jsonObject["StaffIsDeleted"].toBool()));
+                    list.append(StaffFull(jsonObject["StaffId"].toInt(), jsonObject["StaffFirstName"].toString(), jsonObject["StaffLastName"].toString(), jsonObject["StaffPatronymic"].toString(), jsonObject["PostName"].toString(), jsonObject["PostSalary"].toInt(), jsonObject["StaffPassportSeries"].toInt(), jsonObject["StaffPassportNumber"].toInt(), jsonObject["StaffEducation"].toString(), jsonObject["AccountLogin"].toString(), jsonObject["AccountPassword"].toString(), jsonObject["StaffIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -10391,7 +10391,7 @@ void NetworkAPIRequester::getDeleteStaffFull(const std::function<void(QList<Staf
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(StaffFull(jsonObject["StaffId"].toInt(), jsonObject["StaffFirstName"].toString(), jsonObject["StaffLastName"].toString(), jsonObject["StaffPatronymic"].toString(), jsonObject["PostName"].toString(), jsonObject["PostSalary"].toInt(), jsonObject["StaffPassportSeries"].toInt(), jsonObject["StaffPassportNumber"].toInt(), jsonObject["StaffEducation"].toString(), jsonObject["AccountLogin"].toString(), jsonObject["AccountPassword"].toString(), jsonObject["StaffIsDeleted"].toBool()));
+                    list.append(StaffFull(jsonObject["StaffId"].toInt(), jsonObject["StaffFirstName"].toString(), jsonObject["StaffLastName"].toString(), jsonObject["StaffPatronymic"].toString(), jsonObject["PostName"].toString(), jsonObject["PostSalary"].toInt(), jsonObject["StaffPassportSeries"].toInt(), jsonObject["StaffPassportNumber"].toInt(), jsonObject["StaffEducation"].toString(), jsonObject["AccountLogin"].toString(), jsonObject["AccountPassword"].toString(), jsonObject["StaffIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -10446,7 +10446,7 @@ void NetworkAPIRequester::getActiveStaffFull(const std::function<void(QList<Staf
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(StaffFull(jsonObject["StaffId"].toInt(), jsonObject["StaffFirstName"].toString(), jsonObject["StaffLastName"].toString(), jsonObject["StaffPatronymic"].toString(), jsonObject["PostName"].toString(), jsonObject["PostSalary"].toInt(), jsonObject["StaffPassportSeries"].toInt(), jsonObject["StaffPassportNumber"].toInt(), jsonObject["StaffEducation"].toString(), jsonObject["AccountLogin"].toString(), jsonObject["AccountPassword"].toString(), jsonObject["StaffIsDeleted"].toBool()));
+                    list.append(StaffFull(jsonObject["StaffId"].toInt(), jsonObject["StaffFirstName"].toString(), jsonObject["StaffLastName"].toString(), jsonObject["StaffPatronymic"].toString(), jsonObject["PostName"].toString(), jsonObject["PostSalary"].toInt(), jsonObject["StaffPassportSeries"].toInt(), jsonObject["StaffPassportNumber"].toInt(), jsonObject["StaffEducation"].toString(), jsonObject["AccountLogin"].toString(), jsonObject["AccountPassword"].toString(), jsonObject["StaffIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -10519,7 +10519,7 @@ void NetworkAPIRequester::searchStaffFull(const std::function<void (StaffFull)> 
                     staffFull.setStaffEducation(jsonObject["StaffEducation"].toString());
                     staffFull.setAccountLogin(jsonObject["AccountLogin"].toString());
                     staffFull.setAccountPassword(jsonObject["AccountPassword"].toString());
-                    staffFull.setStaffIsDeleted(jsonObject["StaffIsDeleted"].toBool());
+                    staffFull.setStaffIsDeleted(jsonObject["StaffIsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(staffFull);
@@ -10591,7 +10591,7 @@ void NetworkAPIRequester::searchByLoginStaffFull(const std::function<void (Staff
                     staffFull.setStaffEducation(jsonObject["StaffEducation"].toString());
                     staffFull.setAccountLogin(jsonObject["AccountLogin"].toString());
                     staffFull.setAccountPassword(jsonObject["AccountPassword"].toString());
-                    staffFull.setStaffIsDeleted(jsonObject["StaffIsDeleted"].toBool());
+                    staffFull.setStaffIsDeleted(jsonObject["StaffIsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(staffFull);
@@ -10649,7 +10649,7 @@ void NetworkAPIRequester::getAllStaffTrunc(const std::function<void(QList<StaffT
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(StaffTrunc(jsonObject["StaffId"].toInt(), jsonObject["StaffFirstName"].toString(), jsonObject["StaffLastName"].toString(), jsonObject["StaffPatronymic"].toString(), jsonObject["PostName"].toString(), jsonObject["PostSalary"].toInt(), jsonObject["StaffEducation"].toString(), jsonObject["StaffIsDeleted"].toBool()));
+                    list.append(StaffTrunc(jsonObject["StaffId"].toInt(), jsonObject["StaffFirstName"].toString(), jsonObject["StaffLastName"].toString(), jsonObject["StaffPatronymic"].toString(), jsonObject["PostName"].toString(), jsonObject["PostSalary"].toInt(), jsonObject["StaffEducation"].toString(), jsonObject["StaffIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -10704,7 +10704,7 @@ void NetworkAPIRequester::getDeleteStaffTrunc(const std::function<void(QList<Sta
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(StaffTrunc(jsonObject["StaffId"].toInt(), jsonObject["StaffFirstName"].toString(), jsonObject["StaffLastName"].toString(), jsonObject["StaffPatronymic"].toString(), jsonObject["PostName"].toString(), jsonObject["PostSalary"].toInt(), jsonObject["StaffEducation"].toString(), jsonObject["StaffIsDeleted"].toBool()));
+                    list.append(StaffTrunc(jsonObject["StaffId"].toInt(), jsonObject["StaffFirstName"].toString(), jsonObject["StaffLastName"].toString(), jsonObject["StaffPatronymic"].toString(), jsonObject["PostName"].toString(), jsonObject["PostSalary"].toInt(), jsonObject["StaffEducation"].toString(), jsonObject["StaffIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -10759,7 +10759,7 @@ void NetworkAPIRequester::getActiveStaffTrunc(const std::function<void(QList<Sta
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(StaffTrunc(jsonObject["StaffId"].toInt(), jsonObject["StaffFirstName"].toString(), jsonObject["StaffLastName"].toString(), jsonObject["StaffPatronymic"].toString(), jsonObject["PostName"].toString(), jsonObject["PostSalary"].toInt(), jsonObject["StaffEducation"].toString(), jsonObject["StaffIsDeleted"].toBool()));
+                    list.append(StaffTrunc(jsonObject["StaffId"].toInt(), jsonObject["StaffFirstName"].toString(), jsonObject["StaffLastName"].toString(), jsonObject["StaffPatronymic"].toString(), jsonObject["PostName"].toString(), jsonObject["PostSalary"].toInt(), jsonObject["StaffEducation"].toString(), jsonObject["StaffIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -10828,7 +10828,7 @@ void NetworkAPIRequester::searchStaffTrunc(const std::function<void (StaffTrunc)
                     staffTrunc.setPostName(jsonObject["PostName"].toString());
                     staffTrunc.setPostSalary(jsonObject["PostSalary"].toInt());
                     staffTrunc.setStaffEducation(jsonObject["StaffEducation"].toString());
-                    staffTrunc.setStaffIsDeleted(jsonObject["StaffIsDeleted"].toBool());
+                    staffTrunc.setStaffIsDeleted(jsonObject["StaffIsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(staffTrunc);
@@ -10886,7 +10886,7 @@ void NetworkAPIRequester::getAllTicketsAndServicesFull(const std::function<void(
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(TicketsAndServicesFull(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["FlightsDeparturePoint"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toBool(), jsonObject["BaggageName"].toString(), jsonObject["BaggageDescription"].toString(), jsonObject["BaggageWeight"].toInt(), jsonObject["BaggageSize"].toInt(), jsonObject["ServicesName"].toString(), jsonObject["ServicesDescription"].toString(), jsonObject["ServicesPrice"].toInt(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toBool()));
+                    list.append(TicketsAndServicesFull(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["FlightsDeparturePoint"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toInt() == 1, jsonObject["BaggageName"].toString(), jsonObject["BaggageDescription"].toString(), jsonObject["BaggageWeight"].toInt(), jsonObject["BaggageSize"].toInt(), jsonObject["ServicesName"].toString(), jsonObject["ServicesDescription"].toString(), jsonObject["ServicesPrice"].toInt(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -10941,7 +10941,7 @@ void NetworkAPIRequester::getDeleteTicketsAndServicesFull(const std::function<vo
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(TicketsAndServicesFull(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["FlightsDeparturePoint"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toBool(), jsonObject["BaggageName"].toString(), jsonObject["BaggageDescription"].toString(), jsonObject["BaggageWeight"].toInt(), jsonObject["BaggageSize"].toInt(), jsonObject["ServicesName"].toString(), jsonObject["ServicesDescription"].toString(), jsonObject["ServicesPrice"].toInt(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toBool()));
+                    list.append(TicketsAndServicesFull(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["FlightsDeparturePoint"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toInt() == 1, jsonObject["BaggageName"].toString(), jsonObject["BaggageDescription"].toString(), jsonObject["BaggageWeight"].toInt(), jsonObject["BaggageSize"].toInt(), jsonObject["ServicesName"].toString(), jsonObject["ServicesDescription"].toString(), jsonObject["ServicesPrice"].toInt(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -10996,7 +10996,7 @@ void NetworkAPIRequester::getActiveTicketsAndServicesFull(const std::function<vo
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(TicketsAndServicesFull(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["FlightsDeparturePoint"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toBool(), jsonObject["BaggageName"].toString(), jsonObject["BaggageDescription"].toString(), jsonObject["BaggageWeight"].toInt(), jsonObject["BaggageSize"].toInt(), jsonObject["ServicesName"].toString(), jsonObject["ServicesDescription"].toString(), jsonObject["ServicesPrice"].toInt(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toBool()));
+                    list.append(TicketsAndServicesFull(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["FlightsDeparturePoint"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toInt() == 1, jsonObject["BaggageName"].toString(), jsonObject["BaggageDescription"].toString(), jsonObject["BaggageWeight"].toInt(), jsonObject["BaggageSize"].toInt(), jsonObject["ServicesName"].toString(), jsonObject["ServicesDescription"].toString(), jsonObject["ServicesPrice"].toInt(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -11073,7 +11073,7 @@ void NetworkAPIRequester::searchTicketsAndServicesFull(const std::function<void 
                     ticketsAndServicesFull.setAirplaneMaxWeightCargo(jsonObject["AirplaneMaxWeightCargo"].toInt());
                     ticketsAndServicesFull.setAirplaneMaxSeatPlaces(jsonObject["AirplaneMaxSeatPlaces"].toInt());
                     ticketsAndServicesFull.setFlightsLadder(jsonObject["FlightsLadder"].toInt());
-                    ticketsAndServicesFull.setTicketsBaggageAvailable(jsonObject["TicketsBaggageAvailable"].toBool());
+                    ticketsAndServicesFull.setTicketsBaggageAvailable(jsonObject["TicketsBaggageAvailable"].toInt() == 1);
                     ticketsAndServicesFull.setBaggageName(jsonObject["BaggageName"].toString());
                     ticketsAndServicesFull.setBaggageDescription(jsonObject["BaggageDescription"].toString());
                     ticketsAndServicesFull.setBaggageWeight(jsonObject["BaggageWeight"].toInt());
@@ -11082,7 +11082,7 @@ void NetworkAPIRequester::searchTicketsAndServicesFull(const std::function<void 
                     ticketsAndServicesFull.setServicesDescription(jsonObject["ServicesDescription"].toString());
                     ticketsAndServicesFull.setServicesPrice(jsonObject["ServicesPrice"].toInt());
                     ticketsAndServicesFull.setTicketsSeatNumber(jsonObject["TicketsSeatNumber"].toInt());
-                    ticketsAndServicesFull.setTicketsIsDeleted(jsonObject["TicketsIsDeleted"].toBool());
+                    ticketsAndServicesFull.setTicketsIsDeleted(jsonObject["TicketsIsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(ticketsAndServicesFull);
@@ -11140,7 +11140,7 @@ void NetworkAPIRequester::getAllTicketsAndServicesTrunc(const std::function<void
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(TicketsAndServicesTrunc(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ServicesName"].toString(), jsonObject["ServicesPrice"].toInt(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toBool()));
+                    list.append(TicketsAndServicesTrunc(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ServicesName"].toString(), jsonObject["ServicesPrice"].toInt(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -11195,7 +11195,7 @@ void NetworkAPIRequester::getDeleteTicketsAndServicesTrunc(const std::function<v
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(TicketsAndServicesTrunc(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ServicesName"].toString(), jsonObject["ServicesPrice"].toInt(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toBool()));
+                    list.append(TicketsAndServicesTrunc(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ServicesName"].toString(), jsonObject["ServicesPrice"].toInt(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -11250,7 +11250,7 @@ void NetworkAPIRequester::getActiveTicketsAndServicesTrunc(const std::function<v
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(TicketsAndServicesTrunc(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ServicesName"].toString(), jsonObject["ServicesPrice"].toInt(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toBool()));
+                    list.append(TicketsAndServicesTrunc(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ServicesName"].toString(), jsonObject["ServicesPrice"].toInt(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -11318,7 +11318,7 @@ void NetworkAPIRequester::searchTicketsAndServicesTrunc(const std::function<void
                     ticketsAndServicesTrunc.setServicesName(jsonObject["ServicesName"].toString());
                     ticketsAndServicesTrunc.setServicesPrice(jsonObject["ServicesPrice"].toInt());
                     ticketsAndServicesTrunc.setTicketsSeatNumber(jsonObject["TicketsSeatNumber"].toInt());
-                    ticketsAndServicesTrunc.setTicketsIsDeleted(jsonObject["TicketsIsDeleted"].toBool());
+                    ticketsAndServicesTrunc.setTicketsIsDeleted(jsonObject["TicketsIsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(ticketsAndServicesTrunc);
@@ -11376,7 +11376,7 @@ void NetworkAPIRequester::getAllTicketsFull(const std::function<void(QList<Ticke
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(TicketsFull(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["FlightsDeparturePoint"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toBool(), jsonObject["BaggageName"].toString(), jsonObject["BaggageDescription"].toString(), jsonObject["BaggageWeight"].toInt(), jsonObject["BaggageSize"].toInt(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toBool()));
+                    list.append(TicketsFull(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["FlightsDeparturePoint"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toInt() == 1, jsonObject["BaggageName"].toString(), jsonObject["BaggageDescription"].toString(), jsonObject["BaggageWeight"].toInt(), jsonObject["BaggageSize"].toInt(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -11431,7 +11431,7 @@ void NetworkAPIRequester::getDeleteTicketsFull(const std::function<void(QList<Ti
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(TicketsFull(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["FlightsDeparturePoint"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toBool(), jsonObject["BaggageName"].toString(), jsonObject["BaggageDescription"].toString(), jsonObject["BaggageWeight"].toInt(), jsonObject["BaggageSize"].toInt(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toBool()));
+                    list.append(TicketsFull(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["FlightsDeparturePoint"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toInt() == 1, jsonObject["BaggageName"].toString(), jsonObject["BaggageDescription"].toString(), jsonObject["BaggageWeight"].toInt(), jsonObject["BaggageSize"].toInt(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -11486,7 +11486,7 @@ void NetworkAPIRequester::getActiveTicketsFull(const std::function<void(QList<Ti
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(TicketsFull(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["FlightsDeparturePoint"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toBool(), jsonObject["BaggageName"].toString(), jsonObject["BaggageDescription"].toString(), jsonObject["BaggageWeight"].toInt(), jsonObject["BaggageSize"].toInt(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toBool()));
+                    list.append(TicketsFull(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["FlightsDeparturePoint"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toInt() == 1, jsonObject["BaggageName"].toString(), jsonObject["BaggageDescription"].toString(), jsonObject["BaggageWeight"].toInt(), jsonObject["BaggageSize"].toInt(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -11563,13 +11563,13 @@ void NetworkAPIRequester::searchTicketsFull(const std::function<void (TicketsFul
                     ticketsFull.setAirplaneMaxWeightCargo(jsonObject["AirplaneMaxWeightCargo"].toInt());
                     ticketsFull.setAirplaneMaxSeatPlaces(jsonObject["AirplaneMaxSeatPlaces"].toInt());
                     ticketsFull.setFlightsLadder(jsonObject["FlightsLadder"].toInt());
-                    ticketsFull.setTicketsBaggageAvailable(jsonObject["TicketsBaggageAvailable"].toBool());
+                    ticketsFull.setTicketsBaggageAvailable(jsonObject["TicketsBaggageAvailable"].toInt() == 1);
                     ticketsFull.setBaggageName(jsonObject["BaggageName"].toString());
                     ticketsFull.setBaggageDescription(jsonObject["BaggageDescription"].toString());
                     ticketsFull.setBaggageWeight(jsonObject["BaggageWeight"].toInt());
                     ticketsFull.setBaggageSize(jsonObject["BaggageSize"].toInt());
                     ticketsFull.setTicketsSeatNumber(jsonObject["TicketsSeatNumber"].toInt());
-                    ticketsFull.setTicketsIsDeleted(jsonObject["TicketsIsDeleted"].toBool());
+                    ticketsFull.setTicketsIsDeleted(jsonObject["TicketsIsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(ticketsFull);
@@ -11627,7 +11627,7 @@ void NetworkAPIRequester::getAllTicketsTrunc(const std::function<void(QList<Tick
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(TicketsTrunc(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toBool(), jsonObject["BaggageName"].toString(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toBool()));
+                    list.append(TicketsTrunc(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toInt() == 1, jsonObject["BaggageName"].toString(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -11682,7 +11682,7 @@ void NetworkAPIRequester::getDeleteTicketsTrunc(const std::function<void(QList<T
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(TicketsTrunc(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toBool(), jsonObject["BaggageName"].toString(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toBool()));
+                    list.append(TicketsTrunc(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toInt() == 1, jsonObject["BaggageName"].toString(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -11737,7 +11737,7 @@ void NetworkAPIRequester::getActiveTicketsTrunc(const std::function<void(QList<T
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(TicketsTrunc(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toBool(), jsonObject["BaggageName"].toString(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toBool()));
+                    list.append(TicketsTrunc(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toInt() == 1, jsonObject["BaggageName"].toString(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -11805,10 +11805,10 @@ void NetworkAPIRequester::searchTicketsTrunc(const std::function<void (TicketsTr
                     ticketsTrunc.setFlightsDepartureDate(jsonObject["FlightsDepartureDate"].toString());
                     ticketsTrunc.setArrivalPoint(jsonObject["FlightsArrivalPoint"].toString());
                     ticketsTrunc.setFlightsLadder(jsonObject["FlightsLadder"].toInt());
-                    ticketsTrunc.setTicketsBaggageAvailable(jsonObject["TicketsBaggageAvailable"].toBool());
+                    ticketsTrunc.setTicketsBaggageAvailable(jsonObject["TicketsBaggageAvailable"].toInt() == 1);
                     ticketsTrunc.setBaggageName(jsonObject["BaggageName"].toString());
                     ticketsTrunc.setTicketsSeatNumber(jsonObject["TicketsSeatNumber"].toInt());
-                    ticketsTrunc.setTicketsIsDeleted(jsonObject["TicketsIsDeleted"].toBool());
+                    ticketsTrunc.setTicketsIsDeleted(jsonObject["TicketsIsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(ticketsTrunc);
@@ -11866,7 +11866,7 @@ void NetworkAPIRequester::getAllClientFull(const std::function<void(QList<Client
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(ClientFull(jsonObject["ClientId"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["AccountLogin"].toString(), jsonObject["AccountPassword"].toString(), jsonObject["ClientMoney"].toInt(), jsonObject["ClientIsDeleted"].toBool()));
+                    list.append(ClientFull(jsonObject["ClientId"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["AccountLogin"].toString(), jsonObject["AccountPassword"].toString(), jsonObject["ClientMoney"].toInt(), jsonObject["ClientIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -11921,7 +11921,7 @@ void NetworkAPIRequester::getDeleteClientFull(const std::function<void(QList<Cli
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(ClientFull(jsonObject["ClientId"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["AccountLogin"].toString(), jsonObject["AccountPassword"].toString(), jsonObject["ClientMoney"].toInt(), jsonObject["ClientIsDeleted"].toBool()));
+                    list.append(ClientFull(jsonObject["ClientId"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["AccountLogin"].toString(), jsonObject["AccountPassword"].toString(), jsonObject["ClientMoney"].toInt(), jsonObject["ClientIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -11976,7 +11976,7 @@ void NetworkAPIRequester::getActiveClientFull(const std::function<void(QList<Cli
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(ClientFull(jsonObject["ClientId"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["AccountLogin"].toString(), jsonObject["AccountPassword"].toString(), jsonObject["ClientMoney"].toInt(), jsonObject["ClientIsDeleted"].toBool()));
+                    list.append(ClientFull(jsonObject["ClientId"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["AccountLogin"].toString(), jsonObject["AccountPassword"].toString(), jsonObject["ClientMoney"].toInt(), jsonObject["ClientIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -12047,7 +12047,7 @@ void NetworkAPIRequester::searchClientFull(const std::function<void (ClientFull)
                     clientFull.setAccountLogin(jsonObject["AccountLogin"].toString());
                     clientFull.setAccountPassword(jsonObject["AccountPassword"].toString());
                     clientFull.setClientMoney(jsonObject["ClientMoney"].toInt());
-                    clientFull.setClientIsDeleted(jsonObject["ClientIsDeleted"].toBool());
+                    clientFull.setClientIsDeleted(jsonObject["ClientIsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(clientFull);
@@ -12058,7 +12058,6 @@ void NetworkAPIRequester::searchClientFull(const std::function<void (ClientFull)
         reply->deleteLater();
     });
 }
-
 void NetworkAPIRequester::searchByLoginClientFull(const std::function<void (ClientFull)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed, ClientFull clientFull)
 {
     QNetworkRequest request(QUrl(this->url + "Views/ClientFull/ClientFullSearchByLogin.php"));
@@ -12117,7 +12116,7 @@ void NetworkAPIRequester::searchByLoginClientFull(const std::function<void (Clie
                     clientFull.setAccountLogin(jsonObject["AccountLogin"].toString());
                     clientFull.setAccountPassword(jsonObject["AccountPassword"].toString());
                     clientFull.setClientMoney(jsonObject["ClientMoney"].toInt());
-                    clientFull.setClientIsDeleted(jsonObject["ClientIsDeleted"].toBool());
+                    clientFull.setClientIsDeleted(jsonObject["ClientIsDeleted"].toInt() == 1);
             }
 
             callBackSuccess(clientFull);

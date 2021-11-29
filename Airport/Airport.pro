@@ -56,6 +56,7 @@ HEADERS += Accounts.h \
            TicketsFull.h \
            TicketsTrunc.h \
            WindowAirCompany.h \
+           WindowAirplane.h \
            WindowClientLogin.h \
            WindowClientReg.h \
            WindowControlPanelStaff.h \
@@ -87,6 +88,7 @@ SOURCES += Accounts.cpp \
            FlightsTrunc.cpp \
            HtmlGenerator.cpp \
            WindowAirCompany.cpp \
+           WindowAirplane.cpp \
            WindowClientLogin.cpp \
            WindowClientReg.cpp \
            WindowControlPanelStaff.cpp \

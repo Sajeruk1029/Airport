@@ -1,5 +1,5 @@
-#ifndef WINDOWAIRCOMPANY_H
-#define WINDOWAIRCOMPANY_H
+#ifndef WINDOWAIRPLANE_H
+#define WINDOWAIRPLANE_H
 
 #include <QObject>
 #include <QWidget>
@@ -30,12 +30,12 @@
 #include "HtmlGenerator.h"
 #include "CustomInputWidget.h"
 
-class WindowAirCompany : public QWidget
+class WindowAirplane : public QWidget
 {
     Q_OBJECT
 public:
-    explicit WindowAirCompany(void);
-    ~WindowAirCompany();
+    explicit WindowAirplane(void);
+    ~WindowAirplane();
 
 private slots:
     void onClickSearch(void);
@@ -71,4 +71,4 @@ private:
     HTMLGenerator *gen;
 };
 
-#endif // WINDOWAIRCOMPANY_H
+#endif // WINDOWAIRPLANE_H

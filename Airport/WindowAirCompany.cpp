@@ -55,23 +55,35 @@ WindowAirCompany::~WindowAirCompany()
 
 void WindowAirCompany::onClickSearch()
 {
+    if(search->text().isEmpty())
+    {
+        QMessageBox::critical(this, "Ошибка", "Поле поиска по наименованию не должно быть пустым!");
+        return;
+    }
+
+    for(int counter = 0; counter < table->rowCount(); ++counter)
+    {
+        delete table->cellWidget(counter, 3);
+        delete table->cellWidget(counter, 4);
+        delete table->cellWidget(counter, 5);
+    }
+
     table->clear();
 
     table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Логически удалено ли", "", "", ""});
 
     requester->searchAirCompany([this](AirCompany airCompany)
     {
-
         table->setRowCount(1);
         table->setColumnCount(6);
 
         if(airCompany.getId() == 0){ return; }
 
-        if(airCompany.getIsDeleted() != (deleted->checkState() != Qt::CheckState::Checked)){ return; }
+        if(airCompany.getIsDeleted() != (deleted->checkState() == Qt::CheckState::Checked)){ return; }
 
         table->setItem(0, 0, new QTableWidgetItem(QString::number(airCompany.getId())));
         table->setItem(0, 1, new QTableWidgetItem(airCompany.getName()));
-        table->setItem(0, 2, new QTableWidgetItem(QString::number(airCompany.getIsDeleted())));
+        table->setItem(0, 2, new QTableWidgetItem((airCompany.getIsDeleted() == 1)? "Да" : "Нет"));
 
         table->setCellWidget(0, 3, new QPushButton("Удалить"));
         table->setCellWidget(0, 4, new QPushButton("Изменить"));
@@ -79,10 +91,11 @@ void WindowAirCompany::onClickSearch()
         if(deleted->checkState() == Qt::CheckState::Checked){ table->setCellWidget(0, 5, new QPushButton("Восстановить логически")); }
         else{ table->setCellWidget(0, 5, new QPushButton("Удалить логически")); }
 
-
-
         table->cellWidget(0, 3)->setProperty("Id", airCompany.getId());
+
         table->cellWidget(0, 4)->setProperty("Id", airCompany.getId());
+        table->cellWidget(0, 4)->setProperty("IsDeleted", airCompany.getIsDeleted() == 1);
+
         table->cellWidget(0, 5)->setProperty("Id", airCompany.getId());
 
         connect(qobject_cast<QPushButton*>(table->cellWidget(0, 3)), &QPushButton::clicked, [this]()
@@ -99,16 +112,24 @@ void WindowAirCompany::onClickSearch()
 
         connect(qobject_cast<QPushButton*>(table->cellWidget(0, 4)), &QPushButton::clicked, [this]()
         {
-            QString name = "";
+            //QString name = "";
+            AirCompany airCompany;
             bool okDialog = false;
 
-            name = QInputDialog::getText(this, "Изменение авиакомпании", "Наименование авиакомпании", QLineEdit::Normal, QString(), &okDialog);
+            airCompany = CustomInputWidget::getAirCompany("Изменение авиакомпании", okDialog, this);
 
-            if((okDialog) && name.isEmpty())
-            {
-                QMessageBox::critical(this, "Ошибка", "Наименование авиакомпании не может быть пустым!");
-                return;
-            }
+            if(!okDialog){ return; }
+
+            //name = QInputDialog::getText(this, "Изменение авиакомпании", "Наименование авиакомпании", QLineEdit::Normal, QString(), &okDialog);
+
+            //if((okDialog) && name.isEmpty())
+            //{
+                //QMessageBox::critical(this, "Ошибка", "Наименование авиакомпании не может быть пустым!");
+                //return;
+            //}
+
+            airCompany.setIsDeleted(qobject_cast<QPushButton*>(table->cellWidget(0, 4))->property("IsDeleted").toInt() == 1);
+            qDebug() << airCompany.getIsDeleted();
 
             requester->setAirCompany([this](bool success)
             {
@@ -117,23 +138,41 @@ void WindowAirCompany::onClickSearch()
             }, [this](unsigned int errorCode, QString errorLine, QString replyServer)
             {
                 QMessageBox::critical(this, "Ошибка", replyServer);
-            }, AirCompany(qobject_cast<QPushButton*>(table->cellWidget(0, 4))->property("Id").toInt(), "", false), AirCompany(0, name, false));
+            }, AirCompany(qobject_cast<QPushButton*>(table->cellWidget(0, 4))->property("Id").toInt(), "", false), airCompany);
         });
 
-        connect(qobject_cast<QPushButton*>(table->cellWidget(0, 5)), &QPushButton::clicked, [this]()
+        if(deleted->checkState() != Qt::CheckState::Checked)
         {
-            requester->logicalDeleterAirCompany([this](bool success)
+            connect(qobject_cast<QPushButton*>(table->cellWidget(0, 5)), &QPushButton::clicked, [this]()
             {
-                if(deleted->checkState() == Qt::CheckState::Checked){ QMessageBox::about(this, "Успех", "Логическое удаление прошло успешно!"); }
-                else{ QMessageBox::about(this, "Успех", "Логическое восстановление прошло успешно!"); }
+                requester->logicalDeleterAirCompany([this](bool success)
+                {
+                    QMessageBox::about(this, "Успех", "Логическое удаление прошло успешно!");
 
 
-                refreshTable();
-            }, [this](unsigned int errorCode, QString errorLine, QString replyServer)
+                    refreshTable();
+                }, [this](unsigned int errorCode, QString errorLine, QString replyServer)
+                {
+                    QMessageBox::critical(this, "Ошибка", replyServer);
+                }, AirCompany(qobject_cast<QPushButton*>(table->cellWidget(0, 5))->property("Id").toInt(), "", false));
+            });
+        }
+        else
+        {
+            connect(qobject_cast<QPushButton*>(table->cellWidget(0, 5)), &QPushButton::clicked, [this]()
             {
-                QMessageBox::critical(this, "Ошибка", replyServer);
-            }, AirCompany(qobject_cast<QPushButton*>(table->cellWidget(0, 5))->property("Id").toInt(), "", false));
-        });
+                requester->logicalRecoverAirCompany([this](bool success)
+                {
+                    QMessageBox::about(this, "Успех", "Логическое восстановление прошло успешно!");
+
+
+                    refreshTable();
+                }, [this](unsigned int errorCode, QString errorLine, QString replyServer)
+                {
+                    QMessageBox::critical(this, "Ошибка", replyServer);
+                }, AirCompany(qobject_cast<QPushButton*>(table->cellWidget(0, 5))->property("Id").toInt(), "", false));
+            });
+        }
 
     }, [this](unsigned int errorCode, QString errorLine, QString replyServer)
     {
@@ -143,6 +182,13 @@ void WindowAirCompany::onClickSearch()
 
 void WindowAirCompany::refreshTable()
 {
+    for(int counter = 0; counter < table->rowCount(); ++counter)
+    {
+        delete table->cellWidget(counter, 3);
+        delete table->cellWidget(counter, 4);
+        delete table->cellWidget(counter, 5);
+    }
+
     table->clear();
 
     table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Логически удалено ли", "", "", ""});
@@ -159,14 +205,17 @@ void WindowAirCompany::refreshTable()
             {
                 table->setItem(counter, 0, new QTableWidgetItem(QString::number(airCompanies.at(counter).getId())));
                 table->setItem(counter, 1, new QTableWidgetItem(airCompanies.at(counter).getName()));
-                table->setItem(counter, 2, new QTableWidgetItem(QString::number(airCompanies.at(counter).getIsDeleted())));
+                table->setItem(counter, 2, new QTableWidgetItem((((airCompanies.at(counter).getIsDeleted() == 1)? "Да" : "Нет"))));
 
                 table->setCellWidget(counter, 3, new QPushButton("Удалить"));
                 table->setCellWidget(counter, 4, new QPushButton("Изменить"));
                 table->setCellWidget(counter, 5, new QPushButton("Удалить логически"));
 
                 table->cellWidget(counter, 3)->setProperty("Id", airCompanies.at(counter).getId());
+
                 table->cellWidget(counter, 4)->setProperty("Id", airCompanies.at(counter).getId());
+                table->cellWidget(counter, 4)->setProperty("IsDeleted", (airCompanies.at(counter).getIsDeleted() == 1));
+
                 table->cellWidget(counter, 5)->setProperty("Id", airCompanies.at(counter).getId());
 
                 connect(qobject_cast<QPushButton*>(table->cellWidget(counter, 3)), &QPushButton::clicked, [this, counter]()
@@ -183,16 +232,23 @@ void WindowAirCompany::refreshTable()
 
                 connect(qobject_cast<QPushButton*>(table->cellWidget(counter, 4)), &QPushButton::clicked, [this, counter]()
                 {
-                    QString name = "";
+                    //QString name = "";
+                    AirCompany airCompany;
                     bool okDialog = false;
 
-                    name = QInputDialog::getText(this, "Изменение авиакомпании", "Наименование авиакомпании", QLineEdit::Normal, QString(), &okDialog);
+                    airCompany = CustomInputWidget::getAirCompany("Изменение авиакомпании", okDialog, this);
 
-                    if((okDialog) && name.isEmpty())
-                    {
-                        QMessageBox::critical(this, "Ошибка", "Наименование авиакомпании не может быть пустым!");
-                        return;
-                    }
+                    if(!okDialog){ return; }
+
+                    //name = QInputDialog::getText(this, "Изменение авиакомпании", "Наименование авиакомпании", QLineEdit::Normal, QString(), &okDialog);
+
+                    //if((okDialog) && name.isEmpty())
+                    //{
+                        //QMessageBox::critical(this, "Ошибка", "Наименование авиакомпании не может быть пустым!");
+                        //return;
+                    //}
+
+                    airCompany.setIsDeleted(qobject_cast<QPushButton*>(table->cellWidget(counter, 4))->property("IsDeleted").toInt() == 1);
 
                     requester->setAirCompany([this](bool success)
                     {
@@ -201,13 +257,14 @@ void WindowAirCompany::refreshTable()
                     }, [this](unsigned int errorCode, QString errorLine, QString replyServer)
                     {
                         QMessageBox::critical(this, "Ошибка", replyServer);
-                    }, AirCompany(qobject_cast<QPushButton*>(table->cellWidget(counter, 4))->property("Id").toInt(), "", false), AirCompany(0, name, false));
+                    }, AirCompany(qobject_cast<QPushButton*>(table->cellWidget(counter, 4))->property("Id").toInt(), "", false), airCompany);
                 });
 
                 connect(qobject_cast<QPushButton*>(table->cellWidget(counter, 5)), &QPushButton::clicked, [this, counter]()
                 {
-                    requester->logicalDeleterAirCompany([this](bool success)
+                    requester->logicalDeleterAirCompany([this, counter](bool success)
                     {
+                        //qDebug() << counter;
                         QMessageBox::about(this, "Успех", "Логическое удаление прошло успешно!");
                         refreshTable();
                     }, [this](unsigned int errorCode, QString errorLine, QString replyServer)
@@ -234,15 +291,18 @@ void WindowAirCompany::refreshTable()
             {
                 table->setItem(counter, 0, new QTableWidgetItem(QString::number(airCompanies.at(counter).getId())));
                 table->setItem(counter, 1, new QTableWidgetItem(airCompanies.at(counter).getName()));
-                table->setItem(counter, 2, new QTableWidgetItem(airCompanies.at(counter).getIsDeleted()));
+                table->setItem(counter, 2, new QTableWidgetItem((((airCompanies.at(counter).getIsDeleted() == 1)? "Да" : "Нет"))));
 
                 table->setCellWidget(counter, 3, new QPushButton("Удалить"));
                 table->setCellWidget(counter, 4, new QPushButton("Изменить"));
                 table->setCellWidget(counter, 5, new QPushButton("Восстановить логически"));
 
-                table->cellWidget(counter, 3)->setProperty("Id", counter);
-                table->cellWidget(counter, 4)->setProperty("Id", counter);
-                table->cellWidget(counter, 5)->setProperty("Id", counter);
+                table->cellWidget(counter, 3)->setProperty("Id", airCompanies.at(counter).getId());
+
+                table->cellWidget(counter, 4)->setProperty("Id", airCompanies.at(counter).getId());
+                table->cellWidget(counter, 4)->setProperty("IsDeleted", (airCompanies.at(counter).getIsDeleted() == 1));
+
+                table->cellWidget(counter, 5)->setProperty("Id", airCompanies.at(counter).getId());
 
                 connect(qobject_cast<QPushButton*>(table->cellWidget(counter, 3)), &QPushButton::clicked, [this, counter]()
                 {
@@ -258,16 +318,23 @@ void WindowAirCompany::refreshTable()
 
                 connect(qobject_cast<QPushButton*>(table->cellWidget(counter, 4)), &QPushButton::clicked, [this, counter]()
                 {
-                    QString name = "";
+                    //QString name = "";
+                    AirCompany airCompany;
                     bool okDialog = false;
 
-                    name = QInputDialog::getText(this, "Изменение авиакомпании", "Наименование авиакомпании", QLineEdit::Normal, QString(), &okDialog);
+                    airCompany = CustomInputWidget::getAirCompany("Изменение авиакомпании", okDialog, this);
 
-                    if((okDialog) && !name.isEmpty())
-                    {
-                        QMessageBox::critical(this, "Ошибка", "Наименование авиакомпании не может быть пустым!");
-                        return;
-                    }
+                    if(!okDialog){ return; }
+
+                    //name = QInputDialog::getText(this, "Изменение авиакомпании", "Наименование авиакомпании", QLineEdit::Normal, QString(), &okDialog);
+
+                    //if((okDialog) && name.isEmpty())
+                    //{
+                        //QMessageBox::critical(this, "Ошибка", "Наименование авиакомпании не может быть пустым!");
+                        //return;
+                    //}
+
+                    airCompany.setIsDeleted(qobject_cast<QPushButton*>(table->cellWidget(counter, 4))->property("IsDeleted").toInt() == 1);
 
                     requester->setAirCompany([this](bool success)
                     {
@@ -276,7 +343,7 @@ void WindowAirCompany::refreshTable()
                     }, [this](unsigned int errorCode, QString errorLine, QString replyServer)
                     {
                         QMessageBox::critical(this, "Ошибка", replyServer);
-                    }, AirCompany(qobject_cast<QPushButton*>(table->cellWidget(counter, 4))->property("Id").toInt(), "", false), AirCompany(0, name, false));
+                    }, AirCompany(qobject_cast<QPushButton*>(table->cellWidget(counter, 4))->property("Id").toInt(), "", false), airCompany);
                 });
 
                 connect(qobject_cast<QPushButton*>(table->cellWidget(counter, 5)), &QPushButton::clicked, [this, counter]()
@@ -289,6 +356,7 @@ void WindowAirCompany::refreshTable()
                     {
                         QMessageBox::critical(this, "Ошибка", replyServer);
                     }, AirCompany(qobject_cast<QPushButton*>(table->cellWidget(counter, 5))->property("Id").toInt(), "", false));
+                    qDebug() << qobject_cast<QPushButton*>(table->cellWidget(counter, 5))->property("Id").toInt();
                 });
             }
 
@@ -298,23 +366,27 @@ void WindowAirCompany::refreshTable()
         });
     }
 
-    //refreshTable();
+    table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Логически удалено ли", "", "", ""});
 }
 
 void WindowAirCompany::onClickRefresh(){ refreshTable(); }
 
 void WindowAirCompany::onClickAdd()
 {
-    QString name = "";
+    AirCompany airCompany;
     bool okDialog = false;
 
-    name = QInputDialog::getText(this, "Добавить авиакомпании", "Наименование авиакомпании", QLineEdit::Normal, QString(), &okDialog);
+    //name = QInputDialog::getText(this, "Добавить авиакомпании", "Наименование авиакомпании", QLineEdit::Normal, QString(), &okDialog);
 
-    if((!okDialog) && name.isEmpty())
-    {
-        QMessageBox::critical(this, "Ошибка", "Наименование авиакомпании не может быть пустым!");
-        return;
-    }
+    //if((!okDialog) && name.isEmpty())
+    //{
+        //QMessageBox::critical(this, "Ошибка", "Наименование авиакомпании не может быть пустым!");
+        //return;
+    //}
+
+    airCompany = CustomInputWidget::getAirCompany("Добавить авиакомпанию", okDialog, this);
+
+    if(!okDialog){ return; }
 
     requester->addAirCompany([this](bool success)
     {
@@ -323,7 +395,7 @@ void WindowAirCompany::onClickAdd()
     }, [this](unsigned int errorCode, QString errorLine, QString replyServer)
     {
         QMessageBox::critical(this, "Ошибка", replyServer);
-    }, AirCompany(0, name, false));
+    }, airCompany);
 }
 
 void WindowAirCompany::onClickGeneratedHTML()
