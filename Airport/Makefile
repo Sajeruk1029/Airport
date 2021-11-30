@@ -81,6 +81,7 @@ SOURCES       = Accounts.cpp \
 		WindowClientLogin.cpp \
 		WindowClientReg.cpp \
 		WindowControlPanelStaff.cpp \
+		WindowServices.cpp \
 		WindowStaffLogin.cpp \
 		WindowStaffReg.cpp \
 		WindowStartMenu.cpp \
@@ -104,6 +105,7 @@ SOURCES       = Accounts.cpp \
 		moc_WindowClientLogin.cpp \
 		moc_WindowClientReg.cpp \
 		moc_WindowControlPanelStaff.cpp \
+		moc_WindowServices.cpp \
 		moc_WindowStaffLogin.cpp \
 		moc_WindowStaffReg.cpp \
 		moc_WindowStartMenu.cpp
@@ -136,6 +138,7 @@ OBJECTS       = Accounts.o \
 		WindowClientLogin.o \
 		WindowClientReg.o \
 		WindowControlPanelStaff.o \
+		WindowServices.o \
 		WindowStaffLogin.o \
 		WindowStaffReg.o \
 		WindowStartMenu.o \
@@ -160,6 +163,7 @@ OBJECTS       = Accounts.o \
 		moc_WindowClientLogin.o \
 		moc_WindowClientReg.o \
 		moc_WindowControlPanelStaff.o \
+		moc_WindowServices.o \
 		moc_WindowStaffLogin.o \
 		moc_WindowStaffReg.o \
 		moc_WindowStartMenu.o
@@ -510,6 +514,7 @@ DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
 		WindowClientLogin.h \
 		WindowClientReg.h \
 		WindowControlPanelStaff.h \
+		WindowServices.h \
 		WindowStaffLogin.h \
 		WindowStaffReg.h \
 		WindowStartMenu.h Accounts.cpp \
@@ -541,6 +546,7 @@ DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
 		WindowClientLogin.cpp \
 		WindowClientReg.cpp \
 		WindowControlPanelStaff.cpp \
+		WindowServices.cpp \
 		WindowStaffLogin.cpp \
 		WindowStaffReg.cpp \
 		WindowStartMenu.cpp \
@@ -1193,8 +1199,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/qt/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents Accounts.h AirCompany.h AirCompanyAndAirplane.h AirCompanyAndAirplaneFull.h AirCompanyAndAirplaneTrunc.h AirCompanyAndServices.h AirCompanyAndServicesFull.h AirCompanyAndServicesTrunc.h Airplane.h Baggage.h Cargo.h CargoFull.h CargoTrunc.h CategoriesCargo.h Client.h ClientAndAccounts.h ClientAndBaggage.h ClientAndBaggageFull.h ClientAndBaggageTrunc.h ClientFull.h CustomInputWidget.h Flights.h FlightsFull.h FlightsTrunc.h HtmlGenerator.h NetworkAPIRequester.h PlacesOfAirports.h Post.h Services.h Staff.h StaffAndAccounts.h StaffFull.h StaffTrunc.h Tickets.h TicketsAndServices.h TicketsAndServicesFull.h TicketsAndServicesTrunc.h TicketsFull.h TicketsTrunc.h WindowAirCompany.h WindowAirplane.h WindowClientLogin.h WindowClientReg.h WindowControlPanelStaff.h WindowStaffLogin.h WindowStaffReg.h WindowStartMenu.h $(DISTDIR)/
-	$(COPY_FILE) --parents Accounts.cpp AirCompany.cpp AirCompanyAndAirplane.cpp AirCompanyAndAirplaneFull.cpp AirCompanyAndAirplaneTrunc.cpp AirCompanyAndServices.cpp AirCompanyAndServicesFull.cpp AirCompanyAndServicesTrunc.cpp Airplane.cpp Baggage.cpp Cargo.cpp CargoFull.cpp CargoTrunc.cpp CategoriesCargo.cpp Client.cpp ClientAndBaggage.cpp ClientAndBaggageFull.cpp ClientAndBaggageTrunc.cpp ClientFull.cpp CustomInputWidget.cpp Flights.cpp FlightsFull.cpp FlightsTrunc.cpp HtmlGenerator.cpp WindowAirCompany.cpp WindowAirplane.cpp WindowClientLogin.cpp WindowClientReg.cpp WindowControlPanelStaff.cpp WindowStaffLogin.cpp WindowStaffReg.cpp WindowStartMenu.cpp main.cpp NetworkAPIRequester.cpp PlacesOfAirports.cpp Post.cpp Services.cpp Staff.cpp StaffFull.cpp StaffTrunc.cpp Tickets.cpp TicketsAndServices.cpp TicketsAndServicesFull.cpp TicketsAndServicesTrunc.cpp TicketsFull.cpp TicketsTrunc.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents Accounts.h AirCompany.h AirCompanyAndAirplane.h AirCompanyAndAirplaneFull.h AirCompanyAndAirplaneTrunc.h AirCompanyAndServices.h AirCompanyAndServicesFull.h AirCompanyAndServicesTrunc.h Airplane.h Baggage.h Cargo.h CargoFull.h CargoTrunc.h CategoriesCargo.h Client.h ClientAndAccounts.h ClientAndBaggage.h ClientAndBaggageFull.h ClientAndBaggageTrunc.h ClientFull.h CustomInputWidget.h Flights.h FlightsFull.h FlightsTrunc.h HtmlGenerator.h NetworkAPIRequester.h PlacesOfAirports.h Post.h Services.h Staff.h StaffAndAccounts.h StaffFull.h StaffTrunc.h Tickets.h TicketsAndServices.h TicketsAndServicesFull.h TicketsAndServicesTrunc.h TicketsFull.h TicketsTrunc.h WindowAirCompany.h WindowAirplane.h WindowClientLogin.h WindowClientReg.h WindowControlPanelStaff.h WindowServices.h WindowStaffLogin.h WindowStaffReg.h WindowStartMenu.h $(DISTDIR)/
+	$(COPY_FILE) --parents Accounts.cpp AirCompany.cpp AirCompanyAndAirplane.cpp AirCompanyAndAirplaneFull.cpp AirCompanyAndAirplaneTrunc.cpp AirCompanyAndServices.cpp AirCompanyAndServicesFull.cpp AirCompanyAndServicesTrunc.cpp Airplane.cpp Baggage.cpp Cargo.cpp CargoFull.cpp CargoTrunc.cpp CategoriesCargo.cpp Client.cpp ClientAndBaggage.cpp ClientAndBaggageFull.cpp ClientAndBaggageTrunc.cpp ClientFull.cpp CustomInputWidget.cpp Flights.cpp FlightsFull.cpp FlightsTrunc.cpp HtmlGenerator.cpp WindowAirCompany.cpp WindowAirplane.cpp WindowClientLogin.cpp WindowClientReg.cpp WindowControlPanelStaff.cpp WindowServices.cpp WindowStaffLogin.cpp WindowStaffReg.cpp WindowStartMenu.cpp main.cpp NetworkAPIRequester.cpp PlacesOfAirports.cpp Post.cpp Services.cpp Staff.cpp StaffFull.cpp StaffTrunc.cpp Tickets.cpp TicketsAndServices.cpp TicketsAndServicesFull.cpp TicketsAndServicesTrunc.cpp TicketsFull.cpp TicketsTrunc.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -1226,9 +1232,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/qt/mkspecs/features/data/dummy.cpp
 	g++ -pipe -O2 -Wall -Wextra -dM -E -o moc_predefs.h /usr/lib/qt/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_CustomInputWidget.cpp moc_NetworkAPIRequester.cpp moc_WindowAirCompany.cpp moc_WindowAirplane.cpp moc_WindowClientLogin.cpp moc_WindowClientReg.cpp moc_WindowControlPanelStaff.cpp moc_WindowStaffLogin.cpp moc_WindowStaffReg.cpp moc_WindowStartMenu.cpp
+compiler_moc_header_make_all: moc_CustomInputWidget.cpp moc_NetworkAPIRequester.cpp moc_WindowAirCompany.cpp moc_WindowAirplane.cpp moc_WindowClientLogin.cpp moc_WindowClientReg.cpp moc_WindowControlPanelStaff.cpp moc_WindowServices.cpp moc_WindowStaffLogin.cpp moc_WindowStaffReg.cpp moc_WindowStartMenu.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_CustomInputWidget.cpp moc_NetworkAPIRequester.cpp moc_WindowAirCompany.cpp moc_WindowAirplane.cpp moc_WindowClientLogin.cpp moc_WindowClientReg.cpp moc_WindowControlPanelStaff.cpp moc_WindowStaffLogin.cpp moc_WindowStaffReg.cpp moc_WindowStartMenu.cpp
+	-$(DEL_FILE) moc_CustomInputWidget.cpp moc_NetworkAPIRequester.cpp moc_WindowAirCompany.cpp moc_WindowAirplane.cpp moc_WindowClientLogin.cpp moc_WindowClientReg.cpp moc_WindowControlPanelStaff.cpp moc_WindowServices.cpp moc_WindowStaffLogin.cpp moc_WindowStaffReg.cpp moc_WindowStartMenu.cpp
 moc_CustomInputWidget.cpp: CustomInputWidget.h \
 		Accounts.h \
 		AirCompany.h \
@@ -1391,6 +1397,9 @@ moc_WindowAirplane.cpp: WindowAirplane.h \
 		TicketsTrunc.h \
 		ClientFull.h \
 		HtmlGenerator.h \
+		CustomInputWidget.h \
+		ClientAndAccounts.h \
+		StaffAndAccounts.h \
 		moc_predefs.h \
 		/usr/bin/moc
 	/usr/bin/moc $(DEFINES) --include /home/sajeruk/C++/Qt/Air/Airport/moc_predefs.h -I/usr/lib/qt/mkspecs/linux-g++ -I/home/sajeruk/C++/Qt/Air/Airport -I/home/sajeruk/C++/Qt/Air/Airport -I/usr/include/qt -I/usr/include/qt/QtWidgets -I/usr/include/qt/QtGui -I/usr/include/qt/QtNetwork -I/usr/include/qt/QtCore -I/usr/include/c++/11.1.0 -I/usr/include/c++/11.1.0/x86_64-pc-linux-gnu -I/usr/include/c++/11.1.0/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include -I/usr/local/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include-fixed -I/usr/include WindowAirplane.h -o moc_WindowAirplane.cpp
@@ -1517,9 +1526,55 @@ moc_WindowControlPanelStaff.cpp: WindowControlPanelStaff.h \
 		CustomInputWidget.h \
 		ClientAndAccounts.h \
 		StaffAndAccounts.h \
+		WindowAirplane.h \
+		WindowServices.h \
 		moc_predefs.h \
 		/usr/bin/moc
 	/usr/bin/moc $(DEFINES) --include /home/sajeruk/C++/Qt/Air/Airport/moc_predefs.h -I/usr/lib/qt/mkspecs/linux-g++ -I/home/sajeruk/C++/Qt/Air/Airport -I/home/sajeruk/C++/Qt/Air/Airport -I/usr/include/qt -I/usr/include/qt/QtWidgets -I/usr/include/qt/QtGui -I/usr/include/qt/QtNetwork -I/usr/include/qt/QtCore -I/usr/include/c++/11.1.0 -I/usr/include/c++/11.1.0/x86_64-pc-linux-gnu -I/usr/include/c++/11.1.0/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include -I/usr/local/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include-fixed -I/usr/include WindowControlPanelStaff.h -o moc_WindowControlPanelStaff.cpp
+
+moc_WindowServices.cpp: WindowServices.h \
+		NetworkAPIRequester.h \
+		Accounts.h \
+		AirCompany.h \
+		AirCompanyAndAirplane.h \
+		AirCompanyAndServices.h \
+		Airplane.h \
+		Baggage.h \
+		Cargo.h \
+		CategoriesCargo.h \
+		Client.h \
+		ClientAndBaggage.h \
+		Flights.h \
+		PlacesOfAirports.h \
+		Post.h \
+		Services.h \
+		Staff.h \
+		Tickets.h \
+		TicketsAndServices.h \
+		AirCompanyAndAirplaneFull.h \
+		AirCompanyAndAirplaneTrunc.h \
+		AirCompanyAndServicesFull.h \
+		AirCompanyAndServicesTrunc.h \
+		CargoFull.h \
+		CargoTrunc.h \
+		ClientAndBaggageFull.h \
+		ClientAndBaggageTrunc.h \
+		FlightsFull.h \
+		FlightsTrunc.h \
+		StaffFull.h \
+		StaffTrunc.h \
+		TicketsAndServicesFull.h \
+		TicketsAndServicesTrunc.h \
+		TicketsFull.h \
+		TicketsTrunc.h \
+		ClientFull.h \
+		HtmlGenerator.h \
+		CustomInputWidget.h \
+		ClientAndAccounts.h \
+		StaffAndAccounts.h \
+		moc_predefs.h \
+		/usr/bin/moc
+	/usr/bin/moc $(DEFINES) --include /home/sajeruk/C++/Qt/Air/Airport/moc_predefs.h -I/usr/lib/qt/mkspecs/linux-g++ -I/home/sajeruk/C++/Qt/Air/Airport -I/home/sajeruk/C++/Qt/Air/Airport -I/usr/include/qt -I/usr/include/qt/QtWidgets -I/usr/include/qt/QtGui -I/usr/include/qt/QtNetwork -I/usr/include/qt/QtCore -I/usr/include/c++/11.1.0 -I/usr/include/c++/11.1.0/x86_64-pc-linux-gnu -I/usr/include/c++/11.1.0/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include -I/usr/local/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include-fixed -I/usr/include WindowServices.h -o moc_WindowServices.cpp
 
 moc_WindowStaffLogin.cpp: WindowStaffLogin.h \
 		NetworkAPIRequester.h \
@@ -1564,6 +1619,8 @@ moc_WindowStaffLogin.cpp: WindowStaffLogin.h \
 		CustomInputWidget.h \
 		ClientAndAccounts.h \
 		StaffAndAccounts.h \
+		WindowAirplane.h \
+		WindowServices.h \
 		moc_predefs.h \
 		/usr/bin/moc
 	/usr/bin/moc $(DEFINES) --include /home/sajeruk/C++/Qt/Air/Airport/moc_predefs.h -I/usr/lib/qt/mkspecs/linux-g++ -I/home/sajeruk/C++/Qt/Air/Airport -I/home/sajeruk/C++/Qt/Air/Airport -I/usr/include/qt -I/usr/include/qt/QtWidgets -I/usr/include/qt/QtGui -I/usr/include/qt/QtNetwork -I/usr/include/qt/QtCore -I/usr/include/c++/11.1.0 -I/usr/include/c++/11.1.0/x86_64-pc-linux-gnu -I/usr/include/c++/11.1.0/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include -I/usr/local/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include-fixed -I/usr/include WindowStaffLogin.h -o moc_WindowStaffLogin.cpp
@@ -1652,6 +1709,8 @@ moc_WindowStartMenu.cpp: WindowStartMenu.h \
 		CustomInputWidget.h \
 		ClientAndAccounts.h \
 		StaffAndAccounts.h \
+		WindowAirplane.h \
+		WindowServices.h \
 		WindowClientLogin.h \
 		WindowClientReg.h \
 		moc_predefs.h \
@@ -1895,7 +1954,10 @@ WindowAirplane.o: WindowAirplane.cpp WindowAirplane.h \
 		TicketsFull.h \
 		TicketsTrunc.h \
 		ClientFull.h \
-		HtmlGenerator.h
+		HtmlGenerator.h \
+		CustomInputWidget.h \
+		ClientAndAccounts.h \
+		StaffAndAccounts.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o WindowAirplane.o WindowAirplane.cpp
 
 WindowClientLogin.o: WindowClientLogin.cpp WindowClientLogin.h \
@@ -2015,8 +2077,52 @@ WindowControlPanelStaff.o: WindowControlPanelStaff.cpp WindowControlPanelStaff.h
 		HtmlGenerator.h \
 		CustomInputWidget.h \
 		ClientAndAccounts.h \
-		StaffAndAccounts.h
+		StaffAndAccounts.h \
+		WindowAirplane.h \
+		WindowServices.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o WindowControlPanelStaff.o WindowControlPanelStaff.cpp
+
+WindowServices.o: WindowServices.cpp WindowServices.h \
+		NetworkAPIRequester.h \
+		Accounts.h \
+		AirCompany.h \
+		AirCompanyAndAirplane.h \
+		AirCompanyAndServices.h \
+		Airplane.h \
+		Baggage.h \
+		Cargo.h \
+		CategoriesCargo.h \
+		Client.h \
+		ClientAndBaggage.h \
+		Flights.h \
+		PlacesOfAirports.h \
+		Post.h \
+		Services.h \
+		Staff.h \
+		Tickets.h \
+		TicketsAndServices.h \
+		AirCompanyAndAirplaneFull.h \
+		AirCompanyAndAirplaneTrunc.h \
+		AirCompanyAndServicesFull.h \
+		AirCompanyAndServicesTrunc.h \
+		CargoFull.h \
+		CargoTrunc.h \
+		ClientAndBaggageFull.h \
+		ClientAndBaggageTrunc.h \
+		FlightsFull.h \
+		FlightsTrunc.h \
+		StaffFull.h \
+		StaffTrunc.h \
+		TicketsAndServicesFull.h \
+		TicketsAndServicesTrunc.h \
+		TicketsFull.h \
+		TicketsTrunc.h \
+		ClientFull.h \
+		HtmlGenerator.h \
+		CustomInputWidget.h \
+		ClientAndAccounts.h \
+		StaffAndAccounts.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o WindowServices.o WindowServices.cpp
 
 WindowStaffLogin.o: WindowStaffLogin.cpp WindowStaffLogin.h \
 		NetworkAPIRequester.h \
@@ -2060,7 +2166,9 @@ WindowStaffLogin.o: WindowStaffLogin.cpp WindowStaffLogin.h \
 		HtmlGenerator.h \
 		CustomInputWidget.h \
 		ClientAndAccounts.h \
-		StaffAndAccounts.h
+		StaffAndAccounts.h \
+		WindowAirplane.h \
+		WindowServices.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o WindowStaffLogin.o WindowStaffLogin.cpp
 
 WindowStaffReg.o: WindowStaffReg.cpp WindowStaffReg.h \
@@ -2145,6 +2253,8 @@ WindowStartMenu.o: WindowStartMenu.cpp WindowStartMenu.h \
 		CustomInputWidget.h \
 		ClientAndAccounts.h \
 		StaffAndAccounts.h \
+		WindowAirplane.h \
+		WindowServices.h \
 		WindowClientLogin.h \
 		WindowClientReg.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o WindowStartMenu.o WindowStartMenu.cpp
@@ -2193,6 +2303,8 @@ main.o: main.cpp WindowStartMenu.h \
 		CustomInputWidget.h \
 		ClientAndAccounts.h \
 		StaffAndAccounts.h \
+		WindowAirplane.h \
+		WindowServices.h \
 		WindowClientLogin.h \
 		WindowClientReg.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
@@ -2290,6 +2402,9 @@ moc_WindowClientReg.o: moc_WindowClientReg.cpp
 
 moc_WindowControlPanelStaff.o: moc_WindowControlPanelStaff.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_WindowControlPanelStaff.o moc_WindowControlPanelStaff.cpp
+
+moc_WindowServices.o: moc_WindowServices.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_WindowServices.o moc_WindowServices.cpp
 
 moc_WindowStaffLogin.o: moc_WindowStaffLogin.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_WindowStaffLogin.o moc_WindowStaffLogin.cpp

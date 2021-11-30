@@ -419,9 +419,9 @@ void WindowAirplane::onClickGeneratedHTML()
 
     gen = new HTMLGenerator(path);
 
-    gen->createHTMLFile(3);
+    gen->createHTMLFile(7);
 
-    gen->addCaptionTable(QStringList{"Id", "Имя", "Логически удалено ли"});
+    gen->addCaptionTable(QStringList{"Id", "Имя", "Описание", "Максимальный размер груза", "Максимальный вес груза", "Масимум сидячих мест", "Логически удалено ли"});
 
     if(deleted->checkState() == Qt::CheckState::Checked)
     {

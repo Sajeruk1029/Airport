@@ -2511,8 +2511,6 @@ Services CustomInputWidget::getServices(QString title, bool &ok, QWidget *parent
     name->setMaxLength(30);
     description->setMaxLength(100);
 
-    description->setMinimumHeight(200);
-
     name->setValidator(validator);
     description->setValidator(validator);
 

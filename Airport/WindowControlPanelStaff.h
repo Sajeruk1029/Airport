@@ -14,6 +14,7 @@
 
 #include "WindowAirCompany.h"
 #include "WindowAirplane.h"
+#include "WindowServices.h"
 
 class WindowControlPanelStaff : public QGroupBox
 {
@@ -29,6 +30,7 @@ private:
 
     WindowAirCompany *windowAirCompany;
     WindowAirplane *windowAirplane;
+    WindowServices *windowServices;
 
     /*
     QPushButton *butAirCompanies;

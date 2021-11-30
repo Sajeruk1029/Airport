@@ -6301,7 +6301,7 @@ void NetworkAPIRequester::setServices(const std::function<void (bool)> callBackS
     query.addQueryItem("Id", QString::number(oldServices.getId()));
     query.addQueryItem("Name", services.getName());
     query.addQueryItem("Description", services.getDescription());
-    query.addQueryItem("Id", QString::number(services.getPrice()));
+    query.addQueryItem("Price", QString::number(services.getPrice()));
     query.addQueryItem("IsDeleted", QString::number(services.getIsDeleted()));
 
     QNetworkReply *reply = networkAccessManager->post(request, query.toString(QUrl::FullyEncoded).toUtf8());
@@ -6496,7 +6496,7 @@ void NetworkAPIRequester::addServices(const std::function<void(unsigned int)> ca
 
     query.addQueryItem("Name", services.getName());
     query.addQueryItem("Description", services.getDescription());
-    query.addQueryItem("Id", QString::number(services.getPrice()));
+    query.addQueryItem("Price", QString::number(services.getPrice()));
     query.addQueryItem("IsDeleted", QString::number(services.getIsDeleted()));
 
     QNetworkReply *reply = networkAccessManager->post(request, query.toString(QUrl::FullyEncoded).toUtf8());

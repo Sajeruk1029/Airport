@@ -60,6 +60,7 @@ HEADERS += Accounts.h \
            WindowClientLogin.h \
            WindowClientReg.h \
            WindowControlPanelStaff.h \
+           WindowServices.h \
            WindowStaffLogin.h \
            WindowStaffReg.h \
            WindowStartMenu.h
@@ -92,6 +93,7 @@ SOURCES += Accounts.cpp \
            WindowClientLogin.cpp \
            WindowClientReg.cpp \
            WindowControlPanelStaff.cpp \
+           WindowServices.cpp \
            WindowStaffLogin.cpp \
            WindowStaffReg.cpp \
            WindowStartMenu.cpp \
