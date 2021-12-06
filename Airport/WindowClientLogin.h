@@ -20,13 +20,14 @@
 
 #include "NetworkAPIRequester.h"
 
+#include "WindowControlPanelClient.h"
 #include "WindowClientReg.h"
 
 class WindowClientLogin : public QGroupBox
 {
     Q_OBJECT
 public:
-    explicit WindowClientLogin();
+    explicit WindowClientLogin(QString);
     ~WindowClientLogin();
 
 private slots:
@@ -48,8 +49,10 @@ private:
 
     NetworkAPIRequester *requester;
 
+    WindowControlPanelClient *windowControlPanelClient;
     WindowClientReg *windowClientReg;
 
+    QString Host;
 };
 
 #endif // WINDOWCLIENTLOGIN_H

@@ -16,6 +16,7 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QTextEdit>
+#include <QListWidget>
 
 #include <QValidator>
 #include <QIntValidator>
@@ -50,6 +51,8 @@
 
 #include "ClientAndAccounts.h"
 #include "StaffAndAccounts.h"
+#include "BaggageAndTicketsAndServices.h"
+#include "CargoAndTickets.h"
 
 #include "NetworkAPIRequester.h"
 
@@ -60,22 +63,26 @@ public:
     explicit CustomInputWidget(void);
 
     static Accounts getAccounts(QString, bool, bool&, QWidget * = nullptr);
-    static AirCompany getAirCompany(QString, bool&, QWidget *);
-    static AirCompanyAndAirplane getAirCompanyAndAirplane(QString, bool&, QString, QWidget *);
-    static AirCompanyAndServices getAirCompanyAndServices(QString, bool&, QString, QWidget *);
-    static Airplane getAirplane(QString, bool&, QWidget *);
-    static Baggage getBaggage(QString, bool&, QWidget *);
-    static Cargo getCargo(QString, bool&, QString, QWidget *);
-    static CategoriesCargo getCategoriesCargo(QString, bool&, QWidget *);
-    static ClientAndAccounts getClientAndAccounts(QString, bool&, QWidget *, bool);
-    static ClientAndBaggage getClientAndBaggage(QString, bool&, QString, QWidget *);
-    static Flights getFlights(QString, bool&, QString, QWidget *);
-    static PlacesOfAirports getPlacesOfAirport(QString, bool&, QWidget *);
-    static Post getPost(QString, bool&, QWidget *);
-    static Services getServices(QString, bool&, QWidget *);
-    static StaffAndAccounts getStaffAndAccounts(QString, bool&, QString, QWidget *, bool);
-    static Tickets getTickets(QString, bool&, QString, QWidget *);
-    static TicketsAndServices getTicketsAndServices(QString, bool&, QString, QWidget *);
+    static QString getPassword(QString, bool&, bool, QWidget * = nullptr);
+    static AirCompany getAirCompany(QString, bool&, QWidget * = nullptr);
+    static AirCompanyAndAirplane getAirCompanyAndAirplane(QString, bool&, QString, QWidget * = nullptr);
+    static AirCompanyAndServices getAirCompanyAndServices(QString, bool&, QString, QWidget * = nullptr);
+    static Airplane getAirplane(QString, bool&, QWidget * = nullptr);
+    static Baggage getBaggage(QString, bool&, QWidget * = nullptr);
+    static CargoAndTickets getCargoAndTickets(QString, bool&, QString, QWidget * = nullptr);
+    static CargoAndTickets getCargoAndTickets(QString, bool&, QString, unsigned int, QWidget * = nullptr);
+    static CategoriesCargo getCategoriesCargo(QString, bool&, QWidget * = nullptr);
+    static ClientAndAccounts getClientAndAccounts(QString, bool&, bool, QWidget * = nullptr);
+    static ClientAndBaggage getClientAndBaggage(QString, bool&, QString, QWidget * = nullptr);
+    static Flights getFlights(QString, bool&, QString, QWidget * = nullptr);
+    static PlacesOfAirports getPlacesOfAirport(QString, bool&, QWidget * = nullptr);
+    static Post getPost(QString, bool&, QWidget * = nullptr);
+    static Post getPost(QString, bool&, QString, QWidget * = nullptr);
+    static Services getServices(QString, bool&, QWidget * = nullptr);
+    static StaffAndAccounts getStaffAndAccounts(QString, bool&, QString, bool, QWidget * = nullptr);
+    static BaggageAndTicketsAndServices getBaggageAndTicketsAndServices(QString, bool&, QString, QWidget * = nullptr);
+    static BaggageAndTicketsAndServices getBaggageAndTicketsAndServices(QString, bool&, QString, unsigned int, QWidget * = nullptr);
+    static TicketsAndServices getTicketsAndServices(QString, bool&, QString, QWidget * = nullptr);
 
 };
 

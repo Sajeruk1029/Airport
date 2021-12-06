@@ -34,7 +34,7 @@ class WindowServices : public QWidget
 {
     Q_OBJECT
 public:
-    explicit WindowServices(void);
+    explicit WindowServices(QString);
     ~WindowServices();
 
 private slots:
@@ -69,6 +69,8 @@ private:
     NetworkAPIRequester *requester;
 
     HTMLGenerator *gen;
+
+    QString Host;
 };
 
 #endif // WINDOWSERVICES_H

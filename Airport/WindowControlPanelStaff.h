@@ -15,12 +15,18 @@
 #include "WindowAirCompany.h"
 #include "WindowAirplane.h"
 #include "WindowServices.h"
+#include "WindowPost.h"
+#include "WindowTickets.h"
+#include "WindowPlacesOfAirports.h"
+#include "WindowCategoriesCargo.h"
+#include "WindowFlights.h"
+#include "WindowProfile.h"
 
 class WindowControlPanelStaff : public QGroupBox
 {
     Q_OBJECT
 public:
-    explicit WindowControlPanelStaff();
+    explicit WindowControlPanelStaff(StaffFull, QString);
     ~WindowControlPanelStaff();
 
 private:
@@ -31,21 +37,29 @@ private:
     WindowAirCompany *windowAirCompany;
     WindowAirplane *windowAirplane;
     WindowServices *windowServices;
+    WindowPost *windowPost;
+    WindowTickets *windowTickets;
+    WindowPlacesOfAirports *windowPlacesOfAirports;
+    WindowCategoriesCargo *windowCategoriesCargo;
+    WindowFlights *windowFlights;
+    WindowProfile *windowProfile;
+
+    QString Host;
 
     /*
-    QPushButton *butAirCompanies;
-    QPushButton *butAirplanes;
-    QPushButton *butStaff;
+    QPushButton *butAirCompanies;+
+    QPushButton *butAirplanes;+
+    QPushButton *butStaff;-
     QPushButton *butAccounts;
-    QPushButton *butServices;
-    QPushButton *butPosts;
-    QPushButton *butTickets;
-    QPushButton *butPlacesOfAirports;
-    QPushButton *butClients;
-    QPushButton *butBaggage;
-    QPushButton *butCargo;
-    QPushButton *butCategoriesCargo;
-    QPushButton *butFlights;
+    QPushButton *butServices;+
+    QPushButton *butPosts;+
+    QPushButton *butTickets;+
+    QPushButton *butPlacesOfAirports;+
+    QPushButton *butClients;-
+    QPushButton *butBaggage;-
+    QPushButton *butCargo;-
+    QPushButton *butCategoriesCargo;-
+    QPushButton *butFlights;+
     */
 };
 

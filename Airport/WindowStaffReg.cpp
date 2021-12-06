@@ -1,6 +1,6 @@
 #include "WindowStaffReg.h"
 
-WindowStaffReg::WindowStaffReg() : layout(new QVBoxLayout()), layoutButs(new QHBoxLayout()), containerButs(new QWidget()), butReg(new QPushButton("Регистрация")), firstName(new QLineEdit()), lastName(new QLineEdit()), patronymic(new QLineEdit()), postList(new QComboBox()), passportSeries(new QLineEdit()), passportNumber(new QLineEdit()), education(new QTextEdit()), login(new QLineEdit()), password(new QLineEdit()), requester(new NetworkAPIRequester("http://localhost/")), passportSeriesValidator(new QIntValidator(0, 9999)), passportNumberValidator(new QIntValidator(0, 999999)), textValidator(new QRegExpValidator(QRegExp("^[A-zА-я]+$"))), passwordValidator(new QRegExpValidator(QRegExp("^[A-z0-9]+$")))
+WindowStaffReg::WindowStaffReg(QString host) : layout(new QVBoxLayout()), layoutButs(new QHBoxLayout()), containerButs(new QWidget()), butReg(new QPushButton("Регистрация")), firstName(new QLineEdit()), lastName(new QLineEdit()), patronymic(new QLineEdit()), postList(new QComboBox()), passportSeries(new QLineEdit()), passportNumber(new QLineEdit()), education(new QTextEdit()), login(new QLineEdit()), password(new QLineEdit()), requester(new NetworkAPIRequester(host)), passportSeriesValidator(new QIntValidator(0, 9999)), passportNumberValidator(new QIntValidator(0, 999999)), textValidator(new QRegExpValidator(QRegExp("^[A-zА-я]+$"))), passwordValidator(new QRegExpValidator(QRegExp("^[A-z0-9]+$"))), Host(host)
 {
     setTitle("Регистрация сотрудника");
 

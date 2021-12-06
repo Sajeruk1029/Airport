@@ -177,6 +177,7 @@
                             void logicalRecoverClient(const std::function<void(bool)>, const std::function<void(unsigned int, QString, QString)>, Client);
                             void logicalDeleterClient(const std::function<void(bool)>, const std::function<void(unsigned int, QString, QString)>, Client);
                             void addClient(const std::function<void(unsigned int)>, const std::function<void(unsigned int, QString, QString)>, Client);
+                            void searchByIdClient(const std::function<void(Client)>, const std::function<void(unsigned int, QString, QString)>, Client);
 
                             //---Client
 
@@ -394,6 +395,7 @@
                             void getActiveClientFull(const std::function<void(QList<ClientFull>)>, const std::function<void(unsigned int, QString, QString)>);
                             void searchClientFull(const std::function<void(ClientFull)>, const std::function<void(unsigned int, QString, QString)>, ClientFull);
                             void searchByLoginClientFull(const std::function<void(ClientFull)>, const std::function<void(unsigned int, QString, QString)>, ClientFull);
+                            void searchByIdClientFull(const std::function<void(ClientFull)>, const std::function<void(unsigned int, QString, QString)>, ClientFull);
 
                             //---ClientFull
 

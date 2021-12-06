@@ -1,5 +1,5 @@
-#ifndef WINDOWAIRPLANE_H
-#define WINDOWAIRPLANE_H
+#ifndef WINDOWPLACESOFAIRPORTSCLIENT_H
+#define WINDOWPLACESOFAIRPORTSCLIENT_H
 
 #include <QObject>
 #include <QWidget>
@@ -30,17 +30,16 @@
 #include "HtmlGenerator.h"
 #include "CustomInputWidget.h"
 
-class WindowAirplane : public QWidget
+class WindowPlacesOfAirportsClient : public QWidget
 {
     Q_OBJECT
 public:
-    explicit WindowAirplane(QString);
-    ~WindowAirplane();
+    explicit WindowPlacesOfAirportsClient(QString);
+    ~WindowPlacesOfAirportsClient();
 
 private slots:
     void onClickSearch(void);
     void onClickRefresh(void);
-    void onClickAdd(void);
     void onClickGeneratedHTML(void);
 
 private:
@@ -57,14 +56,11 @@ private:
 
     QPushButton *butSearch;
     QPushButton *butRefresh;
-    QPushButton *butAdd;
     QPushButton *butGenerateTable;
 
     QTableWidget *table;
 
     QValidator *validator;
-
-    QCheckBox *deleted;
 
     NetworkAPIRequester *requester;
 
@@ -73,4 +69,4 @@ private:
     QString Host;
 };
 
-#endif // WINDOWAIRPLANE_H
+#endif // WINDOWPLACESOFAIRPORTSCLIENT_H

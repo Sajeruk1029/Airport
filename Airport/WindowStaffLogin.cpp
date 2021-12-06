@@ -1,6 +1,6 @@
 #include "WindowStaffLogin.h"
 
-WindowStaffLogin::WindowStaffLogin() : layout(new QVBoxLayout()), layoutButs(new QHBoxLayout()), containerButs(new QWidget()), butReg(new QPushButton("Регистрация")), butLogin(new QPushButton("Вход")), login(new QLineEdit()), password(new QLineEdit()), requester(new NetworkAPIRequester("http://localhost/")), windowStaffReg(nullptr), windowControlPanelStaff(nullptr)
+WindowStaffLogin::WindowStaffLogin(QString host) : layout(new QVBoxLayout()), layoutButs(new QHBoxLayout()), containerButs(new QWidget()), butReg(new QPushButton("Регистрация")), butLogin(new QPushButton("Вход")), login(new QLineEdit()), password(new QLineEdit()), requester(new NetworkAPIRequester(host)), windowStaffReg(nullptr), windowControlPanelStaff(nullptr), Host(host)
 {
     setTitle("Вход сотрудника");
 
@@ -70,7 +70,7 @@ void WindowStaffLogin::clickButLogin()
             {
                 QMessageBox::about(this, "Успех", "Вход успешен!");
 
-                windowControlPanelStaff = new WindowControlPanelStaff();
+                windowControlPanelStaff = new WindowControlPanelStaff(staffFull, Host);
                 windowControlPanelStaff->show();
                 this->close();
             }
@@ -89,7 +89,7 @@ void WindowStaffLogin::clickButLogin()
 
 void WindowStaffLogin::clickButReg()
 {
-    windowStaffReg = new WindowStaffReg();
+    windowStaffReg = new WindowStaffReg(Host);
     windowStaffReg->show();
     this->close();
 }

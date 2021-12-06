@@ -1,8 +1,5 @@
-#ifndef WINDOWAIRPLANE_H
-#define WINDOWAIRPLANE_H
-
-#include <QObject>
-#include <QWidget>
+#ifndef WINDOWSERVICESCLIENT_H
+#define WINDOWSERVICESCLIENT_H
 
 #include <QVBoxLayout>
 
@@ -30,17 +27,16 @@
 #include "HtmlGenerator.h"
 #include "CustomInputWidget.h"
 
-class WindowAirplane : public QWidget
+class WindowServicesClient : public QWidget
 {
     Q_OBJECT
 public:
-    explicit WindowAirplane(QString);
-    ~WindowAirplane();
+    explicit WindowServicesClient(QString);
+    ~WindowServicesClient();
 
 private slots:
     void onClickSearch(void);
     void onClickRefresh(void);
-    void onClickAdd(void);
     void onClickGeneratedHTML(void);
 
 private:
@@ -57,14 +53,11 @@ private:
 
     QPushButton *butSearch;
     QPushButton *butRefresh;
-    QPushButton *butAdd;
     QPushButton *butGenerateTable;
 
     QTableWidget *table;
 
     QValidator *validator;
-
-    QCheckBox *deleted;
 
     NetworkAPIRequester *requester;
 
@@ -73,4 +66,4 @@ private:
     QString Host;
 };
 
-#endif // WINDOWAIRPLANE_H
+#endif // WINDOWSERVICESCLIENT_H

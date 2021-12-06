@@ -3182,9 +3182,9 @@ void NetworkAPIRequester::addCargo(const std::function<void(unsigned int)> callB
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
     query.addQueryItem("IdCategory", QString::number(cargo.getIdCategory()));
-    query.addQueryItem("IdWeight", QString::number(cargo.getWeight()));
+    query.addQueryItem("Weight", QString::number(cargo.getWeight()));
     query.addQueryItem("Description", cargo.getDescription());
-    query.addQueryItem("IdTicket", QString::number(cargo.getWeight()));
+    query.addQueryItem("IdTicket", QString::number(cargo.getIdTicket()));
     query.addQueryItem("Size", QString::number(cargo.getSize()));
     query.addQueryItem("IsDeleted", QString::number(cargo.getIsDeleted()));
 
@@ -4190,6 +4190,74 @@ void NetworkAPIRequester::addClient(const std::function<void(unsigned int)> call
             jsonObject = jsonDocument.object();
 
             callBackSuccess(jsonObject["Id"].toInt());
+            setErrnoState(0, "Success");
+        }
+
+        reply->close();
+        reply->deleteLater();
+    });
+}
+void NetworkAPIRequester::searchByIdClient(const std::function<void (Client)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed, Client client)
+{
+    QNetworkRequest request(QUrl(this->url + "Tables/Client/ClientSearchById.php"));
+    QUrlQuery query;
+
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+
+    query.addQueryItem("Id", QString::number(client.getId()));
+
+    QNetworkReply *reply = networkAccessManager->post(request, query.toString(QUrl::FullyEncoded).toUtf8());
+
+    connect(reply, &QNetworkReply::finished, this, [this, reply, callBackSuccess, callBackFailed]()
+    {
+        QByteArray byteArray;
+
+        QJsonDocument jsonDocument;
+        QJsonObject jsonObject;
+        QJsonArray jsonArray;
+
+        Client client(0, "", "", "", 0, 0, 0, 0, false);
+
+        if(reply->isFinished())
+        {
+            byteArray = reply->readAll();
+
+            if(reply->error() != QNetworkReply::NoError)
+            {
+                setErrnoState(reply->error(), byteArray);
+                callBackFailed(reply->error(), reply->errorString(), getErrnoLine());
+                return;
+            }
+
+            jsonDocument = QJsonDocument::fromJson(byteArray);
+
+            if(!jsonDocument.isObject())
+            {
+                setErrnoState(reply->error(), byteArray);
+                callBackFailed(reply->error(), reply->errorString(), getErrnoLine());
+                return;
+            }
+
+            jsonObject = jsonDocument.object();
+
+            jsonArray = jsonObject["records"].toArray();
+
+            for(int counter = 0; counter < jsonArray.size(); ++counter)
+            {
+                    jsonObject = jsonArray.at(counter).toObject();
+
+                    client.setId(jsonObject["Id"].toInt());
+                    client.setFirstName(jsonObject["FirstName"].toString());
+                    client.setLastName(jsonObject["LastName"].toString());
+                    client.setPatronymic(jsonObject["Patronymic"].toString());
+                    client.setPassportSeries(jsonObject["PassportSeries"].toInt());
+                    client.setPassportNumber(jsonObject["PassportNumber"].toInt());
+                    client.setAccount(jsonObject["Account"].toInt());
+                    client.setMoney(jsonObject["Money"].toInt());
+                    client.setIsDeleted(jsonObject["IsDeleted"].toInt() == 1);
+            }
+
+            callBackSuccess(client);
             setErrnoState(0, "Success");
         }
 
@@ -5319,7 +5387,7 @@ void NetworkAPIRequester::searchPlacesOfAirports(const std::function<void (Place
                     jsonObject = jsonArray.at(counter).toObject();
 
                     placesOfAirports.setId(jsonObject["Id"].toInt());
-                    placesOfAirports.setCountry(jsonObject["Contry"].toString());
+                    placesOfAirports.setCountry(jsonObject["Country"].toString());
                     placesOfAirports.setCity(jsonObject["City"].toString());
                     placesOfAirports.setStreet(jsonObject["Street"].toString());
                     placesOfAirports.setHouseNumber(jsonObject["HouseNumber"].toInt());
@@ -5802,7 +5870,7 @@ void NetworkAPIRequester::searchPost(const std::function<void (Post)> callBackSu
 
                     post.setId(jsonObject["Id"].toInt());
                     post.setName(jsonObject["Name"].toString());
-                    post.setId(jsonObject["Salary"].toInt());
+                    post.setSalary(jsonObject["Salary"].toInt());
                     post.setIsDeleted(jsonObject["IsDeleted"].toInt() == 1);
             }
 
@@ -7035,7 +7103,6 @@ void NetworkAPIRequester::addStaff(const std::function<void(unsigned int)> callB
     });
 }
 
-
 //---Staff
 
 void NetworkAPIRequester::getAllTickets(const std::function<void(QList<Tickets>)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed)
@@ -7210,7 +7277,7 @@ void NetworkAPIRequester::searchTickets(const std::function<void (Tickets)> call
 
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
-    query.addQueryItem("SeatNumber", QString::number(tickets.getSeatNumber()));
+    query.addQueryItem("Id", QString::number(tickets.getId()));
 
     QNetworkReply *reply = networkAccessManager->post(request, query.toString(QUrl::FullyEncoded).toUtf8());
 
@@ -7471,10 +7538,12 @@ void NetworkAPIRequester::logicalDeleterTickets(const std::function<void (bool)>
 }
 void NetworkAPIRequester::addTickets(const std::function<void(unsigned int)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed, Tickets tickets)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/AirCompanyAndServices/AirCompanyAndServicesSender.php"));
+    QNetworkRequest request(QUrl(this->url + "Tables/Tickets/TicketsSender.php"));
     QUrlQuery query;
 
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+
+    qDebug() << "DEBUG2: " << tickets.getBaggageAvailable();
 
     query.addQueryItem("Price", QString::number(tickets.getPrice()));
     query.addQueryItem("IdClient", QString::number(tickets.getIdClient()));
@@ -9823,7 +9892,7 @@ void NetworkAPIRequester::searchClientAndBaggageTrunc(const std::function<void (
 
 void NetworkAPIRequester::getAllFlightsFull(const std::function<void(QList<FlightsFull>)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/FlightsFull/FlightsFullExtractAll.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/FlightsFull/FlightsFullExtractAll.php"));
 
     QNetworkReply *reply = networkAccessManager->get(request);
 
@@ -9878,7 +9947,7 @@ void NetworkAPIRequester::getAllFlightsFull(const std::function<void(QList<Fligh
 }
 void NetworkAPIRequester::getDeleteFlightsFull(const std::function<void(QList<FlightsFull>)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/FlightsFull/FlightsFullExtractDelete.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/FlightsFull/FlightsFullExtractDelete.php"));
 
     QNetworkReply *reply = networkAccessManager->get(request);
 
@@ -9933,7 +10002,7 @@ void NetworkAPIRequester::getDeleteFlightsFull(const std::function<void(QList<Fl
 }
 void NetworkAPIRequester::getActiveFlightsFull(const std::function<void(QList<FlightsFull>)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/FlightsFull/FlightsFullExtractActive.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/FlightsFull/FlightsFullExtractActive.php"));
 
     QNetworkReply *reply = networkAccessManager->get(request);
 
@@ -9988,11 +10057,12 @@ void NetworkAPIRequester::getActiveFlightsFull(const std::function<void(QList<Fl
 }
 void NetworkAPIRequester::searchFlightsFull(const std::function<void (FlightsFull)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed, FlightsFull flightsFull)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/FlightsFull/FlightsFullSearch.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/FlightsFull/FlightsFullSearch.php"));
     QUrlQuery query;
 
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
+    qDebug() << "TEST" << flightsFull.getFlightsDepartureDate();
     query.addQueryItem("DepartureDate", flightsFull.getFlightsDepartureDate().toString("yyyy-MM-dd hh:mm:ss"));
 
     QNetworkReply *reply = networkAccessManager->post(request, query.toString(QUrl::FullyEncoded).toUtf8());
@@ -10062,7 +10132,7 @@ void NetworkAPIRequester::searchFlightsFull(const std::function<void (FlightsFul
 
 void NetworkAPIRequester::getAllFlightsTrunc(const std::function<void(QList<FlightsTrunc>)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/FlightsTrunc/FlightsTruncExtractAll.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/FlightsTrunc/FlightsTruncExtractAll.php"));
 
     QNetworkReply *reply = networkAccessManager->get(request);
 
@@ -10117,7 +10187,7 @@ void NetworkAPIRequester::getAllFlightsTrunc(const std::function<void(QList<Flig
 }
 void NetworkAPIRequester::getDeleteFlightsTrunc(const std::function<void(QList<FlightsTrunc>)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/FlightsTrunc/FlightsTruncExtractDelete.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/FlightsTrunc/FlightsTruncExtractDelete.php"));
 
     QNetworkReply *reply = networkAccessManager->get(request);
 
@@ -10172,7 +10242,7 @@ void NetworkAPIRequester::getDeleteFlightsTrunc(const std::function<void(QList<F
 }
 void NetworkAPIRequester::getActiveFlightsTrunc(const std::function<void(QList<FlightsTrunc>)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/FlightsTrunc/FlightsTruncExtractActive.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/FlightsTrunc/FlightsTruncExtractActive.php"));
 
     QNetworkReply *reply = networkAccessManager->get(request);
 
@@ -10189,6 +10259,8 @@ void NetworkAPIRequester::getActiveFlightsTrunc(const std::function<void(QList<F
         if(reply->isFinished())
         {
             byteArray = reply->readAll();
+
+            qDebug() << byteArray;
 
             if(reply->error() != QNetworkReply::NoError)
             {
@@ -10227,7 +10299,7 @@ void NetworkAPIRequester::getActiveFlightsTrunc(const std::function<void(QList<F
 }
 void NetworkAPIRequester::searchFlightsTrunc(const std::function<void (FlightsTrunc)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed, FlightsTrunc flightsTrunc)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/FlightsTrunc/FlightsTruncSearch.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/FlightsTrunc/FlightsTruncSearch.php"));
     QUrlQuery query;
 
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
@@ -10294,7 +10366,7 @@ void NetworkAPIRequester::searchFlightsTrunc(const std::function<void (FlightsTr
 
 void NetworkAPIRequester::getAllStaffFull(const std::function<void(QList<StaffFull>)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/StaffFull/StaffFullExtractAll.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/StaffFull/StaffFullExtractAll.php"));
 
     QNetworkReply *reply = networkAccessManager->get(request);
 
@@ -10349,7 +10421,7 @@ void NetworkAPIRequester::getAllStaffFull(const std::function<void(QList<StaffFu
 }
 void NetworkAPIRequester::getDeleteStaffFull(const std::function<void(QList<StaffFull>)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/StaffFull/StaffFullExtractDelete.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/StaffFull/StaffFullExtractDelete.php"));
 
     QNetworkReply *reply = networkAccessManager->get(request);
 
@@ -10404,7 +10476,7 @@ void NetworkAPIRequester::getDeleteStaffFull(const std::function<void(QList<Staf
 }
 void NetworkAPIRequester::getActiveStaffFull(const std::function<void(QList<StaffFull>)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/StaffFull/StaffFullExtractActive.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/StaffFull/StaffFullExtractActive.php"));
 
     QNetworkReply *reply = networkAccessManager->get(request);
 
@@ -10459,7 +10531,7 @@ void NetworkAPIRequester::getActiveStaffFull(const std::function<void(QList<Staf
 }
 void NetworkAPIRequester::searchStaffFull(const std::function<void (StaffFull)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed, StaffFull staffFull)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/StaffFull/StaffFullSearch.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/StaffFull/StaffFullSearch.php"));
     QUrlQuery query;
 
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
@@ -10844,7 +10916,7 @@ void NetworkAPIRequester::searchStaffTrunc(const std::function<void (StaffTrunc)
 
 void NetworkAPIRequester::getAllTicketsAndServicesFull(const std::function<void(QList<TicketsAndServicesFull>)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/AirCompanyAndServicesFull/TicketsAndServicesFullExtractAll.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/AirCompanyAndServicesFull/TicketsAndServicesFullExtractAll.php"));
 
     QNetworkReply *reply = networkAccessManager->get(request);
 
@@ -10899,7 +10971,7 @@ void NetworkAPIRequester::getAllTicketsAndServicesFull(const std::function<void(
 }
 void NetworkAPIRequester::getDeleteTicketsAndServicesFull(const std::function<void(QList<TicketsAndServicesFull>)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/TicketsAndServicesFull/TicketsAndServicesFullExtractDelete.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/TicketsAndServicesFull/TicketsAndServicesFullExtractDelete.php"));
 
     QNetworkReply *reply = networkAccessManager->get(request);
 
@@ -10954,7 +11026,7 @@ void NetworkAPIRequester::getDeleteTicketsAndServicesFull(const std::function<vo
 }
 void NetworkAPIRequester::getActiveTicketsAndServicesFull(const std::function<void(QList<TicketsAndServicesFull>)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/TicketsAndServicesFull/TicketsAndServicesFullExtractActive.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/TicketsAndServicesFull/TicketsAndServicesFullExtractActive.php"));
 
     QNetworkReply *reply = networkAccessManager->get(request);
 
@@ -11009,12 +11081,12 @@ void NetworkAPIRequester::getActiveTicketsAndServicesFull(const std::function<vo
 }
 void NetworkAPIRequester::searchTicketsAndServicesFull(const std::function<void (TicketsAndServicesFull)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed, TicketsAndServicesFull ticketsAndServicesFull)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/TicketsAndServicesFull/TicketsAndServicesFullSearch.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/TicketsAndServicesFull/TicketsAndServicesFullSearch.php"));
     QUrlQuery query;
 
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
-    query.addQueryItem("SeatNumber", QString::number(ticketsAndServicesFull.getTicketsSeatNumber()));
+    query.addQueryItem("Id", QString::number(ticketsAndServicesFull.getTicketsId()));
 
     QNetworkReply *reply = networkAccessManager->post(request, query.toString(QUrl::FullyEncoded).toUtf8());
 
@@ -11098,7 +11170,7 @@ void NetworkAPIRequester::searchTicketsAndServicesFull(const std::function<void 
 
 void NetworkAPIRequester::getAllTicketsAndServicesTrunc(const std::function<void(QList<TicketsAndServicesTrunc>)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/AirCompanyAndServicesTrunc/TicketsAndServicesTruncExtractAll.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/AirCompanyAndServicesTrunc/TicketsAndServicesTruncExtractAll.php"));
 
     QNetworkReply *reply = networkAccessManager->get(request);
 
@@ -11153,7 +11225,7 @@ void NetworkAPIRequester::getAllTicketsAndServicesTrunc(const std::function<void
 }
 void NetworkAPIRequester::getDeleteTicketsAndServicesTrunc(const std::function<void(QList<TicketsAndServicesTrunc>)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/TicketsAndServicesTrunc/TicketsAndServicesTruncExtractDelete.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/TicketsAndServicesTrunc/TicketsAndServicesTruncExtractDelete.php"));
 
     QNetworkReply *reply = networkAccessManager->get(request);
 
@@ -11208,7 +11280,7 @@ void NetworkAPIRequester::getDeleteTicketsAndServicesTrunc(const std::function<v
 }
 void NetworkAPIRequester::getActiveTicketsAndServicesTrunc(const std::function<void(QList<TicketsAndServicesTrunc>)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/TicketsAndServicesTrunc/TicketsAndServicesTruncExtractActive.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/TicketsAndServicesTrunc/TicketsAndServicesTruncExtractActive.php"));
 
     QNetworkReply *reply = networkAccessManager->get(request);
 
@@ -11263,12 +11335,12 @@ void NetworkAPIRequester::getActiveTicketsAndServicesTrunc(const std::function<v
 }
 void NetworkAPIRequester::searchTicketsAndServicesTrunc(const std::function<void (TicketsAndServicesTrunc)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed, TicketsAndServicesTrunc ticketsAndServicesTrunc)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/TicketsAndServicesTrunc/TicketsAndServicesTruncSearch.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/TicketsAndServicesTrunc/TicketsAndServicesTruncSearch.php"));
     QUrlQuery query;
 
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
-    query.addQueryItem("SeatNumber", QString::number(ticketsAndServicesTrunc.getTicketsSeatNumber()));
+    query.addQueryItem("Id", QString::number(ticketsAndServicesTrunc.getTicketsId()));
 
     QNetworkReply *reply = networkAccessManager->post(request, query.toString(QUrl::FullyEncoded).toUtf8());
 
@@ -11334,7 +11406,7 @@ void NetworkAPIRequester::searchTicketsAndServicesTrunc(const std::function<void
 
 void NetworkAPIRequester::getAllTicketsFull(const std::function<void(QList<TicketsFull>)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/TicketsFull/TicketsFullExtractAll.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/TicketsFull/TicketsFullExtractAll.php"));
 
     QNetworkReply *reply = networkAccessManager->get(request);
 
@@ -11389,7 +11461,7 @@ void NetworkAPIRequester::getAllTicketsFull(const std::function<void(QList<Ticke
 }
 void NetworkAPIRequester::getDeleteTicketsFull(const std::function<void(QList<TicketsFull>)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/TicketsFull/TicketsFullExtractDelete.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/TicketsFull/TicketsFullExtractDelete.php"));
 
     QNetworkReply *reply = networkAccessManager->get(request);
 
@@ -11431,7 +11503,7 @@ void NetworkAPIRequester::getDeleteTicketsFull(const std::function<void(QList<Ti
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(TicketsFull(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["FlightsDeparturePoint"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toInt() == 1, jsonObject["BaggageName"].toString(), jsonObject["BaggageDescription"].toString(), jsonObject["BaggageWeight"].toInt(), jsonObject["BaggageSize"].toInt(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toInt() == 1));
+                    list.append(TicketsFull(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["DeparturePoint"].toString(), jsonObject["ArrivalPoint"].toString(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toInt() == 1, jsonObject["BaggageName"].toString(), jsonObject["BaggageDescription"].toString(), jsonObject["BaggageWeight"].toInt(), jsonObject["BaggageSize"].toInt(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -11444,7 +11516,7 @@ void NetworkAPIRequester::getDeleteTicketsFull(const std::function<void(QList<Ti
 }
 void NetworkAPIRequester::getActiveTicketsFull(const std::function<void(QList<TicketsFull>)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/TicketsFull/TicketsFullExtractActive.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/TicketsFull/TicketsFullExtractActive.php"));
 
     QNetworkReply *reply = networkAccessManager->get(request);
 
@@ -11486,7 +11558,7 @@ void NetworkAPIRequester::getActiveTicketsFull(const std::function<void(QList<Ti
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(TicketsFull(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["FlightsDeparturePoint"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toInt() == 1, jsonObject["BaggageName"].toString(), jsonObject["BaggageDescription"].toString(), jsonObject["BaggageWeight"].toInt(), jsonObject["BaggageSize"].toInt(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toInt() == 1));
+                    list.append(TicketsFull(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["ClientPassportSeries"].toInt(), jsonObject["ClientPassportNumber"].toInt(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsArrivalDate"].toString(), jsonObject["DeparturePoint"].toString(), jsonObject["ArrivalPoint"].toString(), jsonObject["AirplaneName"].toString(), jsonObject["AirplaneDescription"].toString(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSizeCargo"].toInt(), jsonObject["AirplaneMaxSeatPlaces"].toInt(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toInt() == 1, jsonObject["BaggageName"].toString(), jsonObject["BaggageDescription"].toString(), jsonObject["BaggageWeight"].toInt(), jsonObject["BaggageSize"].toInt(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -11499,12 +11571,12 @@ void NetworkAPIRequester::getActiveTicketsFull(const std::function<void(QList<Ti
 }
 void NetworkAPIRequester::searchTicketsFull(const std::function<void (TicketsFull)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed, TicketsFull ticketsFull)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/TicketsFull/TicketsFullSearch.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/TicketsFull/TicketsFullSearch.php"));
     QUrlQuery query;
 
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
-    query.addQueryItem("SeatNumber", QString::number(ticketsFull.getTicketsSeatNumber()));
+    query.addQueryItem("Id", QString::number(ticketsFull.getTicketsId()));
 
     QNetworkReply *reply = networkAccessManager->post(request, query.toString(QUrl::FullyEncoded).toUtf8());
 
@@ -11555,8 +11627,8 @@ void NetworkAPIRequester::searchTicketsFull(const std::function<void (TicketsFul
                     ticketsFull.setClientPassportNumber(jsonObject["ClientPassportNumber"].toInt());
                     ticketsFull.setFlightsDepartureDate(jsonObject["FlightsDepartureDate"].toString());
                     ticketsFull.setFlightsArrivalDate(jsonObject["FlightsArrivalDate"].toString());
-                    ticketsFull.setDeparturePoint(jsonObject["FlightsDeparturePoint"].toString());
-                    ticketsFull.setArrivalPoint(jsonObject["FlightsArrivalPoint"].toString());
+                    ticketsFull.setDeparturePoint(jsonObject["DeparturePoint"].toString());
+                    ticketsFull.setArrivalPoint(jsonObject["ArrivalPoint"].toString());
                     ticketsFull.setAirplaneName(jsonObject["AirplaneName"].toString());
                     ticketsFull.setAirplaneDescription(jsonObject["AirplaneDescription"].toString());
                     ticketsFull.setAirplaneMaxSizeCargo(jsonObject["AirplaneMaxSizeCargo"].toInt());
@@ -11564,8 +11636,8 @@ void NetworkAPIRequester::searchTicketsFull(const std::function<void (TicketsFul
                     ticketsFull.setAirplaneMaxSeatPlaces(jsonObject["AirplaneMaxSeatPlaces"].toInt());
                     ticketsFull.setFlightsLadder(jsonObject["FlightsLadder"].toInt());
                     ticketsFull.setTicketsBaggageAvailable(jsonObject["TicketsBaggageAvailable"].toInt() == 1);
-                    ticketsFull.setBaggageName(jsonObject["BaggageName"].toString());
-                    ticketsFull.setBaggageDescription(jsonObject["BaggageDescription"].toString());
+                    ticketsFull.setBaggageName(((jsonObject["BaggageName"].toString() == "")? "Нет" : jsonObject["BaggageName"].toString()));
+                    ticketsFull.setBaggageDescription(((jsonObject["BaggageDescription"].toString() == "")? "Нет" : jsonObject["BaggageDescription"].toString()));
                     ticketsFull.setBaggageWeight(jsonObject["BaggageWeight"].toInt());
                     ticketsFull.setBaggageSize(jsonObject["BaggageSize"].toInt());
                     ticketsFull.setTicketsSeatNumber(jsonObject["TicketsSeatNumber"].toInt());
@@ -11585,7 +11657,7 @@ void NetworkAPIRequester::searchTicketsFull(const std::function<void (TicketsFul
 
 void NetworkAPIRequester::getAllTicketsTrunc(const std::function<void(QList<TicketsTrunc>)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/TicketsTrunc/TicketsTruncExtractAll.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/TicketsTrunc/TicketsTruncExtractAll.php"));
 
     QNetworkReply *reply = networkAccessManager->get(request);
 
@@ -11627,7 +11699,7 @@ void NetworkAPIRequester::getAllTicketsTrunc(const std::function<void(QList<Tick
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(TicketsTrunc(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toInt() == 1, jsonObject["BaggageName"].toString(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toInt() == 1));
+                    list.append(TicketsTrunc(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["ArrivalPoint"].toString(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toInt() == 1, ((jsonObject["BaggageName"].toString() == "")? "Нет" : jsonObject["BaggageName"].toString()), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -11640,7 +11712,7 @@ void NetworkAPIRequester::getAllTicketsTrunc(const std::function<void(QList<Tick
 }
 void NetworkAPIRequester::getDeleteTicketsTrunc(const std::function<void(QList<TicketsTrunc>)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/TicketsTrunc/TicketsTruncExtractDelete.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/TicketsTrunc/TicketsTruncExtractDelete.php"));
 
     QNetworkReply *reply = networkAccessManager->get(request);
 
@@ -11682,7 +11754,7 @@ void NetworkAPIRequester::getDeleteTicketsTrunc(const std::function<void(QList<T
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(TicketsTrunc(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toInt() == 1, jsonObject["BaggageName"].toString(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toInt() == 1));
+                    list.append(TicketsTrunc(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["ArrivalPoint"].toString(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toInt() == 1, ((jsonObject["BaggageName"].toString() == "")? "Нет" : jsonObject["BaggageName"].toString()), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -11695,7 +11767,7 @@ void NetworkAPIRequester::getDeleteTicketsTrunc(const std::function<void(QList<T
 }
 void NetworkAPIRequester::getActiveTicketsTrunc(const std::function<void(QList<TicketsTrunc>)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/TicketsTrunc/TicketsTruncExtractActive.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/TicketsTrunc/TicketsTruncExtractActive.php"));
 
     QNetworkReply *reply = networkAccessManager->get(request);
 
@@ -11737,7 +11809,7 @@ void NetworkAPIRequester::getActiveTicketsTrunc(const std::function<void(QList<T
             {
                     jsonObject = jsonArray.at(counter).toObject();
 
-                    list.append(TicketsTrunc(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["FlightsArrivalPoint"].toString(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toInt() == 1, jsonObject["BaggageName"].toString(), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toInt() == 1));
+                    list.append(TicketsTrunc(jsonObject["TicketsId"].toInt(), jsonObject["TicketsPrice"].toInt(), jsonObject["ClientFirstName"].toString(), jsonObject["ClientLastName"].toString(), jsonObject["ClientPatronymic"].toString(), jsonObject["FlightsDepartureDate"].toString(), jsonObject["ArrivalPoint"].toString(), jsonObject["FlightsLadder"].toInt(), jsonObject["TicketsBaggageAvailable"].toInt() == 1, ((jsonObject["BaggageName"].toString() == "")? "Нет" : jsonObject["BaggageName"].toString()), jsonObject["TicketsSeatNumber"].toInt(), jsonObject["TicketsIsDeleted"].toInt() == 1));
             }
 
             callBackSuccess(list);
@@ -11750,12 +11822,12 @@ void NetworkAPIRequester::getActiveTicketsTrunc(const std::function<void(QList<T
 }
 void NetworkAPIRequester::searchTicketsTrunc(const std::function<void (TicketsTrunc)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed, TicketsTrunc ticketsTrunc)
 {
-    QNetworkRequest request(QUrl(this->url + "Tables/TicketsTrunc/TicketsTruncSearch.php"));
+    QNetworkRequest request(QUrl(this->url + "Views/TicketsTrunc/TicketsTruncSearch.php"));
     QUrlQuery query;
 
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
-    query.addQueryItem("SeatNumber", QString::number(ticketsTrunc.getTicketsSeatNumber()));
+    query.addQueryItem("Id", QString::number(ticketsTrunc.getTicketsId()));
 
     QNetworkReply *reply = networkAccessManager->post(request, query.toString(QUrl::FullyEncoded).toUtf8());
 
@@ -11803,10 +11875,10 @@ void NetworkAPIRequester::searchTicketsTrunc(const std::function<void (TicketsTr
                     ticketsTrunc.setClientLastName(jsonObject["ClientLastName"].toString());
                     ticketsTrunc.setClientPatronymic(jsonObject["ClientPatronymic"].toString());
                     ticketsTrunc.setFlightsDepartureDate(jsonObject["FlightsDepartureDate"].toString());
-                    ticketsTrunc.setArrivalPoint(jsonObject["FlightsArrivalPoint"].toString());
+                    ticketsTrunc.setArrivalPoint(jsonObject["ArrivalPoint"].toString());
                     ticketsTrunc.setFlightsLadder(jsonObject["FlightsLadder"].toInt());
                     ticketsTrunc.setTicketsBaggageAvailable(jsonObject["TicketsBaggageAvailable"].toInt() == 1);
-                    ticketsTrunc.setBaggageName(jsonObject["BaggageName"].toString());
+                    ticketsTrunc.setBaggageName(((jsonObject["BaggageName"].toString() == "")? "Нет" : jsonObject["BaggageName"].toString()));
                     ticketsTrunc.setTicketsSeatNumber(jsonObject["TicketsSeatNumber"].toInt());
                     ticketsTrunc.setTicketsIsDeleted(jsonObject["TicketsIsDeleted"].toInt() == 1);
             }
@@ -12066,6 +12138,75 @@ void NetworkAPIRequester::searchByLoginClientFull(const std::function<void (Clie
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
     query.addQueryItem("Login", clientFull.getAccountLogin());
+
+    QNetworkReply *reply = networkAccessManager->post(request, query.toString(QUrl::FullyEncoded).toUtf8());
+
+    connect(reply, &QNetworkReply::finished, this, [this, reply, callBackSuccess, callBackFailed]()
+    {
+        QByteArray byteArray;
+
+        QJsonDocument jsonDocument;
+        QJsonObject jsonObject;
+        QJsonArray jsonArray;
+
+        ClientFull clientFull(0, "", "", "", 0, 0, "", "", 0, false);
+
+        if(reply->isFinished())
+        {
+            byteArray = reply->readAll();
+
+            if(reply->error() != QNetworkReply::NoError)
+            {
+                setErrnoState(reply->error(), byteArray);
+                callBackFailed(reply->error(), reply->errorString(), getErrnoLine());
+                return;
+            }
+
+            jsonDocument = QJsonDocument::fromJson(byteArray);
+
+            if(!jsonDocument.isObject())
+            {
+                setErrnoState(reply->error(), byteArray);
+                callBackFailed(reply->error(), reply->errorString(), getErrnoLine());
+                return;
+            }
+
+            jsonObject = jsonDocument.object();
+
+            jsonArray = jsonObject["records"].toArray();
+
+            for(int counter = 0; counter < jsonArray.size(); ++counter)
+            {
+                    jsonObject = jsonArray.at(counter).toObject();
+
+                    clientFull.setClientId(jsonObject["ClientId"].toInt());
+                    clientFull.setClientFirstName(jsonObject["ClientFirstName"].toString());
+                    clientFull.setClientLastName(jsonObject["ClientLastName"].toString());
+                    clientFull.setClientPatronymic(jsonObject["ClientPatronymic"].toString());
+                    clientFull.setClientPassportSeries(jsonObject["ClientPassportSeries"].toInt());
+                    clientFull.setClientPassportNumber(jsonObject["ClientPassportNumber"].toInt());
+                    clientFull.setAccountLogin(jsonObject["AccountLogin"].toString());
+                    clientFull.setAccountPassword(jsonObject["AccountPassword"].toString());
+                    clientFull.setClientMoney(jsonObject["ClientMoney"].toInt());
+                    clientFull.setClientIsDeleted(jsonObject["ClientIsDeleted"].toInt() == 1);
+            }
+
+            callBackSuccess(clientFull);
+            setErrnoState(0, "Success");
+        }
+
+        reply->close();
+        reply->deleteLater();
+    });
+}
+void NetworkAPIRequester::searchByIdClientFull(const std::function<void (ClientFull)> callBackSuccess, const std::function<void (unsigned int, QString, QString)> callBackFailed, ClientFull clientFull)
+{
+    QNetworkRequest request(QUrl(this->url + "Views/ClientFull/ClientFullSearchById.php"));
+    QUrlQuery query;
+
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+
+    query.addQueryItem("Id", QString::number(clientFull.getClientId()));
 
     QNetworkReply *reply = networkAccessManager->post(request, query.toString(QUrl::FullyEncoded).toUtf8());
 

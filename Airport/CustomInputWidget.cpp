@@ -161,6 +161,142 @@ Accounts CustomInputWidget::getAccounts(QString title, bool staff, bool &ok, QWi
 
     return account;
 }
+QString CustomInputWidget::getPassword(QString title, bool &ok, bool staff, QWidget *parent)
+{
+    QString password = "";
+
+    QDialog *dialog = nullptr;
+    QWidget *contayner = nullptr;
+
+    QLineEdit *passwordLine = nullptr;
+
+    QValidator *validator = nullptr;
+
+    QVBoxLayout *layout = nullptr;
+    QHBoxLayout *layoutContayner = nullptr;
+
+    QDialogButtonBox *dialogButtonBox = nullptr;
+
+    QEventLoop *eventLoop = nullptr;
+
+    validator = new QRegExpValidator(QRegExp("^[A-z0-9]+$"));
+
+    dialog = new QDialog();
+
+    contayner = new QWidget();
+
+    layout = new QVBoxLayout();
+    layoutContayner = new QHBoxLayout();
+
+    passwordLine = new QLineEdit();
+
+    dialogButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+
+    passwordLine->setPlaceholderText("Пароль");
+
+    passwordLine->setMaxLength(30);
+
+    passwordLine->setEchoMode(QLineEdit::EchoMode::Password);
+
+    passwordLine->setValidator(validator);
+
+    dialog->setWindowTitle(title);
+    dialog->setModal(true);
+
+    dialog->setLayout(layout);
+    contayner->setLayout(layoutContayner);
+
+    layout->addWidget(passwordLine);
+
+    layoutContayner->addWidget(dialogButtonBox);
+
+    layout->addWidget(contayner);
+
+    dialog->show();
+
+    eventLoop = new QEventLoop();
+
+    if(parent)
+    {
+        QObject::connect(dialogButtonBox, &QDialogButtonBox::accepted, parent, [&password, &passwordLine, &staff, &dialog, &parent, &ok]()
+            {
+                if(passwordLine->text().isEmpty())
+                {
+                    QMessageBox::critical(parent, "Ошибка", "Пароль не должен быть пустым!");
+                    return;
+                }
+
+                if(passwordLine->text().size() < 8)
+                {
+                    QMessageBox::critical(parent, "Ошибка", "Пароль не должен быть менее 8 символов!");
+                    return;
+                }
+
+                password = ((staff)? (QCryptographicHash::hash(passwordLine->text().toUtf8(), QCryptographicHash::Sha1).toHex().append(QCryptographicHash::hash("passwordStaff", QCryptographicHash::Sha1).toHex()).toHex()) : QCryptographicHash::hash(passwordLine->text().toUtf8(), QCryptographicHash::Sha1).toHex().append(QCryptographicHash::hash("passwordClient", QCryptographicHash::Sha1).toHex()).toHex());
+
+                dialog->close();
+
+                ok = true;
+            });
+
+        QObject::connect(dialogButtonBox, &QDialogButtonBox::rejected, parent, [&dialog, &ok]()
+        {
+            dialog->close();
+
+            ok = false;
+        });
+    }
+    else
+    {
+        QObject::connect(dialogButtonBox, &QDialogButtonBox::accepted, [&password, &passwordLine, &staff, &dialog, &parent, &ok]()
+            {
+                if(passwordLine->text().isEmpty())
+                {
+                    QMessageBox::critical(parent, "Ошибка", "Пароль не должен быть пустым!");
+                    return;
+                }
+
+                if(passwordLine->text().size() < 8)
+                {
+                    QMessageBox::critical(parent, "Ошибка", "Пароль не должен быть менее 8 символов!");
+                    return;
+                }
+
+                password = ((staff)? (QCryptographicHash::hash(passwordLine->text().toUtf8(), QCryptographicHash::Sha1).toHex().append(QCryptographicHash::hash("passwordStaff", QCryptographicHash::Sha1).toHex()).toHex()) : QCryptographicHash::hash(passwordLine->text().toUtf8(), QCryptographicHash::Sha1).toHex().append(QCryptographicHash::hash("passwordClient", QCryptographicHash::Sha1).toHex()).toHex());
+
+                dialog->close();
+
+                ok = true;
+            });
+
+        QObject::connect(dialogButtonBox, &QDialogButtonBox::rejected, [&dialog, &ok]()
+        {
+            dialog->close();
+
+            ok = false;
+        });
+    }
+
+    connect(dialog, &QDialog::finished, eventLoop, &QEventLoop::quit);
+
+    eventLoop->exec();
+
+    delete dialogButtonBox;
+
+    delete layoutContayner;
+
+    delete contayner;
+
+    delete passwordLine;
+
+    delete layout;
+
+    delete dialog;
+
+    delete validator;
+
+    return password;
+}
 AirCompany CustomInputWidget::getAirCompany(QString title, bool &ok, QWidget *parent)
 {
     AirCompany airCompany(0, "", false);
@@ -999,9 +1135,11 @@ Baggage CustomInputWidget::getBaggage(QString title, bool &ok, QWidget *parent)
 
     return baggage;
 }
-Cargo CustomInputWidget::getCargo(QString title, bool &ok, QString url, QWidget *parent)
+CargoAndTickets CustomInputWidget::getCargoAndTickets(QString title, bool &ok, QString url, QWidget *parent)
 {
     Cargo cargo(0, 0, 0, "", 0, 0, false);
+    Tickets tickets(0, 0, 0, 0, 0, false, 0, false);
+    CargoAndTickets cargoAndTickets;
 
     QDialog *dialog = nullptr;
     QWidget *contayner = nullptr;
@@ -1011,7 +1149,9 @@ Cargo CustomInputWidget::getCargo(QString title, bool &ok, QString url, QWidget 
     QLineEdit *weight = nullptr;
 
     QComboBox *category = nullptr;
-    QComboBox *tickets = nullptr;
+    //QComboBox *tickets = nullptr;
+    QComboBox *client = nullptr;
+    QComboBox *flights = nullptr;
 
     QValidator *validator = nullptr;
     QValidator *validatorNumbers = nullptr;
@@ -1040,7 +1180,9 @@ Cargo CustomInputWidget::getCargo(QString title, bool &ok, QString url, QWidget 
     weight = new QLineEdit();
 
     category = new QComboBox();
-    tickets = new QComboBox();
+    client = new QComboBox();
+    flights = new QComboBox();
+    //tickets = new QComboBox();
 
     dialogButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
@@ -1048,11 +1190,11 @@ Cargo CustomInputWidget::getCargo(QString title, bool &ok, QString url, QWidget 
     description->setPlaceholderText("Описание");
     size->setPlaceholderText("Размер груза");
     weight->setPlaceholderText("Вес груза");
-    tickets->setPlaceholderText("Id билета");
+    //tickets->setPlaceholderText("Id билета");
+    client->setPlaceholderText("Id клиента");
+    flights->setPlaceholderText("Id рейса");
 
     description->setMaxLength(100);
-
-    description->setMinimumHeight(200);
 
     description->setValidator(validator);
 
@@ -1069,7 +1211,9 @@ Cargo CustomInputWidget::getCargo(QString title, bool &ok, QString url, QWidget 
     layout->addWidget(description);
     layout->addWidget(size);
     layout->addWidget(weight);
-    layout->addWidget(tickets);
+    //layout->addWidget(tickets);
+    layout->addWidget(client);
+    layout->addWidget(flights);
 
     layoutContayner->addWidget(dialogButtonBox);
 
@@ -1093,12 +1237,40 @@ Cargo CustomInputWidget::getCargo(QString title, bool &ok, QString url, QWidget 
         QMessageBox::critical(parent, title, replyServer);
     });
 
-    requester->getActiveTickets([&parent, &title, &tickets](QList<Tickets> list)
+//    requester->getActiveTickets([&parent, &title, &tickets](QList<Tickets> list)
+//    {
+//        for(int counter = 0; counter < list.size(); ++counter)
+//        {
+//            tickets->addItem(QString::number(list.at(counter).getId()), list.at(counter).getId());
+//        }
+
+//    },[&parent, &title](unsigned int errorCode, QString error, QString replyServer)
+//    {
+//        QMessageBox::critical(parent, title, replyServer);
+//    });
+
+    requester->getActiveClient([&parent, &title, &client](QList<Client> list)
     {
         for(int counter = 0; counter < list.size(); ++counter)
         {
-            tickets->addItem(QString::number(list.at(counter).getId()), list.at(counter).getId());
+            client->addItem(list.at(counter).getFirstName().append(" ").append(list.at(counter).getLastName()).append(" ").append(list.at(counter).getPatronymic()), list.at(counter).getId());
         }
+
+        client->setCurrentIndex(0);
+
+    },[&parent, &title](unsigned int errorCode, QString error, QString replyServer)
+    {
+        QMessageBox::critical(parent, title, replyServer);
+    });
+
+    requester->getActiveFlights([&parent, &title, &flights](QList<Flights> list)
+    {
+        for(int counter = 0; counter < list.size(); ++counter)
+        {
+            flights->addItem(list.at(counter).getDepartureDate().toString("yyyy-MM-dd hh:mm:ss").append(" ").append(list.at(counter).getArrivalPoint()), list.at(counter).getId());
+        }
+
+        flights->setCurrentIndex(0);
 
     },[&parent, &title](unsigned int errorCode, QString error, QString replyServer)
     {
@@ -1107,7 +1279,7 @@ Cargo CustomInputWidget::getCargo(QString title, bool &ok, QString url, QWidget 
 
     if(parent)
     {
-        QObject::connect(dialogButtonBox, &QDialogButtonBox::accepted, parent, [&cargo, &category, &description, &size, &weight, &tickets, &dialog, &parent, &ok]()
+        QObject::connect(dialogButtonBox, &QDialogButtonBox::accepted, parent, [&cargo, &tickets, &cargoAndTickets, &category, &description, &size, &weight, &client, &flights, &dialog, &parent, &ok]()
             {
                 if(category->count() == 0)
                 {
@@ -1133,7 +1305,19 @@ Cargo CustomInputWidget::getCargo(QString title, bool &ok, QString url, QWidget 
                     return;
                 }
 
-                if(tickets->count() == 0)
+//                if(tickets->count() == 0)
+//                {
+//                    QMessageBox::critical(parent, "Ошибка", "Билет должен быть выбран!");
+//                    return;
+//                }
+
+                if(client->count() == 0)
+                {
+                    QMessageBox::critical(parent, "Ошибка", "Билет должен быть выбран!");
+                    return;
+                }
+
+                if(flights->count() == 0)
                 {
                     QMessageBox::critical(parent, "Ошибка", "Билет должен быть выбран!");
                     return;
@@ -1143,7 +1327,19 @@ Cargo CustomInputWidget::getCargo(QString title, bool &ok, QString url, QWidget 
                 cargo.setDescription(description->text());
                 cargo.setSize(size->text().toInt());
                 cargo.setWeight(weight->text().toInt());
-                cargo.setIdTicket(tickets->currentData().toInt());
+                cargo.setIdTicket(0);
+
+                tickets.setPrice(tickets.getPrice() + cargo.getSize() * 1.5);
+                tickets.setPrice(tickets.getPrice() + cargo.getWeight() * 1.5);
+                tickets.setBaggageAvailable(false);
+                tickets.setId(0);
+                tickets.setFlights(flights->currentData().toInt());
+                tickets.setIdClient(client->currentData().toInt());
+                tickets.setSeatNumber(0);
+                tickets.setIsDeleted(false);
+
+                cargoAndTickets.cargo = cargo;
+                cargoAndTickets.tickets = tickets;
 
                 dialog->close();
 
@@ -1159,55 +1355,79 @@ Cargo CustomInputWidget::getCargo(QString title, bool &ok, QString url, QWidget 
     }
     else
     {
-        QObject::connect(dialogButtonBox, &QDialogButtonBox::accepted, [&cargo, &category, &description, &size, &weight, &tickets, &dialog, &parent, &ok]()
+        QObject::connect(dialogButtonBox, &QDialogButtonBox::accepted, [&cargo, &tickets, &cargoAndTickets, &category, &description, &size, &weight, &client, &flights, &dialog, &parent, &ok]()
             {
-            if(category->count() == 0)
-            {
-                QMessageBox::critical(parent, "Ошибка", "Категория Должна быть выбрана!");
-                return;
-            }
+                if(category->count() == 0)
+                {
+                    QMessageBox::critical(parent, "Ошибка", "Категория Должна быть выбрана!");
+                    return;
+                }
 
-            if(description->text().isEmpty())
-            {
-                QMessageBox::critical(parent, "Ошибка", "Описание не должено быть пустым!");
-                return;
-            }
+                if(description->text().isEmpty())
+                {
+                    QMessageBox::critical(parent, "Ошибка", "Описание не должено быть пустым!");
+                    return;
+                }
 
-            if(size->text().isEmpty())
-            {
-                QMessageBox::critical(parent, "Ошибка", "Размер груза не должен быть пустым!");
-                return;
-            }
+                if(size->text().isEmpty())
+                {
+                    QMessageBox::critical(parent, "Ошибка", "Размер груза не должен быть пустым!");
+                    return;
+                }
 
-            if(weight->text().isEmpty())
-            {
-                QMessageBox::critical(parent, "Ошибка", "Вес багажа не должен быть пустым!");
-                return;
-            }
+                if(weight->text().isEmpty())
+                {
+                    QMessageBox::critical(parent, "Ошибка", "Вес багажа не должен быть пустым!");
+                    return;
+                }
 
-            if(tickets->count() == 0)
-            {
-                QMessageBox::critical(parent, "Ошибка", "Билет должен быть выбран!");
-                return;
-            }
+//                if(tickets->count() == 0)
+//                {
+//                    QMessageBox::critical(parent, "Ошибка", "Билет должен быть выбран!");
+//                    return;
+//                }
 
-            cargo.setIdCategory(category->currentData().toInt());
-            cargo.setDescription(description->text());
-            cargo.setSize(size->text().toInt());
-            cargo.setWeight(weight->text().toInt());
-            cargo.setIdTicket(tickets->currentData().toInt());
+                if(client->count() == 0)
+                {
+                    QMessageBox::critical(parent, "Ошибка", "Билет должен быть выбран!");
+                    return;
+                }
 
+                if(flights->count() == 0)
+                {
+                    QMessageBox::critical(parent, "Ошибка", "Билет должен быть выбран!");
+                    return;
+                }
+
+                cargo.setIdCategory(category->currentData().toInt());
+                cargo.setDescription(description->text());
+                cargo.setSize(size->text().toInt());
+                cargo.setWeight(weight->text().toInt());
+                cargo.setIdTicket(0);
+
+                tickets.setPrice(tickets.getPrice() + cargo.getSize() * 1.5);
+                tickets.setPrice(tickets.getPrice() + cargo.getWeight() * 1.5);
+                tickets.setBaggageAvailable(false);
+                tickets.setId(0);
+                tickets.setFlights(flights->currentData().toInt());
+                tickets.setIdClient(client->currentData().toInt());
+                tickets.setSeatNumber(0);
+                tickets.setIsDeleted(false);
+
+                cargoAndTickets.cargo = cargo;
+                cargoAndTickets.tickets = tickets;
+
+                dialog->close();
+
+                ok = true;
+            });
+
+        QObject::connect(dialogButtonBox, &QDialogButtonBox::rejected, [&dialog, &ok]()
+        {
             dialog->close();
 
-            ok = true;
+            ok = false;
         });
-
-    QObject::connect(dialogButtonBox, &QDialogButtonBox::rejected, [&dialog, &ok]()
-    {
-        dialog->close();
-
-        ok = false;
-    });
     }
 
     connect(dialog, &QDialog::finished, eventLoop, &QEventLoop::quit);
@@ -1224,7 +1444,9 @@ Cargo CustomInputWidget::getCargo(QString title, bool &ok, QString url, QWidget 
     delete size;
     delete weight;
     delete category;
-    delete tickets;
+    //delete tickets;
+    delete flights;
+    delete client;
 
     delete layout;
 
@@ -1235,7 +1457,299 @@ Cargo CustomInputWidget::getCargo(QString title, bool &ok, QString url, QWidget 
 
     delete requester;
 
-    return cargo;
+    return cargoAndTickets;
+}
+CargoAndTickets CustomInputWidget::getCargoAndTickets(QString title, bool &ok, QString url, unsigned int idClient, QWidget *parent)
+{
+    Cargo cargo(0, 0, 0, "", 0, 0, false);
+    Tickets tickets(0, 0, idClient, 0, 0, false, 0, false);
+    CargoAndTickets cargoAndTickets;
+
+    QDialog *dialog = nullptr;
+    QWidget *contayner = nullptr;
+
+    QLineEdit *description = nullptr;
+    QLineEdit *size = nullptr;
+    QLineEdit *weight = nullptr;
+
+    QComboBox *category = nullptr;
+    //QComboBox *tickets = nullptr;
+    QComboBox *flights = nullptr;
+
+    QValidator *validator = nullptr;
+    QValidator *validatorNumbers = nullptr;
+
+    QVBoxLayout *layout = nullptr;
+    QHBoxLayout *layoutContayner = nullptr;
+
+    QDialogButtonBox *dialogButtonBox = nullptr;
+
+    QEventLoop *eventLoop = nullptr;
+
+    NetworkAPIRequester *requester = nullptr;
+
+    validator = new QRegExpValidator(QRegExp("^[A-zА-я0-9]+$"));
+    validatorNumbers = new QIntValidator(0, 999999);
+
+    dialog = new QDialog();
+
+    contayner = new QWidget();
+
+    layout = new QVBoxLayout();
+    layoutContayner = new QHBoxLayout();
+
+    description = new QLineEdit();
+    size = new QLineEdit();
+    weight = new QLineEdit();
+
+    category = new QComboBox();
+    flights = new QComboBox();
+    //tickets = new QComboBox();
+
+    dialogButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+
+    category->setPlaceholderText("Категория груза");
+    description->setPlaceholderText("Описание");
+    size->setPlaceholderText("Размер груза");
+    weight->setPlaceholderText("Вес груза");
+    //tickets->setPlaceholderText("Id билета");
+    flights->setPlaceholderText("Id рейса");
+
+    description->setMaxLength(100);
+
+    description->setValidator(validator);
+
+    size->setValidator(validatorNumbers);
+    weight->setValidator(validatorNumbers);
+
+    dialog->setWindowTitle(title);
+    dialog->setModal(true);
+
+    dialog->setLayout(layout);
+    contayner->setLayout(layoutContayner);
+
+    layout->addWidget(category);
+    layout->addWidget(description);
+    layout->addWidget(size);
+    layout->addWidget(weight);
+    //layout->addWidget(tickets);
+    layout->addWidget(flights);
+
+    layoutContayner->addWidget(dialogButtonBox);
+
+    layout->addWidget(contayner);
+
+    dialog->show();
+
+    eventLoop = new QEventLoop();
+
+    requester = new NetworkAPIRequester(url);
+
+    requester->getActiveCategoriesCargo([&parent, &title, &category](QList<CategoriesCargo> list)
+    {
+        for(int counter = 0; counter < list.size(); ++counter)
+        {
+            category->addItem(list.at(counter).getName(), list.at(counter).getId());
+        }
+
+    },[&parent, &title](unsigned int errorCode, QString error, QString replyServer)
+    {
+        QMessageBox::critical(parent, title, replyServer);
+    });
+
+//    requester->getActiveTickets([&parent, &title, &tickets](QList<Tickets> list)
+//    {
+//        for(int counter = 0; counter < list.size(); ++counter)
+//        {
+//            tickets->addItem(QString::number(list.at(counter).getId()), list.at(counter).getId());
+//        }
+
+//    },[&parent, &title](unsigned int errorCode, QString error, QString replyServer)
+//    {
+//        QMessageBox::critical(parent, title, replyServer);
+//    });
+
+    requester->getActiveFlights([&parent, &title, &flights](QList<Flights> list)
+    {
+        for(int counter = 0; counter < list.size(); ++counter)
+        {
+            flights->addItem(list.at(counter).getDepartureDate().toString("yyyy-MM-dd hh:mm:ss").append(" ").append(list.at(counter).getArrivalPoint()), list.at(counter).getId());
+        }
+
+        flights->setCurrentIndex(0);
+
+    },[&parent, &title](unsigned int errorCode, QString error, QString replyServer)
+    {
+        QMessageBox::critical(parent, title, replyServer);
+    });
+
+    if(parent)
+    {
+        QObject::connect(dialogButtonBox, &QDialogButtonBox::accepted, parent, [&cargo, &tickets, &cargoAndTickets, &category, &description, &size, &weight, &flights, &dialog, &parent, &ok]()
+            {
+                if(category->count() == 0)
+                {
+                    QMessageBox::critical(parent, "Ошибка", "Категория Должна быть выбрана!");
+                    return;
+                }
+
+                if(description->text().isEmpty())
+                {
+                    QMessageBox::critical(parent, "Ошибка", "Описание не должено быть пустым!");
+                    return;
+                }
+
+                if(size->text().isEmpty())
+                {
+                    QMessageBox::critical(parent, "Ошибка", "Размер груза не должен быть пустым!");
+                    return;
+                }
+
+                if(weight->text().isEmpty())
+                {
+                    QMessageBox::critical(parent, "Ошибка", "Вес багажа не должен быть пустым!");
+                    return;
+                }
+
+//                if(tickets->count() == 0)
+//                {
+//                    QMessageBox::critical(parent, "Ошибка", "Билет должен быть выбран!");
+//                    return;
+//                }
+
+
+                if(flights->count() == 0)
+                {
+                    QMessageBox::critical(parent, "Ошибка", "Билет должен быть выбран!");
+                    return;
+                }
+
+                cargo.setIdCategory(category->currentData().toInt());
+                cargo.setDescription(description->text());
+                cargo.setSize(size->text().toInt());
+                cargo.setWeight(weight->text().toInt());
+                cargo.setIdTicket(0);
+
+                tickets.setPrice(tickets.getPrice() + cargo.getSize() * 1.5);
+                tickets.setPrice(tickets.getPrice() + cargo.getWeight() * 1.5);
+                tickets.setBaggageAvailable(false);
+                tickets.setId(0);
+                tickets.setFlights(flights->currentData().toInt());
+                tickets.setSeatNumber(0);
+                tickets.setIsDeleted(false);
+
+                cargoAndTickets.cargo = cargo;
+                cargoAndTickets.tickets = tickets;
+
+                dialog->close();
+
+                ok = true;
+            });
+
+        QObject::connect(dialogButtonBox, &QDialogButtonBox::rejected, parent, [&dialog, &ok]()
+        {
+            dialog->close();
+
+            ok = false;
+        });
+    }
+    else
+    {
+        QObject::connect(dialogButtonBox, &QDialogButtonBox::accepted, [&cargo, &tickets, &cargoAndTickets, &category, &description, &size, &weight, &flights, &dialog, &parent, &ok]()
+            {
+                if(category->count() == 0)
+                {
+                    QMessageBox::critical(parent, "Ошибка", "Категория Должна быть выбрана!");
+                    return;
+                }
+
+                if(description->text().isEmpty())
+                {
+                    QMessageBox::critical(parent, "Ошибка", "Описание не должено быть пустым!");
+                    return;
+                }
+
+                if(size->text().isEmpty())
+                {
+                    QMessageBox::critical(parent, "Ошибка", "Размер груза не должен быть пустым!");
+                    return;
+                }
+
+                if(weight->text().isEmpty())
+                {
+                    QMessageBox::critical(parent, "Ошибка", "Вес багажа не должен быть пустым!");
+                    return;
+                }
+
+//                if(tickets->count() == 0)
+//                {
+//                    QMessageBox::critical(parent, "Ошибка", "Билет должен быть выбран!");
+//                    return;
+//                }
+
+                if(flights->count() == 0)
+                {
+                    QMessageBox::critical(parent, "Ошибка", "Билет должен быть выбран!");
+                    return;
+                }
+
+                cargo.setIdCategory(category->currentData().toInt());
+                cargo.setDescription(description->text());
+                cargo.setSize(size->text().toInt());
+                cargo.setWeight(weight->text().toInt());
+                cargo.setIdTicket(0);
+
+                tickets.setPrice(tickets.getPrice() + cargo.getSize() * 1.5);
+                tickets.setPrice(tickets.getPrice() + cargo.getWeight() * 1.5);
+                tickets.setBaggageAvailable(false);
+                tickets.setId(0);
+                tickets.setFlights(flights->currentData().toInt());
+                tickets.setSeatNumber(0);
+                tickets.setIsDeleted(false);
+
+                cargoAndTickets.cargo = cargo;
+                cargoAndTickets.tickets = tickets;
+
+                dialog->close();
+
+                ok = true;
+            });
+
+        QObject::connect(dialogButtonBox, &QDialogButtonBox::rejected, [&dialog, &ok]()
+        {
+            dialog->close();
+
+            ok = false;
+        });
+    }
+
+    connect(dialog, &QDialog::finished, eventLoop, &QEventLoop::quit);
+
+    eventLoop->exec();
+
+    delete dialogButtonBox;
+
+    delete layoutContayner;
+
+    delete contayner;
+
+    delete description;
+    delete size;
+    delete weight;
+    delete category;
+    //delete tickets;
+    delete flights;
+
+    delete layout;
+
+    delete dialog;
+
+    delete validator;
+    delete validatorNumbers;
+
+    delete requester;
+
+    return cargoAndTickets;
 }
 CategoriesCargo CustomInputWidget::getCategoriesCargo(QString title, bool &ok, QWidget *parent)
 {
@@ -1275,8 +1789,6 @@ CategoriesCargo CustomInputWidget::getCategoriesCargo(QString title, bool &ok, Q
 
     name->setMaxLength(30);
     description->setMaxLength(100);
-
-    description->setMinimumHeight(200);
 
     name->setValidator(validator);
     description->setValidator(validator);
@@ -1382,7 +1894,7 @@ CategoriesCargo CustomInputWidget::getCategoriesCargo(QString title, bool &ok, Q
 
     return categoriesCargo;
 }
-ClientAndAccounts CustomInputWidget::getClientAndAccounts(QString title, bool &ok, QWidget *parent, bool withAccount)
+ClientAndAccounts CustomInputWidget::getClientAndAccounts(QString title, bool &ok, bool withAccount, QWidget *parent)
 {
     Client client(0, "", "", "", 0, 0, 0, 0, false);
     Accounts accounts(0, "", "", false);
@@ -2467,6 +2979,137 @@ Post CustomInputWidget::getPost(QString title, bool &ok, QWidget *parent)
 
     return post;
 }
+Post CustomInputWidget::getPost(QString title, bool &ok, QString url, QWidget *parent)
+{
+    Post post(0, "", 0, false);
+
+    QDialog *dialog = nullptr;
+    QWidget *contayner = nullptr;
+
+    QComboBox *postList = nullptr;
+
+    QVBoxLayout *layout = nullptr;
+    QHBoxLayout *layoutContayner = nullptr;
+
+    QDialogButtonBox *dialogButtonBox = nullptr;
+
+    QEventLoop *eventLoop = nullptr;
+
+    NetworkAPIRequester *requester = nullptr;
+
+    dialog = new QDialog();
+
+    contayner = new QWidget();
+
+    layout = new QVBoxLayout();
+    layoutContayner = new QHBoxLayout();
+
+    postList = new QComboBox();
+
+    dialogButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+
+    postList->setPlaceholderText("Наименование");
+
+    dialog->setWindowTitle(title);
+    dialog->setModal(true);
+
+    dialog->setLayout(layout);
+    contayner->setLayout(layoutContayner);
+
+    layout->addWidget(postList);
+
+    layoutContayner->addWidget(dialogButtonBox);
+
+    layout->addWidget(contayner);
+
+    dialog->show();
+
+    requester = new NetworkAPIRequester(url);
+
+    requester->getActivePost([&postList](QList<Post> list)
+    {
+        for(int counter = 0; counter < list.size(); ++counter)
+        {
+            postList->addItem(list.at(counter).getName(), list.at(counter).getId());
+        }
+
+        postList->setCurrentIndex(0);
+    }, [&parent](unsigned int errorCode, QString error, QString replyServer)
+    {
+       QMessageBox::critical(parent, "Ошибка", replyServer);
+    });
+
+    eventLoop = new QEventLoop();
+
+    if(parent)
+    {
+        QObject::connect(dialogButtonBox, &QDialogButtonBox::accepted, parent, [&post, &postList, &dialog, &parent, &ok]()
+            {
+                if(postList->count() == 0)
+                {
+                    QMessageBox::critical(parent, "Ошибка", "Должность должна быть выбрана!ы");
+                    return;
+                }
+
+                post.setId(postList->currentData().toInt());
+                post.setName(postList->currentText());
+
+                dialog->close();
+
+                ok = true;
+            });
+
+        QObject::connect(dialogButtonBox, &QDialogButtonBox::rejected, parent, [&dialog, &ok]()
+        {
+            dialog->close();
+
+            ok = false;
+        });
+    }
+    else
+    {
+        QObject::connect(dialogButtonBox, &QDialogButtonBox::accepted, [&post, &postList, &dialog, &parent, &ok]()
+            {
+                if(postList->count() == 0)
+                {
+                    QMessageBox::critical(parent, "Ошибка", "Должность должна быть выбрана!");
+                    return;
+                }
+
+                post.setId(postList->currentData().toInt());
+                post.setName(postList->currentText());
+
+                dialog->close();
+
+                ok = true;
+            });
+
+        QObject::connect(dialogButtonBox, &QDialogButtonBox::rejected, [&dialog, &ok]()
+        {
+            dialog->close();
+
+            ok = false;
+        });
+    }
+
+    connect(dialog, &QDialog::finished, eventLoop, &QEventLoop::quit);
+
+    eventLoop->exec();
+
+    delete dialogButtonBox;
+
+    delete layoutContayner;
+
+    delete contayner;
+
+    delete postList;
+
+    delete layout;
+
+    delete dialog;
+
+    return post;
+}
 Services CustomInputWidget::getServices(QString title, bool &ok, QWidget *parent)
 {
     Services services(0, "", "", 0, false);
@@ -2634,7 +3277,7 @@ Services CustomInputWidget::getServices(QString title, bool &ok, QWidget *parent
 
     return services;
 }
-StaffAndAccounts CustomInputWidget::getStaffAndAccounts(QString title, bool &ok, QString url, QWidget *parent, bool withAccount)
+StaffAndAccounts CustomInputWidget::getStaffAndAccounts(QString title, bool &ok, QString url, bool withAccount, QWidget *parent)
 {
     Accounts accounts(0, "", "", false);
     Staff staff(0, "", "", "", 0, 0, 0, 0, "", false);
@@ -3025,22 +3668,32 @@ StaffAndAccounts CustomInputWidget::getStaffAndAccounts(QString title, bool &ok,
 
     return staffAndAccounts;
 }
-Tickets CustomInputWidget::getTickets(QString title, bool &ok, QString url, QWidget *parent)
+BaggageAndTicketsAndServices CustomInputWidget::getBaggageAndTicketsAndServices(QString title, bool &ok, QString url, QWidget *parent)
 {
     Tickets tickets(0, 0, 0, 0, 0, false, 0, false);
+    Baggage baggage(0, "", "", 0, 0, false);
+    QList<Services> services;
+    BaggageAndTicketsAndServices baggageAndTicketsAndServices;
 
     QDialog *dialog = nullptr;
     QWidget *contayner = nullptr;
 
-    QLineEdit *price = nullptr;
+    //QLineEdit *price = nullptr;
     QLineEdit *seatNumber = nullptr;
+    QLineEdit *baggageName = nullptr;
+    QLineEdit *baggageDescription = nullptr;
+    QLineEdit *baggageSize = nullptr;
+    QLineEdit *baggageWeight = nullptr;
+
+    QListWidget *listServices;
 
     QComboBox *client = nullptr;
     QComboBox *flights = nullptr;
-    QComboBox *baggage = nullptr;
+    //QComboBox *baggage = nullptr;
 
     QCheckBox *baggageAvailable = nullptr;
 
+    QValidator *validator = nullptr;
     QValidator *validatorNumbers = nullptr;
 
     QVBoxLayout *layout = nullptr;
@@ -3052,6 +3705,7 @@ Tickets CustomInputWidget::getTickets(QString title, bool &ok, QString url, QWid
 
     NetworkAPIRequester *requester = nullptr;
 
+    validator = new QRegExpValidator(QRegExp("^[A-zА-я0-9]+$"));
     validatorNumbers = new QIntValidator(0, 999999);
 
     dialog = new QDialog();
@@ -3061,25 +3715,48 @@ Tickets CustomInputWidget::getTickets(QString title, bool &ok, QString url, QWid
     layout = new QVBoxLayout();
     layoutContayner = new QHBoxLayout();
 
-    price = new QLineEdit();
+    //price = new QLineEdit();
     seatNumber = new QLineEdit();
+    baggageName = new QLineEdit();
+    baggageDescription = new QLineEdit();
+    baggageSize = new QLineEdit();
+    baggageWeight = new QLineEdit();
+
+    listServices = new QListWidget();
 
     baggageAvailable = new QCheckBox("Есть багаж?");
 
     client = new QComboBox();
     flights = new QComboBox();
-    baggage = new QComboBox();
+    //baggage = new QComboBox();
 
     dialogButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
     client->setPlaceholderText("Клиент");
     flights->setPlaceholderText("Рейс");
-    baggage->setPlaceholderText("Багаж");
-    price->setPlaceholderText("Цена");
+    //baggage->setPlaceholderText("Багаж");
+    //price->setPlaceholderText("Цена");
     seatNumber->setPlaceholderText("Номер места");
+    baggageName->setPlaceholderText("Имя багажа");
+    baggageDescription->setPlaceholderText("Описание багажа");
+    baggageSize->setPlaceholderText("Размер багажа");
+    baggageWeight->setPlaceholderText("Вес багажа");
+
+    baggageName->setValidator(validator);
+    baggageDescription->setValidator(validator);
+
+    baggageName->setMaxLength(30);
+    baggageDescription->setMaxLength(100);
 
     seatNumber->setValidator(validatorNumbers);
-    price->setValidator(validatorNumbers);
+    //price->setValidator(validatorNumbers);
+    baggageSize->setValidator(validatorNumbers);
+    baggageWeight->setValidator(validatorNumbers);
+
+    baggageName->setVisible(false);
+    baggageDescription->setVisible(false);
+    baggageSize->setVisible(false);
+    baggageWeight->setVisible(false);
 
     dialog->setWindowTitle(title);
     dialog->setModal(true);
@@ -3087,12 +3764,40 @@ Tickets CustomInputWidget::getTickets(QString title, bool &ok, QString url, QWid
     dialog->setLayout(layout);
     contayner->setLayout(layoutContayner);
 
-    layout->addWidget(price);
+    if(parent)
+    {
+        connect(baggageAvailable, &QCheckBox::stateChanged, parent, [&](int state)
+        {
+           baggageName->setVisible(baggageAvailable->checkState());
+           baggageDescription->setVisible(baggageAvailable->checkState());
+           baggageSize->setVisible(baggageAvailable->checkState());
+           baggageWeight->setVisible(baggageAvailable->checkState());
+           qDebug() << state;
+        });
+    }
+    else
+    {
+        connect(baggageAvailable, &QCheckBox::stateChanged, [&](int state)
+        {
+           baggageName->setVisible(baggageAvailable->checkState());
+           baggageDescription->setVisible(baggageAvailable->checkState());
+           baggageSize->setVisible(baggageAvailable->checkState());
+           baggageWeight->setVisible(baggageAvailable->checkState());
+           qDebug() << state;
+        });
+    }
+
+    //layout->addWidget(price);
     layout->addWidget(client);
     layout->addWidget(seatNumber);
     layout->addWidget(flights);
     layout->addWidget(baggageAvailable);
-    layout->addWidget(baggage);
+    //layout->addWidget(baggage);
+    layout->addWidget(baggageName);
+    layout->addWidget(baggageDescription);
+    layout->addWidget(baggageSize);
+    layout->addWidget(baggageWeight);
+    layout->addWidget(listServices);
 
     layoutContayner->addWidget(dialogButtonBox);
 
@@ -3111,6 +3816,8 @@ Tickets CustomInputWidget::getTickets(QString title, bool &ok, QString url, QWid
             client->addItem(list.at(counter).getFirstName().append(" ").append(list.at(counter).getLastName()).append(" ").append(list.at(counter).getPatronymic()), list.at(counter).getId());
         }
 
+        client->setCurrentIndex(0);
+
     },[&parent, &title](unsigned int errorCode, QString error, QString replyServer)
     {
         QMessageBox::critical(parent, title, replyServer);
@@ -3123,32 +3830,52 @@ Tickets CustomInputWidget::getTickets(QString title, bool &ok, QString url, QWid
             flights->addItem(list.at(counter).getDepartureDate().toString("yyyy-MM-dd hh:mm:ss").append(" ").append(list.at(counter).getArrivalPoint()), list.at(counter).getId());
         }
 
+        flights->setCurrentIndex(0);
+
     },[&parent, &title](unsigned int errorCode, QString error, QString replyServer)
     {
         QMessageBox::critical(parent, title, replyServer);
     });
 
-    requester->getActiveBaggage([&parent, &title, &baggage](QList<Baggage> list)
+    //requester->getActiveBaggage([&parent, &title, &baggage](QList<Baggage> list)
+    //{
+        //for(int counter = 0; counter < list.size(); ++counter)
+        //{
+            //baggage->addItem(list.at(counter).getName(), list.at(counter).getId());
+        //}
+
+    //},[&parent, &title](unsigned int errorCode, QString error, QString replyServer)
+    //{
+        //QMessageBox::critical(parent, title, replyServer);
+    //});
+
+    requester->getActiveServices([&parent, &title, &baggageAndTicketsAndServices, &listServices](QList<Services> list)
     {
+
         for(int counter = 0; counter < list.size(); ++counter)
         {
-            baggage->addItem(list.at(counter).getName(), list.at(counter).getId());
+            listServices->addItem(new QListWidgetItem());
+
+            listServices->item(counter)->setData(Qt::DisplayRole, list.at(counter).getName());
+            listServices->item(counter)->setData(Qt::CheckStateRole, Qt::Unchecked);
+            listServices->item(counter)->setWhatsThis(QString::number(list.at(counter).getId()).append(":").append(QString::number(list.at(counter).getPrice())));
         }
 
-    },[&parent, &title](unsigned int errorCode, QString error, QString replyServer)
+
+    }, [&parent, &title](unsigned int errorCode, QString error, QString replyServer)
     {
-        QMessageBox::critical(parent, title, replyServer);
+       QMessageBox::critical(parent, title, replyServer);
     });
 
     if(parent)
     {
-        QObject::connect(dialogButtonBox, &QDialogButtonBox::accepted, parent, [&tickets, &price, &client, &seatNumber, &flights, &baggageAvailable, &baggage, &dialog, &parent, &ok]()
+        QObject::connect(dialogButtonBox, &QDialogButtonBox::accepted, parent, [&tickets, &baggage, &baggageAndTicketsAndServices, &services, &client, &seatNumber, &flights, &baggageAvailable, &baggageName, &baggageDescription, &baggageSize, &baggageWeight, &listServices, &dialog, &parent, &ok]()
             {
-                if(price->text().isEmpty())
-                {
-                    QMessageBox::critical(parent, "Ошибка", "Цена не должна быть пустой!");
-                    return;
-                }
+                //if(price->text().isEmpty())
+                //{
+                    //QMessageBox::critical(parent, "Ошибка", "Цена не должна быть пустой!");
+                    //return;
+                //}
 
                 if(client->count() == 0)
                 {
@@ -3170,19 +3897,68 @@ Tickets CustomInputWidget::getTickets(QString title, bool &ok, QString url, QWid
 
                 if(baggageAvailable->checkState() == Qt::CheckState::Checked)
                 {
-                    if(baggage->count() == 0)
+                    //if(baggage->count() == 0)
+                    //{
+                        //qDebug() << "DEBUG3: " << baggageAvailable->checkState();
+                        //QMessageBox::critical(parent, "Ошибка", "Багаж должен быть выбран!");
+                        //return;
+                    //}
+
+                    if(baggageName->text().isEmpty())
                     {
-                        QMessageBox::critical(parent, "Ошибка", "Багаж должен быть выбран!");
+                        QMessageBox::critical(parent, "Ошибка", "Имя багажа не должено быть пустым!");
+                        return;
+                    }
+
+                    if(baggageDescription->text().isEmpty())
+                    {
+                        QMessageBox::critical(parent, "Ошибка", "Описание не должено быть пустым!");
+                        return;
+                    }
+
+                    if(baggageSize->text().isEmpty())
+                    {
+                        QMessageBox::critical(parent, "Ошибка", "Размер багажа не должено быть пустым!");
+                        return;
+                    }
+
+                    if(baggageWeight->text().isEmpty())
+                    {
+                        QMessageBox::critical(parent, "Ошибка", "Вес багажа не должено быть пустым!");
                         return;
                     }
                 }
 
-                tickets.setPrice(price->text().toInt());
+                for(int counter = 0; counter < listServices->count(); ++counter)
+                {
+                    if(listServices->item(counter))
+                    {
+                        services.append(Services(listServices->item(counter)->whatsThis().split(":")[0].toInt(), listServices->item(counter)->text(), "", listServices->item(counter)->whatsThis().split(":")[1].toInt(), false));
+                        tickets.setPrice(tickets.getPrice() + listServices->item(counter)->whatsThis().split(":")[1].toInt());
+                        //qDebug() << "D: " << tickets.getPrice(); 11
+                    }
+                }
+
                 tickets.setIdClient(client->currentData().toInt());
                 tickets.setSeatNumber(seatNumber->text().toInt());
                 tickets.setFlights(flights->currentData().toInt());
-                tickets.setBaggageAvailable(baggageAvailable->checkState() == Qt::CheckState::Checked);
-                tickets.setBaggage((baggageAvailable->checkState() == Qt::CheckState::Checked)? baggage->currentData().toInt() : 0);
+                tickets.setBaggageAvailable((baggageAvailable->checkState()));
+
+                if(baggageAvailable->checkState())
+                {
+                    tickets.setPrice(tickets.getPrice() + ((baggageAvailable->checkState())? baggageSize->text().toInt() * 1.1 : 0));
+                    tickets.setPrice(tickets.getPrice() + ((baggageAvailable->checkState())? baggageWeight->text().toInt() * 1.1 : 0));
+
+                    baggage.setName(baggageName->text());
+                    baggage.setDescription(baggageDescription->text());
+                    baggage.setSize(baggageSize->text().toInt());
+                    baggage.setWeight(baggageName->text().toInt());
+                }
+
+                baggageAndTicketsAndServices.tickets = tickets;
+                baggageAndTicketsAndServices.baggage = baggage;
+                baggageAndTicketsAndServices.services = services;
+                //tickets.setBaggage((baggageAvailable->checkState() == Qt::CheckState::Checked)? baggage->currentData().toInt() : 0);
 
                 dialog->close();
 
@@ -3198,13 +3974,13 @@ Tickets CustomInputWidget::getTickets(QString title, bool &ok, QString url, QWid
     }
     else
     {
-        QObject::connect(dialogButtonBox, &QDialogButtonBox::accepted, [&tickets, &price, &client, &seatNumber, &flights, &baggageAvailable, &baggage, &dialog, &parent, &ok]()
+        QObject::connect(dialogButtonBox, &QDialogButtonBox::accepted, [&tickets, &baggage, &baggageAndTicketsAndServices, &services, &client, &seatNumber, &flights, &baggageAvailable, &baggageName, &baggageDescription, &baggageSize, &baggageWeight, &listServices, &dialog, &parent, &ok]()
             {
-                if(price->text().isEmpty())
-                {
-                    QMessageBox::critical(parent, "Ошибка", "Цена не должна быть пустой!");
-                    return;
-                }
+                //if(price->text().isEmpty())
+                //{
+                    //QMessageBox::critical(parent, "Ошибка", "Цена не должна быть пустой!");
+                    //return;
+                //}
 
                 if(client->count() == 0)
                 {
@@ -3226,19 +4002,67 @@ Tickets CustomInputWidget::getTickets(QString title, bool &ok, QString url, QWid
 
                 if(baggageAvailable->checkState() == Qt::CheckState::Checked)
                 {
-                    if(baggage->count() == 0)
+                    //if(baggage->count() == 0)
+                    //{
+                        //qDebug() << "DEBUG3: " << baggageAvailable->checkState();
+                        //QMessageBox::critical(parent, "Ошибка", "Багаж должен быть выбран!");
+                        //return;
+                    //}
+
+                    if(baggageName->text().isEmpty())
                     {
-                        QMessageBox::critical(parent, "Ошибка", "Багаж должен быть выбран!");
+                        QMessageBox::critical(parent, "Ошибка", "Имя багажа не должено быть пустым!");
+                        return;
+                    }
+
+                    if(baggageDescription->text().isEmpty())
+                    {
+                        QMessageBox::critical(parent, "Ошибка", "Описание не должено быть пустым!");
+                        return;
+                    }
+
+                    if(baggageSize->text().isEmpty())
+                    {
+                        QMessageBox::critical(parent, "Ошибка", "Размер багажа не должено быть пустым!");
+                        return;
+                    }
+
+                    if(baggageWeight->text().isEmpty())
+                    {
+                        QMessageBox::critical(parent, "Ошибка", "Вес багажа не должено быть пустым!");
                         return;
                     }
                 }
 
-                tickets.setPrice(price->text().toInt());
+                for(int counter = 0; counter < listServices->count(); ++counter)
+                {
+                    if(listServices->item(counter))
+                    {
+                        services.append(Services(listServices->item(counter)->whatsThis().split(":")[0].toInt(), listServices->item(counter)->text(), "", listServices->item(counter)->whatsThis().split(":")[1].toInt(), false));
+                        tickets.setPrice(tickets.getPrice() + listServices->item(counter)->whatsThis().split(":")[1].toInt());
+                    }
+                }
+
                 tickets.setIdClient(client->currentData().toInt());
                 tickets.setSeatNumber(seatNumber->text().toInt());
                 tickets.setFlights(flights->currentData().toInt());
-                tickets.setBaggageAvailable(baggageAvailable->checkState() == Qt::CheckState::Checked);
-                tickets.setBaggage((baggageAvailable->checkState() == Qt::CheckState::Checked)? baggage->currentData().toInt() : 0);
+                tickets.setBaggageAvailable((baggageAvailable->checkState()));
+
+                if(baggageAvailable->checkState())
+                {
+                    tickets.setPrice(tickets.getPrice() + ((baggageAvailable->checkState())? baggageSize->text().toInt() * 1.1 : 0));
+                    tickets.setPrice(tickets.getPrice() + ((baggageAvailable->checkState())? baggageWeight->text().toInt() * 1.1 : 0));
+
+                    baggage.setName(baggageName->text());
+                    baggage.setDescription(baggageDescription->text());
+                    baggage.setSize(baggageSize->text().toInt());
+                    baggage.setWeight(baggageName->text().toInt());
+                }
+
+                baggageAndTicketsAndServices.tickets = tickets;
+                baggageAndTicketsAndServices.baggage = baggage;
+                baggageAndTicketsAndServices.services = services;
+                //tickets.setBaggage((baggageAvailable->checkState() == Qt::CheckState::Checked)? baggage->currentData().toInt() : 0);
 
                 dialog->close();
 
@@ -3257,28 +4081,449 @@ Tickets CustomInputWidget::getTickets(QString title, bool &ok, QString url, QWid
 
     eventLoop->exec();
 
+    listServices->clear();
+
     delete dialogButtonBox;
 
     delete layoutContayner;
 
     delete contayner;
 
-    delete price;
+    //delete price;
     delete client;
     delete seatNumber;
     delete flights;
     delete baggageAvailable;
-    delete baggage;
+    delete baggageName;
+    delete baggageDescription;
+    delete baggageSize;
+    delete baggageWeight;
+    //delete baggage;
+
+    delete listServices;
 
     delete layout;
 
     delete dialog;
 
+    delete validator;
     delete validatorNumbers;
 
     delete requester;
 
-    return tickets;
+    return baggageAndTicketsAndServices;
+}
+BaggageAndTicketsAndServices CustomInputWidget::getBaggageAndTicketsAndServices(QString title, bool &ok, QString url, unsigned int idClient, QWidget *parent)
+{
+    Tickets tickets(0, 0, idClient, 0, 0, false, 0, false);
+    Baggage baggage(0, "", "", 0, 0, false);
+    QList<Services> services;
+    BaggageAndTicketsAndServices baggageAndTicketsAndServices;
+
+    QDialog *dialog = nullptr;
+    QWidget *contayner = nullptr;
+
+    //QLineEdit *price = nullptr;
+    QLineEdit *seatNumber = nullptr;
+    QLineEdit *baggageName = nullptr;
+    QLineEdit *baggageDescription = nullptr;
+    QLineEdit *baggageSize = nullptr;
+    QLineEdit *baggageWeight = nullptr;
+
+    QListWidget *listServices;
+
+    QComboBox *flights = nullptr;
+    //QComboBox *baggage = nullptr;
+
+    QCheckBox *baggageAvailable = nullptr;
+
+    QValidator *validator = nullptr;
+    QValidator *validatorNumbers = nullptr;
+
+    QVBoxLayout *layout = nullptr;
+    QHBoxLayout *layoutContayner = nullptr;
+
+    QDialogButtonBox *dialogButtonBox = nullptr;
+
+    QEventLoop *eventLoop = nullptr;
+
+    NetworkAPIRequester *requester = nullptr;
+
+    validator = new QRegExpValidator(QRegExp("^[A-zА-я0-9]+$"));
+    validatorNumbers = new QIntValidator(0, 999999);
+
+    dialog = new QDialog();
+
+    contayner = new QWidget();
+
+    layout = new QVBoxLayout();
+    layoutContayner = new QHBoxLayout();
+
+    //price = new QLineEdit();
+    seatNumber = new QLineEdit();
+    baggageName = new QLineEdit();
+    baggageDescription = new QLineEdit();
+    baggageSize = new QLineEdit();
+    baggageWeight = new QLineEdit();
+
+    listServices = new QListWidget();
+
+    baggageAvailable = new QCheckBox("Есть багаж?");
+
+    flights = new QComboBox();
+    //baggage = new QComboBox();
+
+    dialogButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+
+    flights->setPlaceholderText("Рейс");
+    //baggage->setPlaceholderText("Багаж");
+    //price->setPlaceholderText("Цена");
+    seatNumber->setPlaceholderText("Номер места");
+    baggageName->setPlaceholderText("Имя багажа");
+    baggageDescription->setPlaceholderText("Описание багажа");
+    baggageSize->setPlaceholderText("Размер багажа");
+    baggageWeight->setPlaceholderText("Вес багажа");
+
+    baggageName->setValidator(validator);
+    baggageDescription->setValidator(validator);
+
+    baggageName->setMaxLength(30);
+    baggageDescription->setMaxLength(100);
+
+    seatNumber->setValidator(validatorNumbers);
+    //price->setValidator(validatorNumbers);
+    baggageSize->setValidator(validatorNumbers);
+    baggageWeight->setValidator(validatorNumbers);
+
+    baggageName->setVisible(false);
+    baggageDescription->setVisible(false);
+    baggageSize->setVisible(false);
+    baggageWeight->setVisible(false);
+
+    dialog->setWindowTitle(title);
+    dialog->setModal(true);
+
+    dialog->setLayout(layout);
+    contayner->setLayout(layoutContayner);
+
+    if(parent)
+    {
+        connect(baggageAvailable, &QCheckBox::stateChanged, parent, [&](int state)
+        {
+           baggageName->setVisible(baggageAvailable->checkState());
+           baggageDescription->setVisible(baggageAvailable->checkState());
+           baggageSize->setVisible(baggageAvailable->checkState());
+           baggageWeight->setVisible(baggageAvailable->checkState());
+           qDebug() << state;
+        });
+    }
+    else
+    {
+        connect(baggageAvailable, &QCheckBox::stateChanged, [&](int state)
+        {
+           baggageName->setVisible(baggageAvailable->checkState());
+           baggageDescription->setVisible(baggageAvailable->checkState());
+           baggageSize->setVisible(baggageAvailable->checkState());
+           baggageWeight->setVisible(baggageAvailable->checkState());
+           qDebug() << state;
+        });
+    }
+
+    //layout->addWidget(price);
+    layout->addWidget(seatNumber);
+    layout->addWidget(flights);
+    layout->addWidget(baggageAvailable);
+    //layout->addWidget(baggage);
+    layout->addWidget(baggageName);
+    layout->addWidget(baggageDescription);
+    layout->addWidget(baggageSize);
+    layout->addWidget(baggageWeight);
+    layout->addWidget(listServices);
+
+    layoutContayner->addWidget(dialogButtonBox);
+
+    layout->addWidget(contayner);
+
+    dialog->show();
+
+    eventLoop = new QEventLoop();
+
+    requester = new NetworkAPIRequester(url);
+
+    requester->getActiveFlights([&parent, &title, &flights](QList<Flights> list)
+    {
+        for(int counter = 0; counter < list.size(); ++counter)
+        {
+            flights->addItem(list.at(counter).getDepartureDate().toString("yyyy-MM-dd hh:mm:ss").append(" ").append(list.at(counter).getArrivalPoint()), list.at(counter).getId());
+        }
+
+        flights->setCurrentIndex(0);
+
+    },[&parent, &title](unsigned int errorCode, QString error, QString replyServer)
+    {
+        QMessageBox::critical(parent, title, replyServer);
+    });
+
+    //requester->getActiveBaggage([&parent, &title, &baggage](QList<Baggage> list)
+    //{
+        //for(int counter = 0; counter < list.size(); ++counter)
+        //{
+            //baggage->addItem(list.at(counter).getName(), list.at(counter).getId());
+        //}
+
+    //},[&parent, &title](unsigned int errorCode, QString error, QString replyServer)
+    //{
+        //QMessageBox::critical(parent, title, replyServer);
+    //});
+
+    requester->getActiveServices([&parent, &title, &baggageAndTicketsAndServices, &listServices](QList<Services> list)
+    {
+
+        for(int counter = 0; counter < list.size(); ++counter)
+        {
+            listServices->addItem(new QListWidgetItem());
+
+            listServices->item(counter)->setData(Qt::DisplayRole, list.at(counter).getName());
+            listServices->item(counter)->setData(Qt::CheckStateRole, Qt::Unchecked);
+            listServices->item(counter)->setWhatsThis(QString::number(list.at(counter).getId()).append(":").append(QString::number(list.at(counter).getPrice())));
+        }
+
+
+    }, [&parent, &title](unsigned int errorCode, QString error, QString replyServer)
+    {
+       QMessageBox::critical(parent, title, replyServer);
+    });
+
+    if(parent)
+    {
+        QObject::connect(dialogButtonBox, &QDialogButtonBox::accepted, parent, [&tickets, &baggage, &baggageAndTicketsAndServices, &services, &seatNumber, &flights, &baggageAvailable, &baggageName, &baggageDescription, &baggageSize, &baggageWeight, &listServices, &dialog, &parent, &ok]()
+            {
+                //if(price->text().isEmpty())
+                //{
+                    //QMessageBox::critical(parent, "Ошибка", "Цена не должна быть пустой!");
+                    //return;
+                //}
+
+                if(seatNumber->text().isEmpty())
+                {
+                    QMessageBox::critical(parent, "Ошибка", "Место не должено быть пустым!");
+                    return;
+                }
+
+                if(flights->count() == 0)
+                {
+                    QMessageBox::critical(parent, "Ошибка", "Рейс должен быть выбран!");
+                    return;
+                }
+
+                if(baggageAvailable->checkState() == Qt::CheckState::Checked)
+                {
+                    //if(baggage->count() == 0)
+                    //{
+                        //qDebug() << "DEBUG3: " << baggageAvailable->checkState();
+                        //QMessageBox::critical(parent, "Ошибка", "Багаж должен быть выбран!");
+                        //return;
+                    //}
+
+                    if(baggageName->text().isEmpty())
+                    {
+                        QMessageBox::critical(parent, "Ошибка", "Имя багажа не должено быть пустым!");
+                        return;
+                    }
+
+                    if(baggageDescription->text().isEmpty())
+                    {
+                        QMessageBox::critical(parent, "Ошибка", "Описание не должено быть пустым!");
+                        return;
+                    }
+
+                    if(baggageSize->text().isEmpty())
+                    {
+                        QMessageBox::critical(parent, "Ошибка", "Размер багажа не должено быть пустым!");
+                        return;
+                    }
+
+                    if(baggageWeight->text().isEmpty())
+                    {
+                        QMessageBox::critical(parent, "Ошибка", "Вес багажа не должено быть пустым!");
+                        return;
+                    }
+                }
+
+                for(int counter = 0; counter < listServices->count(); ++counter)
+                {
+                    if(listServices->item(counter))
+                    {
+                        services.append(Services(listServices->item(counter)->whatsThis().split(":")[0].toInt(), listServices->item(counter)->text(), "", listServices->item(counter)->whatsThis().split(":")[1].toInt(), false));
+                        tickets.setPrice(tickets.getPrice() + listServices->item(counter)->whatsThis().split(":")[1].toInt());
+                        //qDebug() << "D: " << tickets.getPrice(); 11
+                    }
+                }
+
+                tickets.setSeatNumber(seatNumber->text().toInt());
+                tickets.setFlights(flights->currentData().toInt());
+                tickets.setBaggageAvailable((baggageAvailable->checkState()));
+
+                if(baggageAvailable->checkState())
+                {
+                    tickets.setPrice(tickets.getPrice() + ((baggageAvailable->checkState())? baggageSize->text().toInt() * 1.1 : 0));
+                    tickets.setPrice(tickets.getPrice() + ((baggageAvailable->checkState())? baggageWeight->text().toInt() * 1.1 : 0));
+
+                    baggage.setName(baggageName->text());
+                    baggage.setDescription(baggageDescription->text());
+                    baggage.setSize(baggageSize->text().toInt());
+                    baggage.setWeight(baggageName->text().toInt());
+                }
+
+                baggageAndTicketsAndServices.tickets = tickets;
+                baggageAndTicketsAndServices.baggage = baggage;
+                baggageAndTicketsAndServices.services = services;
+                //tickets.setBaggage((baggageAvailable->checkState() == Qt::CheckState::Checked)? baggage->currentData().toInt() : 0);
+
+                dialog->close();
+
+                ok = true;
+            });
+
+        QObject::connect(dialogButtonBox, &QDialogButtonBox::rejected, parent, [&dialog, &ok]()
+        {
+            dialog->close();
+
+            ok = false;
+        });
+    }
+    else
+    {
+        QObject::connect(dialogButtonBox, &QDialogButtonBox::accepted, [&tickets, &baggage, &baggageAndTicketsAndServices, &services, &seatNumber, &flights, &baggageAvailable, &baggageName, &baggageDescription, &baggageSize, &baggageWeight, &listServices, &dialog, &parent, &ok]()
+            {
+                //if(price->text().isEmpty())
+                //{
+                    //QMessageBox::critical(parent, "Ошибка", "Цена не должна быть пустой!");
+                    //return;
+                //}
+
+                if(seatNumber->text().isEmpty())
+                {
+                    QMessageBox::critical(parent, "Ошибка", "Место не должено быть пустым!");
+                    return;
+                }
+
+                if(flights->count() == 0)
+                {
+                    QMessageBox::critical(parent, "Ошибка", "Рейс должен быть выбран!");
+                    return;
+                }
+
+                if(baggageAvailable->checkState() == Qt::CheckState::Checked)
+                {
+                    //if(baggage->count() == 0)
+                    //{
+                        //qDebug() << "DEBUG3: " << baggageAvailable->checkState();
+                        //QMessageBox::critical(parent, "Ошибка", "Багаж должен быть выбран!");
+                        //return;
+                    //}
+
+                    if(baggageName->text().isEmpty())
+                    {
+                        QMessageBox::critical(parent, "Ошибка", "Имя багажа не должено быть пустым!");
+                        return;
+                    }
+
+                    if(baggageDescription->text().isEmpty())
+                    {
+                        QMessageBox::critical(parent, "Ошибка", "Описание не должено быть пустым!");
+                        return;
+                    }
+
+                    if(baggageSize->text().isEmpty())
+                    {
+                        QMessageBox::critical(parent, "Ошибка", "Размер багажа не должено быть пустым!");
+                        return;
+                    }
+
+                    if(baggageWeight->text().isEmpty())
+                    {
+                        QMessageBox::critical(parent, "Ошибка", "Вес багажа не должено быть пустым!");
+                        return;
+                    }
+                }
+
+                for(int counter = 0; counter < listServices->count(); ++counter)
+                {
+                    if(listServices->item(counter))
+                    {
+                        services.append(Services(listServices->item(counter)->whatsThis().split(":")[0].toInt(), listServices->item(counter)->text(), "", listServices->item(counter)->whatsThis().split(":")[1].toInt(), false));
+                        tickets.setPrice(tickets.getPrice() + listServices->item(counter)->whatsThis().split(":")[1].toInt());
+                    }
+                }
+
+                tickets.setSeatNumber(seatNumber->text().toInt());
+                tickets.setFlights(flights->currentData().toInt());
+                tickets.setBaggageAvailable((baggageAvailable->checkState()));
+
+                if(baggageAvailable->checkState())
+                {
+                    tickets.setPrice(tickets.getPrice() + ((baggageAvailable->checkState())? baggageSize->text().toInt() * 1.1 : 0));
+                    tickets.setPrice(tickets.getPrice() + ((baggageAvailable->checkState())? baggageWeight->text().toInt() * 1.1 : 0));
+
+                    baggage.setName(baggageName->text());
+                    baggage.setDescription(baggageDescription->text());
+                    baggage.setSize(baggageSize->text().toInt());
+                    baggage.setWeight(baggageName->text().toInt());
+                }
+
+                baggageAndTicketsAndServices.tickets = tickets;
+                baggageAndTicketsAndServices.baggage = baggage;
+                baggageAndTicketsAndServices.services = services;
+                //tickets.setBaggage((baggageAvailable->checkState() == Qt::CheckState::Checked)? baggage->currentData().toInt() : 0);
+
+                dialog->close();
+
+                ok = true;
+            });
+
+        QObject::connect(dialogButtonBox, &QDialogButtonBox::rejected, [&dialog, &ok]()
+        {
+            dialog->close();
+
+            ok = false;
+        });
+    }
+
+    connect(dialog, &QDialog::finished, eventLoop, &QEventLoop::quit);
+
+    eventLoop->exec();
+
+    listServices->clear();
+
+    delete dialogButtonBox;
+
+    delete layoutContayner;
+
+    delete contayner;
+
+    //delete price;
+    delete seatNumber;
+    delete flights;
+    delete baggageAvailable;
+    delete baggageName;
+    delete baggageDescription;
+    delete baggageSize;
+    delete baggageWeight;
+    //delete baggage;
+
+    delete listServices;
+
+    delete layout;
+
+    delete dialog;
+
+    delete validator;
+    delete validatorNumbers;
+
+    delete requester;
+
+    return baggageAndTicketsAndServices;
 }
 TicketsAndServices CustomInputWidget::getTicketsAndServices(QString title, bool &ok, QString url, QWidget *parent)
 {

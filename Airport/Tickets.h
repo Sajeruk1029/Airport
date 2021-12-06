@@ -34,7 +34,7 @@
 						void setIdClient(unsigned int);
 						void setSeatNumber(unsigned int);
 						void setFlights(unsigned int);
-						void setBaggage(unsigned int);
+                        void setBaggage(unsigned int);
 						void setBaggageAvailable(bool);
 						void setIsDeleted(bool);
 		private:

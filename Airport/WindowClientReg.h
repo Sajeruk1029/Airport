@@ -32,7 +32,7 @@ class WindowClientReg : public QGroupBox
 {
     Q_OBJECT
 public:
-    explicit WindowClientReg();
+    explicit WindowClientReg(QString);
     ~WindowClientReg();
 
 private slots:
@@ -65,6 +65,8 @@ private:
     QValidator *passportNumberValidator;
     QValidator *textValidator;
     QValidator *passwordValidator;
+
+    QString Host;
 };
 
 #endif // WINDOWCLIENTREG_H

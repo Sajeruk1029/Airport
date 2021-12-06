@@ -26,7 +26,7 @@ class WindowStaffLogin : public QGroupBox
 {
     Q_OBJECT
 public:
-    explicit WindowStaffLogin();
+    explicit WindowStaffLogin(QString);
     ~WindowStaffLogin();
 
 private slots:
@@ -51,6 +51,8 @@ private:
     WindowStaffReg *windowStaffReg;
 
     WindowControlPanelStaff *windowControlPanelStaff;
+
+    QString Host;
 };
 
 #endif // WINDOWSTAFFLOGIN_H

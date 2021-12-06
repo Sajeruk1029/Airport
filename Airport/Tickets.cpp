@@ -11,7 +11,7 @@ unsigned int Tickets::getSeatNumber() const { return this->SeatNumber; }
 unsigned int Tickets::getFlights() const { return this->Flights; }
 unsigned int Tickets::getBaggage() const { return this->Baggage; }
 
-bool Tickets::getBaggageAvailable() const { return this->Flights; }
+bool Tickets::getBaggageAvailable() const { return this->BaggageAvailable; }
 bool Tickets::getIsDeleted() const { return this->IsDeleted; }
 
 void Tickets::setId(unsigned int &id){ this->Id = id; }

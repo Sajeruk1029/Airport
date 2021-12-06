@@ -17,10 +17,10 @@ class WindowStartMenu : public QGroupBox
 {
     Q_OBJECT
 public:
-    explicit WindowStartMenu();
+    explicit WindowStartMenu(QString);
     ~WindowStartMenu();
 
-private:
+private:    
     QVBoxLayout *layout;
 
     QPushButton *buttonClient;
@@ -29,6 +29,7 @@ private:
     WindowStaffLogin *windowStaffLogin;
     WindowClientLogin *windowClientLogin;
 
+    QString Host;
 private slots:
     void clickButClient();
     void clickButStaff();

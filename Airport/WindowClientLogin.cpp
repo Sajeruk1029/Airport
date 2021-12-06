@@ -1,6 +1,6 @@
 #include "WindowClientLogin.h"
 
-WindowClientLogin::WindowClientLogin() : layout(new QVBoxLayout()), layoutButs(new QHBoxLayout()), containerButs(new QWidget()), butReg(new QPushButton("Регистрация")), butLogin(new QPushButton("Вход")), login(new QLineEdit()), password(new QLineEdit()), requester(new NetworkAPIRequester("http://localhost/")), windowClientReg(nullptr)
+WindowClientLogin::WindowClientLogin(QString host) : layout(new QVBoxLayout()), layoutButs(new QHBoxLayout()), containerButs(new QWidget()), butReg(new QPushButton("Регистрация")), butLogin(new QPushButton("Вход")), login(new QLineEdit()), password(new QLineEdit()), requester(new NetworkAPIRequester(host)), windowControlPanelClient(nullptr), windowClientReg(nullptr), Host(host)
 {
     setTitle("Вход клиента");
 
@@ -51,6 +51,7 @@ WindowClientLogin::~WindowClientLogin()
 
     if(requester){ delete requester; }
 
+    if(windowControlPanelClient){ delete windowControlPanelClient; }
     if(windowClientReg){ delete windowClientReg; }
 }
 
@@ -67,6 +68,10 @@ void WindowClientLogin::clickButLogin()
             if(clientFull.getAccountPassword() == QCryptographicHash::hash(password->text().toUtf8(), QCryptographicHash::Sha1).toHex().append(QCryptographicHash::hash("passwordClient", QCryptographicHash::Sha1).toHex()).toHex())
             {
                 QMessageBox::about(this, "Успех", "Вход успешен!");
+
+                windowControlPanelClient = new WindowControlPanelClient(clientFull, Host);
+                windowControlPanelClient->show();
+                this->close();
             }
             else
             {
@@ -83,7 +88,7 @@ void WindowClientLogin::clickButLogin()
 
 void WindowClientLogin::clickButReg()
 {
-    windowClientReg = new WindowClientReg();
+    windowClientReg = new WindowClientReg(Host);
     windowClientReg->show();
     this->close();
 }

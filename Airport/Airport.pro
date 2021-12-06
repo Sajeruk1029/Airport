@@ -26,7 +26,9 @@ HEADERS += Accounts.h \
            AirCompanyAndServicesTrunc.h \
            Airplane.h \
            Baggage.h \
+           BaggageAndTicketsAndServices.h \
            Cargo.h \
+           CargoAndTickets.h \
            CargoFull.h \
            CargoTrunc.h \
            CategoriesCargo.h \
@@ -57,13 +59,24 @@ HEADERS += Accounts.h \
            TicketsTrunc.h \
            WindowAirCompany.h \
            WindowAirplane.h \
+           WindowCategoriesCargo.h \
            WindowClientLogin.h \
            WindowClientReg.h \
+           WindowControlPanelClient.h \
            WindowControlPanelStaff.h \
+           WindowFlights.h \
+           WindowFlightsClient.h \
+           WindowPlacesOfAirports.h \
+           WindowPlacesOfAirportsClient.h \
+           WindowPost.h \
+           WindowProfile.h \
            WindowServices.h \
+           WindowServicesClient.h \
            WindowStaffLogin.h \
            WindowStaffReg.h \
-           WindowStartMenu.h
+           WindowStartMenu.h \
+           WindowTickets.h \
+           WindowTicketsClient.h
 SOURCES += Accounts.cpp \
            AirCompany.cpp \
            AirCompanyAndAirplane.cpp \
@@ -90,13 +103,24 @@ SOURCES += Accounts.cpp \
            HtmlGenerator.cpp \
            WindowAirCompany.cpp \
            WindowAirplane.cpp \
+           WindowCategoriesCargo.cpp \
            WindowClientLogin.cpp \
            WindowClientReg.cpp \
+           WindowControlPanelClient.cpp \
            WindowControlPanelStaff.cpp \
+           WindowFlights.cpp \
+           WindowFlightsClient.cpp \
+           WindowPlacesOfAirports.cpp \
+           WindowPlacesOfAirportsClient.cpp \
+           WindowPost.cpp \
+           WindowProfile.cpp \
            WindowServices.cpp \
+           WindowServicesClient.cpp \
            WindowStaffLogin.cpp \
            WindowStaffReg.cpp \
            WindowStartMenu.cpp \
+           WindowTickets.cpp \
+           WindowTicketsClient.cpp \
            main.cpp \
            NetworkAPIRequester.cpp \
            PlacesOfAirports.cpp \

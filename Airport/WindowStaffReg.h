@@ -32,7 +32,7 @@ class WindowStaffReg : public QGroupBox
 {
     Q_OBJECT
 public:
-    explicit WindowStaffReg();
+    explicit WindowStaffReg(QString);
     ~WindowStaffReg();
 
 private slots:
@@ -67,6 +67,8 @@ private:
     QValidator *passportNumberValidator;
     QValidator *textValidator;
     QValidator *passwordValidator;
+
+    QString Host;
 };
 
 #endif // WINDOWSTAFFREG_H

@@ -34,7 +34,7 @@ class WindowAirCompany : public QWidget
 {
     Q_OBJECT
 public:
-    explicit WindowAirCompany(void);
+    explicit WindowAirCompany(QString);
     ~WindowAirCompany();
 
 private slots:
@@ -69,6 +69,8 @@ private:
     NetworkAPIRequester *requester;
 
     HTMLGenerator *gen;
+
+    QString Host;
 };
 
 #endif // WINDOWAIRCOMPANY_H
