@@ -11,7 +11,7 @@ WindowPlacesOfAirportsClient::WindowPlacesOfAirportsClient(QString host) : layou
     layoutContaner->addWidget(butRefresh);
     layoutContaner->addWidget(butGenerateTable);
 
-    search->setPlaceholderText("Название");
+    search->setPlaceholderText("Страна Город Улица");
     search->setValidator(validator);
 
     table->setEditTriggers(QTableWidget::NoEditTriggers);
@@ -19,9 +19,9 @@ WindowPlacesOfAirportsClient::WindowPlacesOfAirportsClient(QString host) : layou
     layout->addWidget(container);
     layout->addWidget(table);
 
-    refreshTable();
+		table->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Страна", "Город", "Улица", "Номер дома"});
+    refreshTable();
 
     connect(butSearch, SIGNAL(clicked()), this, SLOT(onClickSearch()));
     connect(butRefresh, SIGNAL(clicked()), this, SLOT(onClickRefresh()));
@@ -73,6 +73,8 @@ void WindowPlacesOfAirportsClient::onClickSearch()
         table->setRowCount(1);
         table->setColumnCount(5);
 
+				table->setHorizontalHeaderLabels(QStringList{"Id", "Страна", "Город", "Улица", "Номер дома"});
+
         if(placesOfAirports.getId() == 0){ return; }
 
         qDebug() << placesOfAirports.getId();
@@ -93,13 +95,13 @@ void WindowPlacesOfAirportsClient::refreshTable()
 {
     table->clear();
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Страна", "Город", "Улица", "Номер дома"});
-
         requester->getActivePlacesOfAirports([this](QList<PlacesOfAirports> placesOfAirports)
         {
 
             table->setRowCount(placesOfAirports.size());
             table->setColumnCount(5);
+
+						table->setHorizontalHeaderLabels(QStringList{"Id", "Страна", "Город", "Улица", "Номер дома"});
 
             for(int counter = 0; counter < placesOfAirports.size(); ++counter)
             {
@@ -115,7 +117,7 @@ void WindowPlacesOfAirportsClient::refreshTable()
             QMessageBox::critical(this, "Ошибка", replyServer);
         });
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Страна", "Город", "Улица", "Номер дома"});
+    //table->setHorizontalHeaderLabels(QStringList{"Id", "Страна", "Город", "Улица", "Номер дома"});
 }
 
 void WindowPlacesOfAirportsClient::onClickRefresh(){ refreshTable(); }
@@ -130,9 +132,9 @@ void WindowPlacesOfAirportsClient::onClickGeneratedHTML()
 
     gen = new HTMLGenerator(path);
 
-    gen->createHTMLFile(5);
+    gen->createHTMLFile(6);
 
-    gen->addCaptionTable(QStringList{"Id", "Страна", "Город", "Улица", "Номер дома", "Логически удалено ли", "", "", ""});
+    gen->addCaptionTable(QStringList{"Id", "Страна", "Город", "Улица", "Номер дома", "Логически удалено ли"});
 
     requester->getActivePlacesOfAirports([this](QList<PlacesOfAirports> placesOfAirport)
         {

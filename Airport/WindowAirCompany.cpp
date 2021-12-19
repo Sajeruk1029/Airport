@@ -21,9 +21,11 @@ WindowAirCompany::WindowAirCompany(QString host) : layout(new QVBoxLayout()), la
     layout->addWidget(container);
     layout->addWidget(table);
 
+		table->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
     refreshTable();
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Логически удалено ли", "", "", ""});
+    //table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Логически удалено ли", "", "", ""});
 
     connect(butSearch, SIGNAL(clicked()), this, SLOT(onClickSearch()));
     connect(butRefresh, SIGNAL(clicked()), this, SLOT(onClickRefresh()));
@@ -70,12 +72,19 @@ void WindowAirCompany::onClickSearch()
 
     table->clear();
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Логически удалено ли", "", "", ""});
+		//table->setColumnWidth(0, 300);
+		//table->setColumnWidth(1, 300);
+		//table->setColumnWidth(2, 300);
+		//table->setColumnWidth(3, 300);
+		//table->setColumnWidth(4, 300);
+		//table->setColumnWidth(5, 300);
 
     requester->searchAirCompany([this](AirCompany airCompany)
     {
         table->setRowCount(1);
         table->setColumnCount(6);
+
+				table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Логически удалено ли", "", "", ""});
 
         if(airCompany.getId() == 0){ return; }
 
@@ -106,7 +115,8 @@ void WindowAirCompany::onClickSearch()
                 refreshTable();
             }, [this](unsigned int errorCode, QString errorLine, QString replyServer)
             {
-                QMessageBox::critical(this, "Ошибка", replyServer);
+                QMessageBox::critical(this, "Ошибка", "Не удалось удалить данные!");
+								qDebug() << replyServer;
             }, AirCompany(qobject_cast<QPushButton*>(table->cellWidget(0, 3))->property("Id").toInt(), "", false));
         });
 
@@ -137,7 +147,8 @@ void WindowAirCompany::onClickSearch()
                 refreshTable();
             }, [this](unsigned int errorCode, QString errorLine, QString replyServer)
             {
-                QMessageBox::critical(this, "Ошибка", replyServer);
+                QMessageBox::critical(this, "Ошибка", "Не удалось изменить данные!");
+								qDebug() << replyServer;
             }, AirCompany(qobject_cast<QPushButton*>(table->cellWidget(0, 4))->property("Id").toInt(), "", false), airCompany);
         });
 
@@ -153,7 +164,8 @@ void WindowAirCompany::onClickSearch()
                     refreshTable();
                 }, [this](unsigned int errorCode, QString errorLine, QString replyServer)
                 {
-                    QMessageBox::critical(this, "Ошибка", replyServer);
+                    QMessageBox::critical(this, "Ошибка", "Не удалось логически удалить данные!");
+										qDebug() << replyServer;
                 }, AirCompany(qobject_cast<QPushButton*>(table->cellWidget(0, 5))->property("Id").toInt(), "", false));
             });
         }
@@ -169,14 +181,16 @@ void WindowAirCompany::onClickSearch()
                     refreshTable();
                 }, [this](unsigned int errorCode, QString errorLine, QString replyServer)
                 {
-                    QMessageBox::critical(this, "Ошибка", replyServer);
+                    QMessageBox::critical(this, "Ошибка", "Не удалось логически восстановить данные!");
+										qDebug() << replyServer;
                 }, AirCompany(qobject_cast<QPushButton*>(table->cellWidget(0, 5))->property("Id").toInt(), "", false));
             });
         }
 
     }, [this](unsigned int errorCode, QString errorLine, QString replyServer)
     {
-        QMessageBox::critical(this, "Ошибка", replyServer);
+        QMessageBox::critical(this, "Ошибка", "Не удалось найти данные!");
+				qDebug() << replyServer;
     }, AirCompany(0, search->text(), false));
 }
 
@@ -191,8 +205,6 @@ void WindowAirCompany::refreshTable()
 
     table->clear();
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Логически удалено ли", "", "", ""});
-
     if(deleted->checkState() != Qt::CheckState::Checked)
     {
         requester->getActiveAirCompany([this](QList<AirCompany> airCompanies)
@@ -200,6 +212,15 @@ void WindowAirCompany::refreshTable()
 
             table->setRowCount(airCompanies.size());
             table->setColumnCount(6);
+
+						table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Логически удалено ли", "", "", ""});
+
+						//table->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+						//table->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
+						//table->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
+						//table->horizontalHeader()->setResizeMode(3, QHeaderView::Stretch);
+						//table->horizontalHeader()->setResizeMode(4, QHeaderView::Stretch);
+						//table->horizontalHeader()->setResizeMode(5, QHeaderView::Stretch);
 
             for(int counter = 0; counter < airCompanies.size(); ++counter)
             {
@@ -226,7 +247,8 @@ void WindowAirCompany::refreshTable()
                         refreshTable();
                     }, [this](unsigned int errorCode, QString errorLine, QString replyServer)
                     {
-                        QMessageBox::critical(this, "Ошибка", replyServer);
+												QMessageBox::critical(this, "Ошибка", "Не удалось удалить данные!");
+												qDebug() << replyServer;
                     }, AirCompany(qobject_cast<QPushButton*>(table->cellWidget(counter, 3))->property("Id").toInt(), "", false));
                 });
 
@@ -287,6 +309,22 @@ void WindowAirCompany::refreshTable()
             table->setRowCount(airCompanies.size());
             table->setColumnCount(6);
 
+						table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Логически удалено ли", "", "", ""});
+
+						//table->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+						//table->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
+						//table->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
+						//table->horizontalHeader()->setResizeMode(3, QHeaderView::Stretch);
+						//table->horizontalHeader()->setResizeMode(4, QHeaderView::Stretch);
+						//table->horizontalHeader()->setResizeMode(5, QHeaderView::Stretch);
+
+						//table->setColumnWidth(0, 300);
+						//table->setColumnWidth(1, 300);
+						//table->setColumnWidth(2, 300);
+						//table->setColumnWidth(3, 300);
+						//table->setColumnWidth(4, 300);
+						//table->setColumnWidth(5, 300);
+
             for(int counter = 0; counter < airCompanies.size(); ++counter)
             {
                 table->setItem(counter, 0, new QTableWidgetItem(QString::number(airCompanies.at(counter).getId())));
@@ -312,7 +350,8 @@ void WindowAirCompany::refreshTable()
                         refreshTable();
                     }, [this](unsigned int errorCode, QString errorLine, QString replyServer)
                     {
-                        QMessageBox::critical(this, "Ошибка", replyServer);
+												QMessageBox::critical(this, "Ошибка", "Не удалось удалить данные!");
+												qDebug() << replyServer;
                     }, AirCompany(qobject_cast<QPushButton*>(table->cellWidget(counter, 3))->property("Id").toInt(), "", false));
                 });
 
@@ -365,8 +404,6 @@ void WindowAirCompany::refreshTable()
             QMessageBox::critical(this, "Ошибка", replyServer);
         });
     }
-
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Логически удалено ли", "", "", ""});
 }
 
 void WindowAirCompany::onClickRefresh(){ refreshTable(); }

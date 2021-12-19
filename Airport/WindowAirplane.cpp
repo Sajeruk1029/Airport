@@ -21,9 +21,11 @@ WindowAirplane::WindowAirplane(QString host) : layout(new QVBoxLayout()), layout
     layout->addWidget(container);
     layout->addWidget(table);
 
+		table->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
     refreshTable();
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Максимальный размер груза", "Максимальный вес груза", "Масимум сидячих мест", "Логически удалено ли", "", "", ""});
+    //table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Максимальный размер груза", "Максимальный вес груза", "Масимум сидячих мест", "Логически удалено ли", "", "", ""});
 
     connect(butSearch, SIGNAL(clicked()), this, SLOT(onClickSearch()));
     connect(butRefresh, SIGNAL(clicked()), this, SLOT(onClickRefresh()));
@@ -70,12 +72,12 @@ void WindowAirplane::onClickSearch()
 
     table->clear();
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Максимальный размер груза", "Максимальный вес груза", "Масимум сидячих мест", "Логически удалено ли", "", "", ""});
-
     requester->searchAirplane([this](Airplane airplane)
     {
         table->setRowCount(1);
         table->setColumnCount(10);
+
+				table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Максимальный размер груза", "Максимальный вес груза", "Масимум сидячих мест", "Логически удалено ли", "", "", ""});
 
         if(airplane.getId() == 0){ return; }
 
@@ -195,14 +197,14 @@ void WindowAirplane::refreshTable()
 
     table->clear();
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Максимальный размер груза", "Максимальный вес груза", "Масимум сидячих мест", "Логически удалено ли", "", "", ""});
-
     if(deleted->checkState() != Qt::CheckState::Checked)
     {
         requester->getActiveAirplane([this](QList<Airplane> airplane)
         {
             table->setRowCount(airplane.size());
             table->setColumnCount(10);
+
+						table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Максимальный размер груза", "Максимальный вес груза", "Масимум сидячих мест", "Логически удалено ли", "", "", ""});
 
             for(int counter = 0; counter < airplane.size(); ++counter)
             {
@@ -294,6 +296,8 @@ void WindowAirplane::refreshTable()
             table->setRowCount(airplane.size());
             table->setColumnCount(10);
 
+						table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Максимальный размер груза", "Максимальный вес груза", "Масимум сидячих мест", "Логически удалено ли", "", "", ""});
+
             for(int counter = 0; counter < airplane.size(); ++counter)
             {
                 table->setItem(counter, 0, new QTableWidgetItem(QString::number(airplane.at(counter).getId())));
@@ -377,7 +381,7 @@ void WindowAirplane::refreshTable()
         });
     }
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Максимальный размер груза", "Максимальный вес груза", "Масимум сидячих мест", "Логически удалено ли", "", "", ""});
+    //table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Максимальный размер груза", "Максимальный вес груза", "Масимум сидячих мест", "Логически удалено ли", "", "", ""});
 }
 
 void WindowAirplane::onClickRefresh(){ refreshTable(); }

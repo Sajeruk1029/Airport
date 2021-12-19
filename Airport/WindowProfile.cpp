@@ -407,6 +407,8 @@ void WindowProfile::onClickGeneratedHTML()
 
     gen->saveHTMLFile();
 
+		QMessageBox::about(this, "Успех", "Отчет успешно создан!");
+
     delete gen;
     gen = nullptr;
 }

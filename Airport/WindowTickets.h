@@ -23,6 +23,8 @@
 #include <QFile>
 #include <QFileDialog>
 
+#include <QHeaderView>
+
 #include "NetworkAPIRequester.h"
 #include "HtmlGenerator.h"
 #include "CustomInputWidget.h"
@@ -33,6 +35,8 @@ class WindowTickets : public QWidget
 public:
     explicit WindowTickets(QString);
     ~WindowTickets();
+
+    QString test;
 
 private slots:
     void onClickSearch(void);

@@ -50,7 +50,7 @@ void HTMLGenerator::addLineTable(Accounts accounts)
     table->cellAt(table->rows() - 1, 0).firstCursorPosition().insertText(QString::number(accounts.getId()));
     table->cellAt(table->rows() - 1, 1).firstCursorPosition().insertText(accounts.getLogin());
     table->cellAt(table->rows() - 1, 2).firstCursorPosition().insertText(accounts.getPassword());
-    table->cellAt(table->rows() - 1, 3).firstCursorPosition().insertText(QString::number(accounts.getIsDeleted()));
+    table->cellAt(table->rows() - 1, 3).firstCursorPosition().insertText((accounts.getIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(AirCompany airCompany)
@@ -59,7 +59,7 @@ void HTMLGenerator::addLineTable(AirCompany airCompany)
 
     table->cellAt(table->rows() - 1, 0).firstCursorPosition().insertText(QString::number(airCompany.getId()));
     table->cellAt(table->rows() - 1, 1).firstCursorPosition().insertText(airCompany.getName());
-    table->cellAt(table->rows() - 1, 2).firstCursorPosition().insertText(QString::number(airCompany.getIsDeleted()));
+    table->cellAt(table->rows() - 1, 2).firstCursorPosition().insertText((airCompany.getIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(Airplane airplane)
@@ -71,7 +71,7 @@ void HTMLGenerator::addLineTable(Airplane airplane)
     table->cellAt(table->rows() - 1, 2).firstCursorPosition().insertText(QString::number(airplane.getMaxSizeCargo()));
     table->cellAt(table->rows() - 1, 3).firstCursorPosition().insertText(QString::number(airplane.getMaxWeightCargo()));
     table->cellAt(table->rows() - 1, 4).firstCursorPosition().insertText(QString::number(airplane.getMaxSeatPlaces()));
-    table->cellAt(table->rows() - 1, 5).firstCursorPosition().insertText(QString::number(airplane.getIsDeleted()));
+    table->cellAt(table->rows() - 1, 5).firstCursorPosition().insertText((airplane.getIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(Baggage baggage)
@@ -83,7 +83,7 @@ void HTMLGenerator::addLineTable(Baggage baggage)
     table->cellAt(table->rows() - 1, 2).firstCursorPosition().insertText(baggage.getDescription());
     table->cellAt(table->rows() - 1, 3).firstCursorPosition().insertText(QString::number(baggage.getWeight()));
     table->cellAt(table->rows() - 1, 4).firstCursorPosition().insertText(QString::number(baggage.getSize()));
-    table->cellAt(table->rows() - 1, 5).firstCursorPosition().insertText(QString::number(baggage.getIsDeleted()));
+    table->cellAt(table->rows() - 1, 5).firstCursorPosition().insertText((baggage.getIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(Cargo cargo)
@@ -96,7 +96,7 @@ void HTMLGenerator::addLineTable(Cargo cargo)
     table->cellAt(table->rows() - 1, 3).firstCursorPosition().insertText(cargo.getDescription());
     table->cellAt(table->rows() - 1, 4).firstCursorPosition().insertText(QString::number(cargo.getIdTicket()));
     table->cellAt(table->rows() - 1, 5).firstCursorPosition().insertText(QString::number(cargo.getSize()));
-    table->cellAt(table->rows() - 1, 6).firstCursorPosition().insertText(QString::number(cargo.getIsDeleted()));
+    table->cellAt(table->rows() - 1, 6).firstCursorPosition().insertText((cargo.getIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(CategoriesCargo categoriesCargo)
@@ -105,7 +105,7 @@ void HTMLGenerator::addLineTable(CategoriesCargo categoriesCargo)
 
     table->cellAt(table->rows() - 1, 0).firstCursorPosition().insertText(QString::number(categoriesCargo.getId()));
     table->cellAt(table->rows() - 1, 1).firstCursorPosition().insertText(categoriesCargo.getName());
-    table->cellAt(table->rows() - 1, 2).firstCursorPosition().insertText(QString::number(categoriesCargo.getIsDeleted()));
+    table->cellAt(table->rows() - 1, 2).firstCursorPosition().insertText((categoriesCargo.getIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(Client client)
@@ -120,7 +120,7 @@ void HTMLGenerator::addLineTable(Client client)
     table->cellAt(table->rows() - 1, 5).firstCursorPosition().insertText(QString::number(client.getPassportNumber()));
     table->cellAt(table->rows() - 1, 6).firstCursorPosition().insertText(QString::number(client.getAccount()));
     table->cellAt(table->rows() - 1, 7).firstCursorPosition().insertText(QString::number(client.getMoney()));
-    table->cellAt(table->rows() - 1, 8).firstCursorPosition().insertText(QString::number(client.getIsDeleted()));
+    table->cellAt(table->rows() - 1, 8).firstCursorPosition().insertText((client.getIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(Flights flights)
@@ -134,7 +134,7 @@ void HTMLGenerator::addLineTable(Flights flights)
     table->cellAt(table->rows() - 1, 4).firstCursorPosition().insertText(QString::number(flights.getArrivalPoint()));
     table->cellAt(table->rows() - 1, 5).firstCursorPosition().insertText(QString::number(flights.getAirplane()));
     table->cellAt(table->rows() - 1, 6).firstCursorPosition().insertText(QString::number(flights.getLadder()));
-    table->cellAt(table->rows() - 1, 7).firstCursorPosition().insertText(QString::number(flights.getIsDeleted()));
+    table->cellAt(table->rows() - 1, 7).firstCursorPosition().insertText((flights.getIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(PlacesOfAirports placesOfAirports)
@@ -146,7 +146,7 @@ void HTMLGenerator::addLineTable(PlacesOfAirports placesOfAirports)
     table->cellAt(table->rows() - 1, 2).firstCursorPosition().insertText(placesOfAirports.getCity());
     table->cellAt(table->rows() - 1, 3).firstCursorPosition().insertText(placesOfAirports.getStreet());
     table->cellAt(table->rows() - 1, 4).firstCursorPosition().insertText(QString::number(placesOfAirports.getHouseNumber()));
-    table->cellAt(table->rows() - 1, 5).firstCursorPosition().insertText(QString::number(placesOfAirports.getIsDeleted()));
+    table->cellAt(table->rows() - 1, 5).firstCursorPosition().insertText((placesOfAirports.getIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(Post post)
@@ -156,7 +156,7 @@ void HTMLGenerator::addLineTable(Post post)
     table->cellAt(table->rows() - 1, 0).firstCursorPosition().insertText(QString::number(post.getId()));
     table->cellAt(table->rows() - 1, 1).firstCursorPosition().insertText(post.getName());
     table->cellAt(table->rows() - 1, 2).firstCursorPosition().insertText(QString::number(post.getSalary()));
-    table->cellAt(table->rows() - 1, 3).firstCursorPosition().insertText(QString::number(post.getIsDeleted()));
+    table->cellAt(table->rows() - 1, 3).firstCursorPosition().insertText((post.getIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(Services services)
@@ -167,7 +167,7 @@ void HTMLGenerator::addLineTable(Services services)
     table->cellAt(table->rows() - 1, 1).firstCursorPosition().insertText(services.getName());
     table->cellAt(table->rows() - 1, 2).firstCursorPosition().insertText(services.getDescription());
     table->cellAt(table->rows() - 1, 3).firstCursorPosition().insertText(QString::number(services.getPrice()));
-    table->cellAt(table->rows() - 1, 4).firstCursorPosition().insertText(QString::number(services.getIsDeleted()));
+    table->cellAt(table->rows() - 1, 4).firstCursorPosition().insertText((services.getIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(Staff staff)
@@ -183,7 +183,7 @@ void HTMLGenerator::addLineTable(Staff staff)
     table->cellAt(table->rows() - 1, 6).firstCursorPosition().insertText(QString::number(staff.getPassportNumber()));
     table->cellAt(table->rows() - 1, 7).firstCursorPosition().insertText(QString::number(staff.getAccount()));
     table->cellAt(table->rows() - 1, 8).firstCursorPosition().insertText(staff.getEducation());
-    table->cellAt(table->rows() - 1, 9).firstCursorPosition().insertText(QString::number(staff.getIsDeleted()));
+    table->cellAt(table->rows() - 1, 9).firstCursorPosition().insertText((staff.getIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(Tickets tickets)
@@ -197,7 +197,7 @@ void HTMLGenerator::addLineTable(Tickets tickets)
     table->cellAt(table->rows() - 1, 4).firstCursorPosition().insertText(QString::number(tickets.getFlights()));
     table->cellAt(table->rows() - 1, 5).firstCursorPosition().insertText(QString::number(tickets.getBaggageAvailable()));
     table->cellAt(table->rows() - 1, 6).firstCursorPosition().insertText(QString::number(tickets.getBaggage()));
-    table->cellAt(table->rows() - 1, 7).firstCursorPosition().insertText(QString::number(tickets.getIsDeleted()));
+    table->cellAt(table->rows() - 1, 7).firstCursorPosition().insertText((tickets.getIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(AirCompanyAndAirplaneFull airCompanyAndAirplaneFull)
@@ -211,7 +211,7 @@ void HTMLGenerator::addLineTable(AirCompanyAndAirplaneFull airCompanyAndAirplane
     table->cellAt(table->rows() - 1, 4).firstCursorPosition().insertText(QString::number(airCompanyAndAirplaneFull.getAirplaneMaxWeightCargo()));
     table->cellAt(table->rows() - 1, 5).firstCursorPosition().insertText(QString::number(airCompanyAndAirplaneFull.getAirplaneMaxSeatPlaces()));
     table->cellAt(table->rows() - 1, 6).firstCursorPosition().insertText(airCompanyAndAirplaneFull.getAirCompanyName());
-    table->cellAt(table->rows() - 1, 7).firstCursorPosition().insertText(QString::number(airCompanyAndAirplaneFull.getAirplaneIsDeleted()));
+    table->cellAt(table->rows() - 1, 7).firstCursorPosition().insertText((airCompanyAndAirplaneFull.getAirplaneIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(AirCompanyAndAirplaneTrunc airCompanyAndAirplaneTrunc)
@@ -221,7 +221,7 @@ void HTMLGenerator::addLineTable(AirCompanyAndAirplaneTrunc airCompanyAndAirplan
     table->cellAt(table->rows() - 1, 0).firstCursorPosition().insertText(QString::number(airCompanyAndAirplaneTrunc.getAirplaneId()));
     table->cellAt(table->rows() - 1, 1).firstCursorPosition().insertText(airCompanyAndAirplaneTrunc.getAirplaneName());
     table->cellAt(table->rows() - 1, 2).firstCursorPosition().insertText(airCompanyAndAirplaneTrunc.getAirCompanyName());
-    table->cellAt(table->rows() - 1, 3).firstCursorPosition().insertText(QString::number(airCompanyAndAirplaneTrunc.getAirplaneIsDeleted()));
+    table->cellAt(table->rows() - 1, 3).firstCursorPosition().insertText((airCompanyAndAirplaneTrunc.getAirplaneIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(AirCompanyAndServicesFull airCompanyAndServicesFull)
@@ -233,7 +233,7 @@ void HTMLGenerator::addLineTable(AirCompanyAndServicesFull airCompanyAndServices
     table->cellAt(table->rows() - 1, 2).firstCursorPosition().insertText(airCompanyAndServicesFull.getServiceDescription());
     table->cellAt(table->rows() - 1, 3).firstCursorPosition().insertText(QString::number(airCompanyAndServicesFull.getServicePrice()));
     table->cellAt(table->rows() - 1, 4).firstCursorPosition().insertText(airCompanyAndServicesFull.getAirCompanyName());
-    table->cellAt(table->rows() - 1, 5).firstCursorPosition().insertText(QString::number(airCompanyAndServicesFull.getServicesIsDeleted()));
+    table->cellAt(table->rows() - 1, 5).firstCursorPosition().insertText((airCompanyAndServicesFull.getServicesIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(AirCompanyAndServicesTrunc airCompanyAndServicesTrunc)
@@ -244,7 +244,7 @@ void HTMLGenerator::addLineTable(AirCompanyAndServicesTrunc airCompanyAndService
     table->cellAt(table->rows() - 1, 1).firstCursorPosition().insertText(airCompanyAndServicesTrunc.getServiceName());
     table->cellAt(table->rows() - 1, 2).firstCursorPosition().insertText(QString::number(airCompanyAndServicesTrunc.getServicePrice()));
     table->cellAt(table->rows() - 1, 3).firstCursorPosition().insertText(airCompanyAndServicesTrunc.getAirCompanyName());
-    table->cellAt(table->rows() - 1, 4).firstCursorPosition().insertText(QString::number(airCompanyAndServicesTrunc.getServicesIsDeleted()));
+    table->cellAt(table->rows() - 1, 4).firstCursorPosition().insertText((airCompanyAndServicesTrunc.getServicesIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(CargoFull cargoFull)
@@ -265,7 +265,7 @@ void HTMLGenerator::addLineTable(CargoFull cargoFull)
     table->cellAt(table->rows() - 1, 11).firstCursorPosition().insertText(cargoFull.getDeparturePoint());
     table->cellAt(table->rows() - 1, 12).firstCursorPosition().insertText(cargoFull.getArrivalPoint());
     table->cellAt(table->rows() - 1, 13).firstCursorPosition().insertText(QString::number(cargoFull.getFlightsLadder()));
-    table->cellAt(table->rows() - 1, 14).firstCursorPosition().insertText(QString::number(cargoFull.getCargoIsDeleted()));
+    table->cellAt(table->rows() - 1, 14).firstCursorPosition().insertText((cargoFull.getCargoIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(CargoTrunc cargoTrunc)
@@ -280,7 +280,7 @@ void HTMLGenerator::addLineTable(CargoTrunc cargoTrunc)
     table->cellAt(table->rows() - 1, 5).firstCursorPosition().insertText(cargoTrunc.getClientFirstName());
     table->cellAt(table->rows() - 1, 6).firstCursorPosition().insertText(cargoTrunc.getClientLastName());
     table->cellAt(table->rows() - 1, 7).firstCursorPosition().insertText(cargoTrunc.getClientPatronymic());
-    table->cellAt(table->rows() - 1, 8).firstCursorPosition().insertText(QString::number(cargoTrunc.getCargoIsDeleted()));
+    table->cellAt(table->rows() - 1, 8).firstCursorPosition().insertText((cargoTrunc.getCargoIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(ClientAndBaggageFull clientAndBaggageFull)
@@ -297,7 +297,7 @@ void HTMLGenerator::addLineTable(ClientAndBaggageFull clientAndBaggageFull)
     table->cellAt(table->rows() - 1, 7).firstCursorPosition().insertText(clientAndBaggageFull.getClientPatronymic());
     table->cellAt(table->rows() - 1, 8).firstCursorPosition().insertText(QString::number(clientAndBaggageFull.getClientPassportSeries()));
     table->cellAt(table->rows() - 1, 9).firstCursorPosition().insertText(QString::number(clientAndBaggageFull.getClientPassportNumber()));
-    table->cellAt(table->rows() - 1, 10).firstCursorPosition().insertText(QString::number(clientAndBaggageFull.getBaggageIsDeleted()));
+    table->cellAt(table->rows() - 1, 10).firstCursorPosition().insertText((clientAndBaggageFull.getBaggageIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(ClientAndBaggageTrunc clientAndBaggageTrunc)
@@ -309,7 +309,7 @@ void HTMLGenerator::addLineTable(ClientAndBaggageTrunc clientAndBaggageTrunc)
     table->cellAt(table->rows() - 1, 2).firstCursorPosition().insertText(clientAndBaggageTrunc.getClientFirstName());
     table->cellAt(table->rows() - 1, 3).firstCursorPosition().insertText(clientAndBaggageTrunc.getClientLastName());
     table->cellAt(table->rows() - 1, 4).firstCursorPosition().insertText(clientAndBaggageTrunc.getClientPatronymic());
-    table->cellAt(table->rows() - 1, 5).firstCursorPosition().insertText(QString::number(clientAndBaggageTrunc.getBaggageIsDeleted()));
+    table->cellAt(table->rows() - 1, 5).firstCursorPosition().insertText((clientAndBaggageTrunc.getBaggageIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(ClientFull clientFull)
@@ -323,9 +323,9 @@ void HTMLGenerator::addLineTable(ClientFull clientFull)
     table->cellAt(table->rows() - 1, 4).firstCursorPosition().insertText(QString::number(clientFull.getClientPassportSeries()));
     table->cellAt(table->rows() - 1, 5).firstCursorPosition().insertText(QString::number(clientFull.getClientPassportNumber()));
     table->cellAt(table->rows() - 1, 6).firstCursorPosition().insertText(clientFull.getAccountLogin());
-    table->cellAt(table->rows() - 1, 8).firstCursorPosition().insertText(clientFull.getAccountPassword());
-    table->cellAt(table->rows() - 1, 9).firstCursorPosition().insertText(QString::number(clientFull.getClientMoney()));
-    table->cellAt(table->rows() - 1, 10).firstCursorPosition().insertText(QString::number(clientFull.getClientIsDeleted()));
+    table->cellAt(table->rows() - 1, 7).firstCursorPosition().insertText(clientFull.getAccountPassword());
+    table->cellAt(table->rows() - 1, 8).firstCursorPosition().insertText(QString::number(clientFull.getClientMoney()));
+    table->cellAt(table->rows() - 1, 9).firstCursorPosition().insertText((clientFull.getClientIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(FlightsFull flightsFull)
@@ -343,7 +343,7 @@ void HTMLGenerator::addLineTable(FlightsFull flightsFull)
     table->cellAt(table->rows() - 1, 8).firstCursorPosition().insertText(QString::number(flightsFull.getAirplaneMaxWeightCargo()));
     table->cellAt(table->rows() - 1, 9).firstCursorPosition().insertText(QString::number(flightsFull.getAirplaneMaxSeatPlaces()));
     table->cellAt(table->rows() - 1, 10).firstCursorPosition().insertText(QString::number(flightsFull.getFlightsLadder()));
-    table->cellAt(table->rows() - 1, 11).firstCursorPosition().insertText(QString::number(flightsFull.getFlightsIsDeleted()));
+    table->cellAt(table->rows() - 1, 11).firstCursorPosition().insertText((flightsFull.getFlightsIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(FlightsTrunc flightsTrunc)
@@ -354,7 +354,7 @@ void HTMLGenerator::addLineTable(FlightsTrunc flightsTrunc)
     table->cellAt(table->rows() - 1, 1).firstCursorPosition().insertText(flightsTrunc.getFlightsDepartureDate().toString("yyyy-MM-dd hh:mm:ss"));
     table->cellAt(table->rows() - 1, 2).firstCursorPosition().insertText(flightsTrunc.getArrivalPoint());
     table->cellAt(table->rows() - 1, 3).firstCursorPosition().insertText(QString::number(flightsTrunc.getFlightsLadder()));
-    table->cellAt(table->rows() - 1, 4).firstCursorPosition().insertText(QString::number(flightsTrunc.getFlightsIsDeleted()));
+    table->cellAt(table->rows() - 1, 4).firstCursorPosition().insertText((flightsTrunc.getFlightsIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(StaffFull staffFull)
@@ -372,7 +372,7 @@ void HTMLGenerator::addLineTable(StaffFull staffFull)
     table->cellAt(table->rows() - 1, 8).firstCursorPosition().insertText(staffFull.getStaffEducation());
     table->cellAt(table->rows() - 1, 9).firstCursorPosition().insertText(staffFull.getAccountLogin());
     table->cellAt(table->rows() - 1, 10).firstCursorPosition().insertText(staffFull.getAccountPassword());
-    table->cellAt(table->rows() - 1, 11).firstCursorPosition().insertText(QString::number(staffFull.getStaffIsDeleted()));
+    table->cellAt(table->rows() - 1, 11).firstCursorPosition().insertText((staffFull.getStaffIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(StaffTrunc staffTrunc)
@@ -387,7 +387,7 @@ void HTMLGenerator::addLineTable(StaffTrunc staffTrunc)
     table->cellAt(table->rows() - 1, 5).firstCursorPosition().insertText(QString::number(staffTrunc.getPostSalary()));
     table->cellAt(table->rows() - 1, 6).firstCursorPosition().insertText(QString::number(staffTrunc.getPostSalary()));
     table->cellAt(table->rows() - 1, 7).firstCursorPosition().insertText(staffTrunc.getStaffEducation());
-    table->cellAt(table->rows() - 1, 8).firstCursorPosition().insertText(QString::number(staffTrunc.getStaffIsDeleted()));
+    table->cellAt(table->rows() - 1, 8).firstCursorPosition().insertText((staffTrunc.getStaffIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(TicketsAndServicesFull ticketsAndServicesFull)
@@ -420,7 +420,7 @@ void HTMLGenerator::addLineTable(TicketsAndServicesFull ticketsAndServicesFull)
     table->cellAt(table->rows() - 1, 23).firstCursorPosition().insertText(ticketsAndServicesFull.getServicesDescription());
     table->cellAt(table->rows() - 1, 24).firstCursorPosition().insertText(QString::number(ticketsAndServicesFull.getServicesPrice()));
     table->cellAt(table->rows() - 1, 25).firstCursorPosition().insertText(QString::number(ticketsAndServicesFull.getTicketsSeatNumber()));
-    table->cellAt(table->rows() - 1, 26).firstCursorPosition().insertText(QString::number(ticketsAndServicesFull.getTicketsIsDeleted()));
+    table->cellAt(table->rows() - 1, 26).firstCursorPosition().insertText((ticketsAndServicesFull.getTicketsIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(TicketsAndServicesTrunc ticketsAndServicesTrunc)
@@ -435,7 +435,7 @@ void HTMLGenerator::addLineTable(TicketsAndServicesTrunc ticketsAndServicesTrunc
     table->cellAt(table->rows() - 1, 5).firstCursorPosition().insertText(ticketsAndServicesTrunc.getServicesName());
     table->cellAt(table->rows() - 1, 6).firstCursorPosition().insertText(QString::number(ticketsAndServicesTrunc.getServicesPrice()));
     table->cellAt(table->rows() - 1, 7).firstCursorPosition().insertText(QString::number(ticketsAndServicesTrunc.getTicketsSeatNumber()));
-    table->cellAt(table->rows() - 1, 8).firstCursorPosition().insertText(QString::number(ticketsAndServicesTrunc.getTicketsIsDeleted()));
+    table->cellAt(table->rows() - 1, 8).firstCursorPosition().insertText((ticketsAndServicesTrunc.getTicketsIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(TicketsFull ticketsFull)
@@ -465,7 +465,7 @@ void HTMLGenerator::addLineTable(TicketsFull ticketsFull)
     table->cellAt(table->rows() - 1, 20).firstCursorPosition().insertText(QString::number(ticketsFull.getBaggageWeight()));
     table->cellAt(table->rows() - 1, 21).firstCursorPosition().insertText(QString::number(ticketsFull.getBaggageSize()));
     table->cellAt(table->rows() - 1, 22).firstCursorPosition().insertText(QString::number(ticketsFull.getTicketsSeatNumber()));
-    table->cellAt(table->rows() - 1, 23).firstCursorPosition().insertText(QString::number(ticketsFull.getTicketsIsDeleted()));
+    table->cellAt(table->rows() - 1, 23).firstCursorPosition().insertText((ticketsFull.getTicketsIsDeleted() == 1)? "Да" : "Нет");
 }
 
 void HTMLGenerator::addLineTable(TicketsTrunc ticketsTrunc)
@@ -483,5 +483,5 @@ void HTMLGenerator::addLineTable(TicketsTrunc ticketsTrunc)
     table->cellAt(table->rows() - 1, 8).firstCursorPosition().insertText(QString::number(ticketsTrunc.getTicketsBaggageAvailable()));
     table->cellAt(table->rows() - 1, 9).firstCursorPosition().insertText(ticketsTrunc.getBaggageName());
     table->cellAt(table->rows() - 1, 10).firstCursorPosition().insertText(QString::number(ticketsTrunc.getTicketsSeatNumber()));
-    table->cellAt(table->rows() - 1, 11).firstCursorPosition().insertText(QString::number(ticketsTrunc.getTicketsIsDeleted()));
+    table->cellAt(table->rows() - 1, 11).firstCursorPosition().insertText((ticketsTrunc.getTicketsIsDeleted() == 1)? "Да" : "Нет");
 }

@@ -23,6 +23,8 @@
 #include <QFile>
 #include <QFileDialog>
 
+#include <QHeaderView>
+
 #include "NetworkAPIRequester.h"
 #include "HtmlGenerator.h"
 #include "CustomInputWidget.h"

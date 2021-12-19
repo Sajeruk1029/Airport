@@ -19,11 +19,9 @@ WindowServicesClient::WindowServicesClient(QString host) : layout(new QVBoxLayou
     layout->addWidget(container);
     layout->addWidget(table);
 
+		table->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
     refreshTable();
-
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Цена"});
-
-    table->update();
 
     connect(butSearch, SIGNAL(clicked()), this, SLOT(onClickSearch()));
     connect(butRefresh, SIGNAL(clicked()), this, SLOT(onClickRefresh()));
@@ -60,12 +58,12 @@ void WindowServicesClient::onClickSearch()
 
     table->clear();
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Цена"});
-
     requester->searchServices([this](Services services)
     {
         table->setRowCount(1);
         table->setColumnCount(5);
+
+				table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Цена"});
 
         if(services.getId() == 0){ return; }
 
@@ -85,13 +83,13 @@ void WindowServicesClient::refreshTable()
 {
     table->clear();
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Цена"});
-
         requester->getActiveServices([this](QList<Services> services)
         {
 
             table->setRowCount(services.size());
             table->setColumnCount(5);
+
+						table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Цена"});
 
             for(int counter = 0; counter < services.size(); ++counter)
             {

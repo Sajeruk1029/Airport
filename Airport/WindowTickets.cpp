@@ -22,9 +22,9 @@ WindowTickets::WindowTickets(QString host) : layout(new QVBoxLayout()), layoutCo
     layout->addWidget(container);
     layout->addWidget(table);
 
-    refreshTable();
+		table->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Цена билета", "Имя клиента", "Фамилия клиента", "Отчество клиента", "Дата отправления", "Точка прибытия", "Трап", "Наличия багажа", "Наименование багажа", "Номер места", "Логически удалено ли", "", "", "", ""});
+    refreshTable();
 
     connect(butSearch, SIGNAL(clicked()), this, SLOT(onClickSearch()));
     connect(butRefresh, SIGNAL(clicked()), this, SLOT(onClickRefresh()));
@@ -74,12 +74,12 @@ void WindowTickets::onClickSearch()
 
     table->clear();
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Цена билета", "Имя клиента", "Фамилия клиента", "Отчество клиента", "Дата отправления", "Точка прибытия", "Трап", "Наличия багажа", "Наименование багажа", "Номер места", "Логически удалено ли", "", "", "", ""});
-
     requester->searchTicketsTrunc([this](TicketsTrunc ticketsTrunc)
     {
         table->setRowCount(1);
         table->setColumnCount(16);
+
+				table->setHorizontalHeaderLabels(QStringList{"Id", "Цена билета", "Имя клиента", "Фамилия клиента", "Отчество клиента", "Дата отправления", "Точка прибытия", "Трап", "Наличия багажа", "Наименование багажа", "Номер места", "Логически удалено ли", "", "", "", ""});
 
         if(ticketsTrunc.getTicketsId() == 0){ return; }
 
@@ -203,10 +203,10 @@ void WindowTickets::onClickSearch()
 
                 table->clear();
 
-                table->setHorizontalHeaderLabels(QStringList{"Id", "Цена билета", "Имя клиента", "Фамилия клиента", "Отчество клиента", "Серия паспорта", "Номер паспорта", "Дата отправления", "Дата прибытия", "Точка отбытия", "Точка прибытия", "Название самолета", "Описание самолета", "Максимальный размер груза", "Максимальный вес груза", "Количество сидячих мест", "Трап", "Наличия багажа", "Наименование багажа", "Описание багажа", "Вес багажа", "Размер багажа", "Номер места", "Логически удалено ли"});
-
                 table->setRowCount(1);
                 table->setColumnCount(24);
+
+                table->setHorizontalHeaderLabels(QStringList{"Id", "Цена билета", "Имя клиента", "Фамилия клиента", "Отчество клиента", "Серия паспорта", "Номер паспорта", "Дата отправления", "Дата прибытия", "Точка отбытия", "Точка прибытия", "Название самолета", "Описание самолета", "Максимальный размер груза", "Максимальный вес груза", "Количество сидячих мест", "Трап", "Наличия багажа", "Наименование багажа", "Описание багажа", "Вес багажа", "Размер багажа", "Номер места", "Логически удалено ли"});
 
                 table->setItem(0, 0, new QTableWidgetItem(QString::number(ticketsFull.getTicketsId())));
                 table->setItem(0, 1, new QTableWidgetItem(QString::number(ticketsFull.getTicketsPrice())));
@@ -256,8 +256,6 @@ void WindowTickets::refreshTable()
 
     table->clear();
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Цена билета", "Имя клиента", "Фамилия клиента", "Отчество клиента", "Дата отправления", "Точка прибытия", "Трап", "Наличия багажа", "Наименование багажа", "Номер места", "Логически удалено ли", "", "", "", ""});
-
     if(deleted->checkState() != Qt::CheckState::Checked)
     {
         requester->getActiveTicketsTrunc([this](QList<TicketsTrunc> ticketsTrunc)
@@ -265,6 +263,8 @@ void WindowTickets::refreshTable()
 
             table->setRowCount(ticketsTrunc.size());
             table->setColumnCount(16);
+
+						table->setHorizontalHeaderLabels(QStringList{"Id", "Цена билета", "Имя клиента", "Фамилия клиента", "Отчество клиента", "Дата отправления", "Точка прибытия", "Трап", "Наличия багажа", "Наименование багажа", "Номер места", "Логически удалено ли", "", "", "", ""});
 
             for(int counter = 0; counter < ticketsTrunc.size(); ++counter)
             {
@@ -366,13 +366,13 @@ void WindowTickets::refreshTable()
 
                             table->clear();
 
+                            table->setRowCount(1);
+                            table->setColumnCount(24);
+
                             table->setHorizontalHeaderLabels(QStringList{"Id", "Цена билета", "Имя клиента", "Фамилия клиента", "Отчество клиента", "Серия паспорта", "Номер паспорта", "Дата отправления", "Дата прибытия", "Точка отбытия", "Точка прибытия", "Название самолета", "Описание самолета", "Максимальный размер груза", "Максимальный вес груза", "Количество сидячих мест", "Трап", "Наличия багажа", "Наименование багажа", "Описание багажа", "Вес багажа", "Размер багажа", "Номер места", "Логически удалено ли"});
 
                             //qDebug() << "DEBUG: " << ticketsFull.getBaggageName();
                             //qDebug() << "DEBUG: " << ticketsFull.getBaggageDescription();
-
-                            table->setRowCount(1);
-                            table->setColumnCount(24);
 
                             table->setItem(0, 0, new QTableWidgetItem(QString::number(ticketsFull.getTicketsId())));
                             table->setItem(0, 1, new QTableWidgetItem(QString::number(ticketsFull.getTicketsPrice())));
@@ -419,6 +419,8 @@ void WindowTickets::refreshTable()
 
             table->setRowCount(ticketsTrunc.size());
             table->setColumnCount(16);
+
+						table->setHorizontalHeaderLabels(QStringList{"Id", "Цена билета", "Имя клиента", "Фамилия клиента", "Отчество клиента", "Дата отправления", "Точка прибытия", "Трап", "Наличия багажа", "Наименование багажа", "Номер места", "Логически удалено ли", "", "", "", ""});
 
             for(int counter = 0; counter < ticketsTrunc.size(); ++counter)
             {
@@ -518,10 +520,10 @@ void WindowTickets::refreshTable()
 
                         table->clear();
 
-                        table->setHorizontalHeaderLabels(QStringList{"Id", "Цена билета", "Имя клиента", "Фамилия клиента", "Отчество клиента", "Серия паспорта", "Номер паспорта", "Дата отправления", "Дата прибытия", "Точка отбытия", "Точка прибытия", "Название самолета", "Описание самолета", "Максимальный размер груза", "Максимальный вес груза", "Количество сидячих мест", "Трап", "Наличия багажа", "Наименование багажа", "Описание багажа", "Вес багажа", "Размер багажа", "Номер места", "Логически удалено ли"});
-
                         table->setRowCount(1);
                         table->setColumnCount(24);
+
+                        table->setHorizontalHeaderLabels(QStringList{"Id", "Цена билета", "Имя клиента", "Фамилия клиента", "Отчество клиента", "Серия паспорта", "Номер паспорта", "Дата отправления", "Дата прибытия", "Точка отбытия", "Точка прибытия", "Название самолета", "Описание самолета", "Максимальный размер груза", "Максимальный вес груза", "Количество сидячих мест", "Трап", "Наличия багажа", "Наименование багажа", "Описание багажа", "Вес багажа", "Размер багажа", "Номер места", "Логически удалено ли"});
 
                         table->setItem(0, 0, new QTableWidgetItem(QString::number(ticketsFull.getTicketsId())));
                         table->setItem(0, 1, new QTableWidgetItem(QString::number(ticketsFull.getTicketsPrice())));
@@ -562,7 +564,7 @@ void WindowTickets::refreshTable()
         });
     }
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Цена билета", "Имя клиента", "Фамилия клиента", "Отчество клиента", "Дата отправления", "Точка прибытия", "Трап", "Наличия багажа", "Наименование багажа", "Номер места", "Логически удалено ли", "", "", "", ""});
+    //table->setHorizontalHeaderLabels(QStringList{"Id", "Цена билета", "Имя клиента", "Фамилия клиента", "Отчество клиента", "Дата отправления", "Точка прибытия", "Трап", "Наличия багажа", "Наименование багажа", "Номер места", "Логически удалено ли", "", "", "", ""});
 }
 
 void WindowTickets::onClickRefresh(){ refreshTable(); }
@@ -746,7 +748,7 @@ void WindowTickets::onClickGeneratedHTML()
 
     gen = new HTMLGenerator(path);
 
-    gen->createHTMLFile(11);
+    gen->createHTMLFile(12);
 
     gen->addCaptionTable(QStringList{"Id", "Цена билета", "Имя клиента", "Фамилия клиента", "Отчество клиента", "Дата отправления", "Точка прибытия", "Трап", "Наличия багажа", "Наименование багажа", "Номер места", "Логически удалено ли"});
 

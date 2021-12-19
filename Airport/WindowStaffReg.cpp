@@ -192,7 +192,17 @@ void WindowStaffReg::clickButReg()
 
     },[this](unsigned int errorCode, QString error, QString replyServer)
     {
-        QMessageBox::critical(this, "Ошибка", replyServer);
+				if(errorCode == QNetworkReply::HostNotFoundError)
+				{
+					QMessageBox::critical(this, "Ошибка", "Хост недоступен!");
+				}
+				else
+				{
+					QMessageBox::critical(this, "Ошибка", error);
+				}
+
+				qDebug() << replyServer;
+
         qDebug() << QCryptographicHash::hash(password->text().toUtf8(), QCryptographicHash::Sha1).toHex().append(QCryptographicHash::hash("passwordStaff", QCryptographicHash::Sha1).toHex()).toHex().size();
     }, Accounts(0, login->text(), QCryptographicHash::hash(password->text().toUtf8(), QCryptographicHash::Sha1).toHex().append(QCryptographicHash::hash("passwordStaff", QCryptographicHash::Sha1).toHex()).toHex(), false));
 }

@@ -4608,7 +4608,7 @@ TicketsAndServices CustomInputWidget::getTicketsAndServices(QString title, bool 
             {
                 if(ticket->count() == 0)
                 {
-                    QMessageBox::critical(parent, "Ошибка", "Билет должн быть выбран!");
+                    QMessageBox::critical(parent, "Ошибка", "Билет должен быть выбран!");
                     return;
                 }
 

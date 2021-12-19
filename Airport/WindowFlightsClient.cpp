@@ -19,9 +19,9 @@ WindowFlightsClient::WindowFlightsClient(QString host) : layout(new QVBoxLayout(
     layout->addWidget(container);
     layout->addWidget(table);
 
-    refreshTable();
+		table->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Время отбытия", "Место прибытия", "Трап", ""});
+    refreshTable();
 
     connect(butSearch, SIGNAL(clicked()), this, SLOT(onClickSearch()));
     connect(butRefresh, SIGNAL(clicked()), this, SLOT(onClickRefresh()));
@@ -72,14 +72,14 @@ void WindowFlightsClient::onClickSearch()
 
     table->clear();
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Время отбытия", "Место прибытия", "Трап", ""});
-
     requester->searchFlightsTrunc([this](FlightsTrunc flightsTrunc)
     {
         for(int counter = 0; counter < table->rowCount(); ++counter){ delete table->cellWidget(counter, 4); }
 
         table->setRowCount(1);
         table->setColumnCount(5);
+
+				table->setHorizontalHeaderLabels(QStringList{"Id", "Время отбытия", "Место прибытия", "Трап", ""});
 
         if(flightsTrunc.getFlightsId() == 0){ return; }
 
@@ -102,10 +102,10 @@ void WindowFlightsClient::onClickSearch()
 
                 table->clear();
 
-                table->setHorizontalHeaderLabels(QStringList{"Id", "Дата прибытия", "Дата отправления", "Место отправления", "Место прибытия", "Название самолета", "Описание самолета", "Максимальный размер груза самолета", "Максимальный вес груза самолета", "Максимум сидячих мест самолета", "Трап"});
-
                 table->setRowCount(1);
                 table->setColumnCount(11);
+
+                table->setHorizontalHeaderLabels(QStringList{"Id", "Дата прибытия", "Дата отправления", "Место отправления", "Место прибытия", "Название самолета", "Описание самолета", "Максимальный размер груза самолета", "Максимальный вес груза самолета", "Максимум сидячих мест самолета", "Трап"});
 
                 table->setItem(0, 0, new QTableWidgetItem(QString::number(flightsFull.getFlightsId())));
                 table->setItem(0, 1, new QTableWidgetItem(flightsFull.getFlightsArrivalDate().toString("yyyy-MM-dd hh:mm:ss")));
@@ -136,14 +136,14 @@ void WindowFlightsClient::refreshTable()
 
     table->clear();
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Время отбытия", "Место прибытия", "Трап", "Логически удалено ли", ""});
-
         requester->getActiveFlightsTrunc([this](QList<FlightsTrunc> flightsTrunc)
         {
 
             qDebug() << "G " << flightsTrunc.size();
             table->setRowCount(flightsTrunc.size());
             table->setColumnCount(5);
+
+						table->setHorizontalHeaderLabels(QStringList{"Id", "Время отбытия", "Место прибытия", "Трап", ""});
 
             for(int counter = 0; counter < flightsTrunc.size(); ++counter)
             {
@@ -165,10 +165,10 @@ void WindowFlightsClient::refreshTable()
 
                         table->clear();
 
-                        table->setHorizontalHeaderLabels(QStringList{"Id", "Дата прибытия", "Дата отправления", "Место отправления", "Место прибытия", "Название самолета", "Описание самолета", "Максимальный размер груза самолета", "Максимальный вес груза самолета", "Максимум сидячих мест самолета", "Трап"});
-
                         table->setRowCount(1);
                         table->setColumnCount(11);
+
+                        table->setHorizontalHeaderLabels(QStringList{"Id", "Дата прибытия", "Дата отправления", "Место отправления", "Место прибытия", "Название самолета", "Описание самолета", "Максимальный размер груза самолета", "Максимальный вес груза самолета", "Максимум сидячих мест самолета", "Трап"});
 
                         table->setItem(0, 0, new QTableWidgetItem(QString::number(flightsFull.getFlightsId())));
                         table->setItem(0, 1, new QTableWidgetItem(flightsFull.getFlightsArrivalDate().toString("yyyy-MM-dd hh:mm:ss")));

@@ -80,7 +80,17 @@ void WindowClientLogin::clickButLogin()
         }
     }, [this](unsigned int codeError, QString errorLine, QString serverReply)
     {
-        QMessageBox::critical(this, "Error", serverReply);
+				if(codeError == QNetworkReply::HostNotFoundError)
+				{
+					QMessageBox::critical(this, "Ошибка", "Хост недоступен!");
+				}
+				else
+				{
+					QMessageBox::critical(this, "Ошибка", errorLine);
+				}
+
+				qDebug() << serverReply;
+        //QMessageBox::critical(this, "Error", serverReply);
     }, ClientFull(0, "", "", "", 0, 0, login->text(), "", 0, false));
 
     //QCryptographicHash::hash(password->text().toUtf8(), QCryptographicHash::Sha1).append(QCryptographicHash::hash("passwordStaff", QCryptographicHash::Sha1)).length();

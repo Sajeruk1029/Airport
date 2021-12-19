@@ -21,9 +21,9 @@ WindowServices::WindowServices(QString host) : layout(new QVBoxLayout()), layout
     layout->addWidget(container);
     layout->addWidget(table);
 
-    refreshTable();
+		table->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Цена", "Логически удалено ли", "", "", ""});
+    refreshTable();
 
     connect(butSearch, SIGNAL(clicked()), this, SLOT(onClickSearch()));
     connect(butRefresh, SIGNAL(clicked()), this, SLOT(onClickRefresh()));
@@ -70,12 +70,12 @@ void WindowServices::onClickSearch()
 
     table->clear();
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Цена", "Логически удалено ли", "", "", ""});
-
     requester->searchServices([this](Services services)
     {
         table->setRowCount(1);
         table->setColumnCount(8);
+
+				table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Цена", "Логически удалено ли", "", "", ""});
 
         if(services.getId() == 0){ return; }
 
@@ -193,8 +193,6 @@ void WindowServices::refreshTable()
 
     table->clear();
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Цена", "Логически удалено ли", "", "", ""});
-
     if(deleted->checkState() != Qt::CheckState::Checked)
     {
         requester->getActiveServices([this](QList<Services> services)
@@ -202,6 +200,8 @@ void WindowServices::refreshTable()
 
             table->setRowCount(services.size());
             table->setColumnCount(8);
+
+						table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Цена", "Логически удалено ли", "", "", ""});
 
             for(int counter = 0; counter < services.size(); ++counter)
             {
@@ -291,6 +291,8 @@ void WindowServices::refreshTable()
             table->setRowCount(services.size());
             table->setColumnCount(8);
 
+						table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Цена", "Логически удалено ли", "", "", ""});
+
             for(int counter = 0; counter < services.size(); ++counter)
             {
                 table->setItem(counter, 0, new QTableWidgetItem(QString::number(services.at(counter).getId())));
@@ -372,7 +374,7 @@ void WindowServices::refreshTable()
         });
     }
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Цена", "Логически удалено ли", "", "", ""});
+    //table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Цена", "Логически удалено ли", "", "", ""});
 }
 
 void WindowServices::onClickRefresh(){ refreshTable(); }

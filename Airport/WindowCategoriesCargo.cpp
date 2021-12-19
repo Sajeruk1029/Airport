@@ -21,9 +21,11 @@ WindowCategoriesCargo::WindowCategoriesCargo(QString host) : layout(new QVBoxLay
     layout->addWidget(container);
     layout->addWidget(table);
 
+				table->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
     refreshTable();
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Логически удалено ли", "", "", ""});
+    //table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Логически удалено ли", "", "", ""});
 
     connect(butSearch, SIGNAL(clicked()), this, SLOT(onClickSearch()));
     connect(butRefresh, SIGNAL(clicked()), this, SLOT(onClickRefresh()));
@@ -70,12 +72,12 @@ void WindowCategoriesCargo::onClickSearch()
 
     table->clear();
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Логически удалено ли", "", "", ""});
-
     requester->searchCategoriesCargo([this](CategoriesCargo categoriesCargo)
     {
         table->setRowCount(1);
         table->setColumnCount(7);
+
+				table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Логически удалено ли", "", "", ""});
 
         if(categoriesCargo.getId() == 0){ return; }
 
@@ -193,7 +195,7 @@ void WindowCategoriesCargo::refreshTable()
 
     table->clear();
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Логически удалено ли", "", "", ""});
+    //table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Логически удалено ли", "", "", ""});
 
     if(deleted->checkState() != Qt::CheckState::Checked)
     {
@@ -202,6 +204,8 @@ void WindowCategoriesCargo::refreshTable()
 
             table->setRowCount(categoriesCargo.size());
             table->setColumnCount(7);
+
+						table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Логически удалено ли", "", "", ""});
 
             for(int counter = 0; counter < categoriesCargo.size(); ++counter)
             {
@@ -212,7 +216,7 @@ void WindowCategoriesCargo::refreshTable()
 
                 table->setCellWidget(counter, 4, new QPushButton("Удалить"));
                 table->setCellWidget(counter, 5, new QPushButton("Изменить"));
-                table->setCellWidget(counter, 6, new QPushButton("Восстановить логически"));
+                table->setCellWidget(counter, 6, new QPushButton("Удалить логически"));
 
                 table->cellWidget(counter, 4)->setProperty("Id", categoriesCargo.at(counter).getId());
 
@@ -289,6 +293,8 @@ void WindowCategoriesCargo::refreshTable()
 
             table->setRowCount(categoriesCargo.size());
             table->setColumnCount(7);
+
+						table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Логически удалено ли", "", "", ""});
 
             for(int counter = 0; counter < categoriesCargo.size(); ++counter)
             {
@@ -370,7 +376,7 @@ void WindowCategoriesCargo::refreshTable()
         });
     }
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Логически удалено ли", "", "", ""});
+    //table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Описание", "Логически удалено ли", "", "", ""});
 }
 
 void WindowCategoriesCargo::onClickRefresh(){ refreshTable(); }
@@ -412,7 +418,7 @@ void WindowCategoriesCargo::onClickGeneratedHTML()
 
     gen = new HTMLGenerator(path);
 
-    gen->createHTMLFile(5);
+    gen->createHTMLFile(4);
 
     gen->addCaptionTable(QStringList{"Id", "Имя", "Описание", "Логически удалено ли"});
 

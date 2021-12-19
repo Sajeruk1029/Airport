@@ -21,9 +21,9 @@ WindowPost::WindowPost(QString host) : layout(new QVBoxLayout()), layoutContaner
     layout->addWidget(container);
     layout->addWidget(table);
 
-    refreshTable();
+		table->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Зарплата", "Логически удалено ли", "", "", ""});
+    refreshTable();
 
     connect(butSearch, SIGNAL(clicked()), this, SLOT(onClickSearch()));
     connect(butRefresh, SIGNAL(clicked()), this, SLOT(onClickRefresh()));
@@ -70,12 +70,12 @@ void WindowPost::onClickSearch()
 
     table->clear();
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Зарплата", "Логически удалено ли", "", "", ""});
-
     requester->searchPost([this](Post post)
     {
         table->setRowCount(1);
         table->setColumnCount(7);
+
+				table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Зарплата", "Логически удалено ли", "", "", ""});
 
         if(post.getId() == 0){ return; }
 
@@ -193,8 +193,6 @@ void WindowPost::refreshTable()
 
     table->clear();
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Зарплата", "Логически удалено ли", "", "", ""});
-
     if(deleted->checkState() != Qt::CheckState::Checked)
     {
         requester->getActivePost([this](QList<Post> post)
@@ -202,6 +200,8 @@ void WindowPost::refreshTable()
 
             table->setRowCount(post.size());
             table->setColumnCount(7);
+
+						table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Зарплата", "Логически удалено ли", "", "", ""});
 
             for(int counter = 0; counter < post.size(); ++counter)
             {
@@ -290,6 +290,8 @@ void WindowPost::refreshTable()
             table->setRowCount(post.size());
             table->setColumnCount(7);
 
+						table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Зарплата", "Логически удалено ли", "", "", ""});
+
             for(int counter = 0; counter < post.size(); ++counter)
             {
                 table->setItem(counter, 0, new QTableWidgetItem(QString::number(post.at(counter).getId())));
@@ -370,7 +372,7 @@ void WindowPost::refreshTable()
         });
     }
 
-    table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Зарплата", "Логически удалено ли", "", "", ""});
+    //table->setHorizontalHeaderLabels(QStringList{"Id", "Имя", "Зарплата", "Логически удалено ли", "", "", ""});
 }
 
 void WindowPost::onClickRefresh(){ refreshTable(); }

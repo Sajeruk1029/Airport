@@ -12,7 +12,7 @@ WindowClientReg::WindowClientReg(QString host) : layout(new QVBoxLayout()), layo
     patronymic->setPlaceholderText("Отчество");
     passportSeries->setPlaceholderText("Серия паспорта");
     passportNumber->setPlaceholderText("Номер паспорта");
-    money->setPlaceholderText("Денеги");
+    money->setPlaceholderText("Деньги");
     login->setPlaceholderText("Логин");
     password->setPlaceholderText("Пароль");
 
@@ -163,7 +163,19 @@ void WindowClientReg::clickButReg()
             QMessageBox::about(this, "Успех", "Клиент успешно зарегистрирован!");
         }, [this](unsigned int errorCode, QString error, QString replyServer)
         {
-            QMessageBox::critical(this, "Ошибка", replyServer);
+            //QMessageBox::critical(this, "Ошибка", replyServer);
+						
+						if(errorCode == QNetworkReply::HostNotFoundError)
+						{
+							QMessageBox::critical(this, "Ошибка", "Хост недоступен!");
+						}
+						else
+						{
+							QMessageBox::critical(this, "Ошибка", error);
+						}
+						
+						qDebug() << replyServer;
+
         }, Client(0, firstName->text(), lastName->text(), patronymic->text(), passportSeries->text().toInt(), passportNumber->text().toInt(), id, money->text().toInt(), false));
 
     },[this](unsigned int errorCode, QString error, QString replyServer)

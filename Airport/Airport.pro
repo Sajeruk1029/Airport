@@ -135,3 +135,6 @@ SOURCES += Accounts.cpp \
            TicketsAndServicesTrunc.cpp \
            TicketsFull.cpp \
            TicketsTrunc.cpp
+
+DISTFILES += \
+    classesdiagram.qmodel
